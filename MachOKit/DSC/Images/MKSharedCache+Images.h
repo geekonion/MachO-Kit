@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKSharedCache (Images)
 
 //! The table listing all of the images present in the shared cache.
-@property (nonatomic, readonly) MKDSCImagesInfo *imagesInfo;
+@property (nonatomic, readonly) MKDSCImagesInfo *imageInfos;
 
 @end
 

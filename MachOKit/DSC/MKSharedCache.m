@@ -31,6 +31,8 @@
 #import "MKDSCMappingInfo.h"
 #import "MKDSCMapping.h"
 #import "MKDSCImagesInfo.h"
+#import "MKDSCLocalSymbols.h"
+#import "MKDSCSlideInfo.h"
 
 #include "dyld_cache_format.h"
 #include <objc/runtime.h>
@@ -65,7 +67,7 @@
     
     // Read the Magic
     {
-        char magic[17] = {0};
+        char magic[17] = {};
         if (![mapping copyBytesAtOffset:0 fromAddress:contextAddress into:magic length:sizeof(magic) requireFull:YES error:error])
         { [self release]; return nil; }
         
@@ -99,6 +101,11 @@
             _cpuType = CPU_TYPE_X86_64;
             _cpuSubtype = CPU_SUBTYPE_X86_64_ALL;
             sharedRegionBase = SHARED_REGION_BASE_X86_64;
+        } else if (strcmp(magic, "dyld_v1  arm64e") == 0) {
+            _dataModel = [[MKLP64DataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM64;
+            _cpuSubtype = CPU_SUBTYPE_ARM64E;
+            sharedRegionBase = SHARED_REGION_BASE_ARM64;
         } else if (strcmp(magic, "dyld_v1   arm64") == 0) {
             _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
             _cpuType = CPU_TYPE_ARM64;
@@ -320,6 +327,17 @@
 @synthesize mappingInfos = _mappingInfos;
 @synthesize mappings = _mappings;
 
+- (MKDSCMapping *)findMapping:(uint64_t)vmaddr {
+    for (MKDSCMapping *mapping in _mappings) {
+        uint64_t mappingEndAddr = mapping.vmAddress + mapping.vmSize;
+        
+        if (vmaddr >= mapping.vmAddress && (vmaddr < mappingEndAddr)) {
+            return mapping;
+        }
+    }
+    return NULL;
+}
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark - MKNode
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -348,15 +366,92 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    MKNodeFieldBuilder *header = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(header) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCHeader.class]]
+    ];
+    header.description = @"Header";
+    header.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeWithParent;
+    
+    MKNodeFieldBuilder *mappings = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(mappings) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCMapping.class]]
+    ];
+    mappings.description = @"Mappings";
+    mappings.options = MKNodeFieldOptionDisplayAsChild;
+    
+    MKNodeFieldBuilder *images = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(imageInfos) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCImagesInfo.class]]
+    ];
+    images.description = @"imageInfos";
+    images.options = MKNodeFieldOptionDisplayAsChild;
+    
+    MKNodeFieldBuilder *slideInfo = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(slideInfo) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSlideInfo.class]]
+    ];
+    slideInfo.description = @"SlideInfo";
+    slideInfo.options = MKNodeFieldOptionDisplayAsChild;
+    
+    MKNodeFieldBuilder *symbols = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(localSymbols) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCLocalSymbols.class]]
+    ];
+    symbols.description = @"Symbols";
+    symbols.options = MKNodeFieldOptionDisplayAsChild;
+    
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(slide) description:@"Slide"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(header) description:@"Shared Cache Header"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(mappingInfos) description:@"Mapping Descriptors"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(mappings) description:@"Mappings"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(imageInfos) description:@"Image Descriptors"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(slideInfo) description:@"Slide Info"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(localSymbols) description:@"Local Symbols"],
+        header.build,
+        mappings.build,
+        images.build,
+        slideInfo.build,
+        //symbols.build
     ]];
+}
+
+- (const char *)architecture_description {
+    const char *description = "";
+    
+    switch (_cpuType) {
+        case CPU_TYPE_ARM: {
+            switch (_cpuSubtype) {
+                case CPU_SUBTYPE_ARM_V7K:
+                    description = "armv7k";
+                    break;
+                case CPU_SUBTYPE_ARM_V7S:
+                    description = "armv7s";
+                    break;
+                case CPU_SUBTYPE_ARM_V7F:
+                    description = "armv7f";
+                    break;
+                case CPU_SUBTYPE_ARM_V7:
+                    description = "armv7";
+                    break;
+                case CPU_SUBTYPE_ARM_V6:
+                    description = "armv6";
+                    break;
+                default:
+                    description = "ARM";
+                    break;
+            }
+            break;
+        }
+        case CPU_TYPE_ARM64: {
+            switch (_cpuSubtype) {
+                case CPU_SUBTYPE_ARM64E:
+                    description = "arm64e";
+                    break;
+                default:
+                    description = "arm64";
+                    break;
+            }
+            break;
+        }
+        case CPU_TYPE_ARM64_32: {
+            description = "arm64_32";
+            break;
+        }
+        default:
+            description = "Unknown";
+            break;
+    }
+    
+    return description;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"DSC (%s)", [self architecture_description]];
 }
 
 @end

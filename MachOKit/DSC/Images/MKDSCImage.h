@@ -27,8 +27,9 @@
 
 #include <MachOKit/macho.h>
 #import <Foundation/Foundation.h>
-
 #import <MachOKit/MKOffsetNode.h>
+#import "MKCString.h"
+#import "MKMachO.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -53,6 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint64_t modTime;
 @property (nonatomic, readonly) uint64_t inode;
 @property (nonatomic, readonly) uint32_t pathFileOffset;
+
+//! The pathname of the library.
+@property (nonatomic, readonly) MKCString *name;
+@property (nonatomic, readonly) MKMachOImage *macho;
+
 
 @end
 

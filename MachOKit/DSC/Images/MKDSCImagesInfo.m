@@ -144,9 +144,18 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    MKNodeFieldBuilder *imagelist = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(images) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCImage.class]]
+    ];
+    imagelist.description = @"Images";
+    imagelist.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
+    
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(images) description:@"Images"]
+        imagelist.build
     ]];
+}
+
+- (NSString *)description {
+    return @"ImageInfos";
 }
 
 @end

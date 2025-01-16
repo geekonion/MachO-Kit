@@ -33,14 +33,14 @@
 @implementation MKSharedCache (Images)
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (MKDSCImagesInfo*)imagesInfo
+- (MKDSCImagesInfo*)imageInfos
 {
     if (_imagesInfo == nil) {
         NSError *e = nil;
         
         _imagesInfo = [[MKDSCImagesInfo alloc] initWithSharedCache:self error:&e];
         if (_imagesInfo == nil)
-            MK_PUSH_UNDERLYING_WARNING(imagesInfo, e, @"Failed to load images info.");
+            MK_PUSH_UNDERLYING_WARNING(imageInfos, e, @"Failed to load images info.");
     }
     
     return _imagesInfo;

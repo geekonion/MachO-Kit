@@ -138,9 +138,18 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    MKNodeFieldBuilder *symbols = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(symbols) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSymbol.class]]
+    ];
+    symbols.description = @"Symbols";
+    symbols.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeWithParent;
+    
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(symbols) description:@"Symbols"]
+        symbols.build
     ]];
+}
+
+- (NSString *)description {
+    return @"SymbolTable";
 }
 
 @end

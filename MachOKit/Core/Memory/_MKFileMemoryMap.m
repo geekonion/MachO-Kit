@@ -88,4 +88,8 @@
     handler(fileOffset, mappingLength, nil);
 }
 
+- (NSData *)data {
+    return _fileData;
+}
+
 @end

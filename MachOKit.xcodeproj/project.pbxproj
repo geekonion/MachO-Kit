@@ -4888,6 +4888,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 			};
 			name = Debug;
 		};
@@ -4907,6 +4908,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 			};
 			name = Release;
 		};
@@ -4937,6 +4939,7 @@
 			baseConfigurationReference = D0079FD21895C06F00E9D0CF /* StaticLibrary.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				PRODUCT_NAME = MachO;
 			};
 			name = Debug;
@@ -4946,6 +4949,7 @@
 			baseConfigurationReference = D0079FD21895C06F00E9D0CF /* StaticLibrary.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				PRODUCT_NAME = MachO;
 			};
 			name = Release;

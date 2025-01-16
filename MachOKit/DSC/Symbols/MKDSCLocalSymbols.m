@@ -171,12 +171,31 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    MKNodeFieldBuilder *symHeader = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(header) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCLocalSymbolsHeader.class]]
+    ];
+    symHeader.description = @"LocalSymbolHeader";
+    symHeader.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeWithParent;
+    
+    MKNodeFieldBuilder *symTable = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(symbolTable) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSymbolTable.class]]
+    ];
+    symTable.description = @"SymbolTable";
+    symTable.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
+    
+    MKNodeFieldBuilder *strTable = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(stringTable) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSymbolTable.class]]
+    ];
+    strTable.description = @"StringTable";
+    strTable.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
+    
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(header) description:@"Header"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(symbolTable) description:@"Symbol Table"],
-        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(stringTable) description:@"String Table"],
+        symHeader.build,
+        symTable.build,
+        strTable.build,
         [MKNodeField nodeFieldWithProperty:MK_PROPERTY(entriesTable) description:@"Entries Table"],
     ]];
+}
+
+- (NSString *)description {
+    return @"LocalSymbols";
 }
 
 @end

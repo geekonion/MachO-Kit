@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithURL:(NSURL*)fileURL error:(NSError**)error;
 
+- (NSData *)data;
+
 @end
 
 NS_ASSUME_NONNULL_END

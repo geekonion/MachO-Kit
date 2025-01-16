@@ -82,7 +82,11 @@
     Class commandClass = [self classForOpcode:opcode immediate:immediate];
     if (commandClass == NULL) {
         NSString *reason = [NSString stringWithFormat:@"No class for bind opcode [%" PRIu8 "] and immediate [%" PRIu8 "].", opcode, immediate];
+#ifdef DEBUG
+        NSLog(@"%@", reason);
+#else
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
+#endif
     }
     
     return [[[commandClass alloc] initWithOffset:offset fromParent:parent error:error] autorelease];

@@ -118,6 +118,7 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
 //!
 @property (nonatomic, readonly) NSArray<MKDSCMapping*> *mappings;
 
+- (MKDSCMapping *)findMapping:(uint64_t)vmaddr;
 @end
 
 NS_ASSUME_NONNULL_END

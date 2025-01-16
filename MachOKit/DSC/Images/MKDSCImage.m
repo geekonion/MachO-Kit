@@ -28,6 +28,9 @@
 #import "MKDSCImage.h"
 #import "NSError+MK.h"
 #import "MKMachO.h"
+#import "MKSharedCache.h"
+#import "MKDSCMapping.h"
+#import "_MKFileMemoryMap.h"
 
 #include "dyld_cache_format.h"
 
@@ -40,7 +43,7 @@
     NSParameterAssert(parent.dataModel);
     
     self = [super initWithOffset:offset fromParent:parent error:error];
-    if (self == nil) return nil;
+    if (self == nil || *error) return nil;
     
     struct dyld_cache_image_info scii;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&scii length:sizeof(scii) requireFull:YES error:error] < sizeof(scii))
@@ -50,6 +53,39 @@
     _modTime = MKSwapLValue64(scii.modTime, self.dataModel);
     _inode = MKSwapLValue64(scii.inode, self.dataModel);
     _pathFileOffset = MKSwapLValue32(scii.pathFileOffset, self.dataModel);
+    
+    MKSharedCache *dsc = nil;
+    MKNode *node = parent;
+    while (node) {
+        if ([node isKindOfClass:[MKSharedCache class]]) {
+            dsc = (MKSharedCache *)node;
+            break;
+        } else {
+            node = node.parent;
+        }
+    }
+    
+    NSError *err = nil;
+    _name = [[MKCString alloc] initWithOffset:_pathFileOffset fromParent:dsc error:&err];
+    if (err) {
+        *error = err;
+    }
+    
+//    MKDSCMapping *mapping = [dsc findMapping:_address];
+//    if (mapping) {
+//        intptr_t ptr = (intptr_t)mapping->ptr;
+//        
+//        
+//        return (void *)(ptr + content_offset);
+//    }
+//    _MKFileMemoryMap *map = dsc.memoryMap;
+//    NSData *data = [map data];
+//    void *bytes = data.bytes;
+    uint64_t content_offset = _address - dsc.nodeVMAddress;
+    _macho = [[MKMachOImage alloc] initWithName:_name.string.UTF8String flags:0 atAddress:content_offset inMapping:dsc.memoryMap error:&err];
+    if (err) {
+        *error = err;
+    }
     
     return self;
 }
@@ -74,12 +110,22 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    MKNodeFieldBuilder *macho = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(macho) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKMachOImage.class]]
+    ];
+    macho.description = @"MachO";
+    macho.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
+    
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
         [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(address) description:@"Image Start Address" offset:offsetof(struct dyld_cache_image_info, address) size:sizeof(uint64_t) format:MKNodeFieldFormatAddress],
         [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(modTime) description:@"Modification Time" offset:offsetof(struct dyld_cache_image_info, modTime) size:sizeof(uint64_t)],
         [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(inode) description:@"iNode" offset:offsetof(struct dyld_cache_image_info, inode) size:sizeof(uint64_t)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(pathFileOffset) description:@"Image Path Offset" offset:offsetof(struct dyld_cache_image_info, pathFileOffset) size:sizeof(uint32_t) format:MKNodeFieldFormatOffset]
+        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(pathFileOffset) description:@"Image Path Offset" offset:offsetof(struct dyld_cache_image_info, pathFileOffset) size:sizeof(uint32_t) format:MKNodeFieldFormatOffset],
+        macho.build
     ]];
+}
+
+- (NSString *)description {
+    return _name.string.lastPathComponent ?: @"unknown";
 }
 
 @end

@@ -131,7 +131,11 @@
         case MKNodeContextAddress:
             return 0;
         default:
+#ifdef DEBUG
+            return 0;
+#else
             @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unsupported node address type." userInfo:nil];
+#endif
     }
 }
 
