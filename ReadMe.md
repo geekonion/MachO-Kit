@@ -21,7 +21,7 @@ Mach-O Kit supports macOS 10.10+, iOS 9.0+, and tvOS 9.0+ (and possibly older ve
 ***Use a recursive git clone***.
 
 ```
-git clone --recursive https://github.com/DeVaukz/MachO-Kit
+git clone --recursive https://github.com/geekonion/MachO-Kit.git
 ```
 
 ### Installation
@@ -29,7 +29,7 @@ git clone --recursive https://github.com/DeVaukz/MachO-Kit
 1. Clone the Mach-O repository into your application's repository.
 ```
 cd MyGreatApp;
-git clone --recursive https://github.com/DeVaukz/MachO-Kit
+git clone --recursive https://github.com/geekonion/MachO-Kit.git
 ```
 2. Drag and drop MachOKit.xcodeproj into your application’s Xcode project or workspace.
 3. On the “General” tab of your application target’s settings, add MachOKit.framework to the “Embedded Binaries” section.
@@ -68,7 +68,7 @@ Load commands can be retrieved from the `loadCommands` property of `MKMachOImage
 let loadCommands = macho.loadCommands
 
 print(loadCommands)
-``` 
+```
 
 Most classes in Mach-O Kit print verbose debug descriptions.  `MKLoadCommand` is no exception.
 
