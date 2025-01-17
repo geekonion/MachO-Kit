@@ -63,6 +63,18 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct sub_library_command *lc = (void *)lc_ptr;
+    
+    _sub_library = [[MKCString alloc] initWithOffset:lc->sub_library.offset fromParent:self error:nil];
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {

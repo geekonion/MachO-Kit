@@ -63,6 +63,26 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct dylib_command *lc = (void *)lc_ptr;
+    
+    const char *ptr = (const char *)lc + lc->dylib.name.offset;
+    NSString *str = [NSString stringWithUTF8String:ptr];
+    _name = [[MKCString alloc] initWithParent:self string:str];
+    
+    _timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:lc->dylib.timestamp];
+    
+    _current_version = [[MKDylibVersion alloc] initWithMachVersion:lc->dylib.current_version];
+    
+    _compatibility_version = [[MKDylibVersion alloc] initWithMachVersion:lc->dylib.compatibility_version];
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {

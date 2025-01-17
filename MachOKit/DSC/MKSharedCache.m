@@ -33,9 +33,11 @@
 #import "MKDSCImagesInfo.h"
 #import "MKDSCLocalSymbols.h"
 #import "MKDSCSlideInfo.h"
+#import "MKDSCImage.h"
 
 #include "dyld_cache_format.h"
 #include <objc/runtime.h>
+#import "DyldSharedCache.h"
 
 #if __has_include(<mach/shared_region.h>)
 #include <mach/shared_region.h>
@@ -47,8 +49,169 @@
 #define SHARED_REGION_BASE_ARM			0x20000000ULL
 #endif
 
+@interface MKSharedCache () {
+    DyldSharedCache *_dsc;
+}
+
+@end
 //----------------------------------------------------------------------------//
 @implementation MKSharedCache
+
+- (instancetype)initWithFlags:(MKSharedCacheFlags)flags url:(NSURL *)url {
+    NSError *tmp = nil;
+    NSError **error = &tmp;
+    self = [super initWithParent:nil error:error];
+    if (self == nil) return nil;
+    
+    NSError *localError = nil;
+    mk_vm_address_t sharedRegionBase;
+    mk_vm_address_t contextAddress = 0;
+    bool load_sym = true;
+    _dsc = dsc_init_from_path(url.path.UTF8String, load_sym);
+    if (!_dsc) {
+        return nil;
+    }
+    DyldSharedCacheFile *main = _dsc->files[0];
+    // Read the Magic
+    {
+        struct dyld_cache_header *header = &main->header;
+        char *magic = header->magic;
+        // First 4 bytes must == 'dyld'
+        if (strncmp(&magic[0], "dyld", 4)) {
+            MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad Shared Cache magic: %s", magic];
+            [self release]; return nil;
+        }
+        
+        // TODO - Support parsing shared cache v0.
+        if (strncmp(&magic[5], "v1", 2)) {
+            MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unknown Shared Cache version: %s", magic];
+            [self release]; return nil;
+        }
+        
+        _version = 1;
+        
+        // Architecture
+        if (strcmp(magic, "dyld_v1    i386") == 0) {
+            _dataModel = [[MKDarwinIntel32DataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_I386;
+            _cpuSubtype = CPU_SUBTYPE_I386_ALL;
+            sharedRegionBase = SHARED_REGION_BASE_I386;
+        } else if (strcmp(magic, "dyld_v1 x86_64h") == 0) {
+            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_X86_64;
+            _cpuSubtype = CPU_SUBTYPE_X86_64_H;
+            sharedRegionBase = SHARED_REGION_BASE_X86_64;
+        } else if (strcmp(magic, "dyld_v1  x86_64") == 0) {
+            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_X86_64;
+            _cpuSubtype = CPU_SUBTYPE_X86_64_ALL;
+            sharedRegionBase = SHARED_REGION_BASE_X86_64;
+        } else if (strcmp(magic, "dyld_v1  arm64e") == 0) {
+            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM64;
+            _cpuSubtype = CPU_SUBTYPE_ARM64E;
+            sharedRegionBase = SHARED_REGION_BASE_ARM64;
+        } else if (strcmp(magic, "dyld_v1   arm64") == 0) {
+            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM64;
+            _cpuSubtype = CPU_SUBTYPE_ARM64_ALL;
+            sharedRegionBase = SHARED_REGION_BASE_ARM64;
+        } else if (strcmp(magic, "dyld_v1  armv7s") == 0) {
+            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM;
+            _cpuSubtype = CPU_SUBTYPE_ARM_V7S;
+            sharedRegionBase = SHARED_REGION_BASE_ARM;
+        } else if (strcmp(magic, "dyld_v1  armv7k") == 0) {
+            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM;
+            _cpuSubtype = CPU_SUBTYPE_ARM_V7K;
+            sharedRegionBase = SHARED_REGION_BASE_ARM;
+        } else if (strcmp(magic, "dyld_v1  armv7f") == 0) {
+            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM;
+            _cpuSubtype = CPU_SUBTYPE_ARM_V7F;
+            sharedRegionBase = SHARED_REGION_BASE_ARM;
+        } else if (strcmp(magic, "dyld_v1   armv7") == 0) {
+            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM;
+            _cpuSubtype = CPU_SUBTYPE_ARM_V7;
+            sharedRegionBase = SHARED_REGION_BASE_ARM;
+        } else if (strcmp(magic, "dyld_v1   armv6") == 0) {
+            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM;
+            _cpuSubtype = CPU_SUBTYPE_ARM_V6;
+            sharedRegionBase = SHARED_REGION_BASE_ARM;
+        } else if (strcmp(magic, "dyld_v1   armv5") == 0) {
+            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _cpuType = CPU_TYPE_ARM;
+            _cpuSubtype = CPU_SUBTYPE_ARM_ALL; //TODO - Find a better value
+            sharedRegionBase = SHARED_REGION_BASE_ARM;
+        } else {
+            MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unknown Shared Cache architecture: %s", magic];
+            [self release]; return nil;
+        }
+    }
+    
+    // Can now parse the full header
+    _header = [[MKDSCHeader alloc] initWithOffset:0 fromParent:self dsc:_dsc error:&localError];
+    if (_header == nil) {
+        MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:localError.code underlyingError:localError description:@"Failed to load shared cache header."];
+        [self release]; return nil;
+    }
+    
+    // Handle flags
+    {
+        // If neither the MKSharedCacheFromSourceFile or MKSharedCacheFromVM
+        // were specified, attempt to detect whether we are parsing a
+        // dyld_shared_cache_[arch] from disk.  The best heuristic is a
+        // contextAddress of 0.
+        if (!(flags & MKSharedCacheFromSourceFile) && !(flags & MKSharedCacheFromVM)) {
+            if (contextAddress == 0)
+                flags |= MKSharedCacheFromSourceFile;
+            else
+                flags |= MKSharedCacheFromVM;
+        }
+        
+        _flags = flags;
+    }
+    
+    // Load mappings
+    {
+        int32_t nmapping = _dsc->mappingCount;
+        NSMutableArray<MKDSCMapping*> *mappings = [[NSMutableArray alloc] initWithCapacity:nmapping];
+        
+        for (int32_t i = 0; i < nmapping; i++) {
+            DyldSharedCacheMapping *dscmapping = &_dsc->mappings[i];
+            NSError *e = nil;
+            
+            MKDSCMapping *mapping = [[MKDSCMapping alloc] initWithDSCMapping:dscmapping parent:self error:&e];
+            
+            [mappings addObject:mapping];
+        }
+        
+        _mappings = [mappings copy];
+        [mappings release];
+    }
+    
+    // Load images
+    {
+        uint64_t nimage = _dsc->containedImageCount;
+        NSMutableArray<MKDSCImage*> *images = [[NSMutableArray alloc] initWithCapacity:nimage];
+        
+        for (int64_t i = 0; i < nimage; i++) {
+            DyldSharedCacheImage *dsimage = &_dsc->containedImages[i];
+            NSError *e = nil;
+            MKDSCImage *image = [[MKDSCImage alloc] initWithDSC:_dsc image:dsimage parent:self error:&e];
+            
+            [images addObject:image];
+        }
+        
+        _images = [images copy];
+        [images release];
+    }
+    
+    return self;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithFlags:(MKSharedCacheFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)mapping error:(NSError**)error
@@ -295,6 +458,7 @@
     [_header release];
     [_dataModel release];
     [_memoryMap release];
+    dsc_free(_dsc);
     
     [super dealloc];
 }
@@ -374,17 +538,17 @@
     MKNodeFieldBuilder *mappings = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(mappings) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCMapping.class]]
     ];
     mappings.description = @"Mappings";
-    mappings.options = MKNodeFieldOptionDisplayAsChild;
+    mappings.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
     
-    MKNodeFieldBuilder *images = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(imageInfos) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCImagesInfo.class]]
+    MKNodeFieldBuilder *images = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(images) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCImage.class]]
     ];
-    images.description = @"imageInfos";
-    images.options = MKNodeFieldOptionDisplayAsChild;
+    images.description = @"Images";
+    images.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
     
-    MKNodeFieldBuilder *slideInfo = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(slideInfo) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSlideInfo.class]]
-    ];
-    slideInfo.description = @"SlideInfo";
-    slideInfo.options = MKNodeFieldOptionDisplayAsChild;
+//    MKNodeFieldBuilder *slideInfo = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(slideInfo) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSlideInfo.class]]
+//    ];
+//    slideInfo.description = @"SlideInfo";
+//    slideInfo.options = MKNodeFieldOptionDisplayAsChild;
     
     MKNodeFieldBuilder *symbols = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(localSymbols) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCLocalSymbols.class]]
     ];
@@ -395,7 +559,7 @@
         header.build,
         mappings.build,
         images.build,
-        slideInfo.build,
+//        slideInfo.build,
         //symbols.build
     ]];
 }

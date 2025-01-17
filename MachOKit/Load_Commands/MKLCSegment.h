@@ -159,6 +159,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! Reserved (for count or sizeof).
 @property (nonatomic, readonly) uint32_t reserved2;
 
+- (instancetype)initWithSection:(struct section *)sec_ptr fromParent:(MKBackedNode*)parent;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -76,6 +76,25 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct routines_command *lc = (void *)lc_ptr;
+    
+    _init_address = lc->init_address;
+    _init_module = lc->init_module;
+    _reserved1 = lc->reserved1;
+    _reserved2 = lc->reserved2;
+    _reserved3 = lc->reserved3;
+    _reserved4 = lc->reserved4;
+    _reserved5 = lc->reserved5;
+    _reserved6 = lc->reserved6;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

@@ -157,6 +157,8 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //! and trailing load commands could not be read.
 @property (nonatomic, readonly) NSArray<__kindof MKLoadCommand*> *loadCommands;
 
+- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address;
+
 //! Filters the \ref loadCommands array to those of the specified \a type
 //! and returns the result.  The relative ordering of the returned load
 //! commands is preserved.

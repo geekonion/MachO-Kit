@@ -63,6 +63,18 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct sub_client_command *lc = (void *)lc_ptr;
+    
+    _client = [[MKCString alloc] initWithOffset:lc->client.offset fromParent:self error:nil];
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {

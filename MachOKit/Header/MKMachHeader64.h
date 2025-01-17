@@ -57,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint32_t flags;
 @property (nonatomic, readonly) uint32_t reserved;
 
+- (instancetype)initWithHeader:(struct mach_header_64 *)header dataModel:(MKDataModel *)dataModel;
 @end
 
 NS_ASSUME_NONNULL_END

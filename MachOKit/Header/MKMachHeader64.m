@@ -50,6 +50,15 @@
     return self;
 }
 
+- (instancetype)initWithHeader:(struct mach_header_64 *)header dataModel:(MKDataModel *)dataModel
+{
+    if (self = [super initWithHeader:header dataModel:dataModel]) {
+        _reserved = header->reserved;
+    }
+    
+    return self;
+}
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Mach-O Header Values
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

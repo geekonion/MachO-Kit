@@ -64,6 +64,19 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct twolevel_hints_command *lc = (void *)lc_ptr;
+    
+    _offset = lc->offset;
+    _nhints = lc->nhints;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

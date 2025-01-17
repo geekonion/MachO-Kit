@@ -30,6 +30,7 @@
 
 #import <MachOKit/MKNode+SharedCache.h>
 #import <MachOKit/MKBackedNode.h>
+#import <MachOKit/MKDSCImage.h>
 
 @class MKDSCHeader;
 @class MKDSCMappingInfo;
@@ -75,6 +76,7 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
     // Mappings //
     NSArray<MKDSCMappingInfo*> *_mappingInfos;
     NSArray<MKDSCMapping*> *_mappings;
+    NSArray<MKDSCImage*> *_images;
     // Images //
     MKDSCImagesInfo *_imagesInfo;
     // Slide //
@@ -83,7 +85,8 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
     MKDSCLocalSymbols *_localSymbols;
 }
 
-//! 
+- (instancetype)initWithFlags:(MKSharedCacheFlags)flags url:(NSURL *)url;
+//!
 - (nullable instancetype)initWithFlags:(MKSharedCacheFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memoryMap error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -117,6 +120,8 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
 
 //!
 @property (nonatomic, readonly) NSArray<MKDSCMapping*> *mappings;
+
+@property (nonatomic, readonly) NSArray<MKDSCImage*> *images;
 
 - (MKDSCMapping *)findMapping:(uint64_t)vmaddr;
 @end

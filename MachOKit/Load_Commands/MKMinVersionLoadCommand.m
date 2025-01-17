@@ -56,6 +56,22 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct version_min_command *lc = (void *)lc_ptr;
+
+    _version = [[MKVersion alloc] initWithMachVersion:lc->version];
+    if (_version == nil) { [self release]; return nil; }
+    
+    _sdk = [[MKVersion alloc] initWithMachVersion:lc->sdk];
+    if (_sdk == nil) { [self release]; return nil; }
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {

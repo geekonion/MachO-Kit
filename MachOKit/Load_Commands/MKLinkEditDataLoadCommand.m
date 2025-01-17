@@ -51,6 +51,19 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct linkedit_data_command *lc = (void *)lc_ptr;
+    
+    _dataoff = lc->dataoff;
+    _datasize = lc->datasize;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

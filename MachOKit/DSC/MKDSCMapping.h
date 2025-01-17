@@ -27,8 +27,8 @@
 
 #include <MachOKit/macho.h>
 #import <Foundation/Foundation.h>
-
 #import <MachOKit/MKBackedNode.h>
+#import "DyldSharedCache.h"
 
 @class MKSharedCache;
 @class MKDSCMappingInfo;
@@ -47,9 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
     vm_prot_t _initialProtection;
 }
 
-- (nullable instancetype)initWithSharedCache:(MKSharedCache*)sharedCache vmAddress:(mk_vm_address_t)vmAddress vmSize:(mk_vm_size_t)vmSize fileOffset:(mk_vm_offset_t)fileOffset initialProtection:(vm_prot_t)initialProtection maximumProtection:(vm_prot_t)maximumProtection error:(NSError**)error NS_DESIGNATED_INITIALIZER;
-
-- (nullable instancetype)initWithDescriptor:(MKDSCMappingInfo*)descriptor error:(NSError**)error;
+- (nullable instancetype)initWithDSCMapping:(DyldSharedCacheMapping *)mapping parent:(MKNode *)parent error:(NSError**)error;
 
 @property (nonatomic, readonly) mk_vm_address_t vmAddress;
 @property (nonatomic, readonly) mk_vm_size_t vmSize;

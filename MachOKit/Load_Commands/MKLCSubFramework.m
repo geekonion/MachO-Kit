@@ -63,6 +63,20 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct sub_framework_command *lc = (void *)lc_ptr;
+    
+    const char *ptr = (const char *)lc + lc->umbrella.offset;
+    NSString *str = [NSString stringWithUTF8String:ptr];
+    _umbrella = [[MKCString alloc] initWithParent:self string:str];
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {

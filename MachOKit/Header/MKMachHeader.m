@@ -60,6 +60,21 @@
     return self;
 }
 
+- (instancetype)initWithHeader:(struct mach_header *)header dataModel:(MKDataModel *)dataModel
+{
+    if (self = [super initWithOffset:0 fromParent:nil error:nil]) {
+        _magic = header->magic;
+        _cputype = header->cputype;
+        _cpusubtype = header->cpusubtype;
+        _filetype = header->filetype;
+        _ncmds = header->ncmds;
+        _sizeofcmds = header->sizeofcmds;
+        _flags = header->flags;
+    }
+    
+    return self;
+}
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Mach-O Header Values
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -144,6 +144,90 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct segment_command *lc = (void *)lc_ptr;
+    
+    _vmaddr = lc->vmaddr;
+    _vmsize = lc->vmsize;
+    _fileoff = lc->fileoff;
+    _filesize = lc->filesize;
+    _maxprot = lc->maxprot;
+    _initprot = lc->initprot;
+    _nsects = lc->nsects;
+    _flags = lc->flags;
+    
+    // Load segname
+    {
+        const char *bytes = lc->segname;
+        NSUInteger length = strnlen(bytes, sizeof(lc->segname));
+        
+        _segname = [[NSString alloc] initWithBytes:bytes length:length encoding:NSUTF8StringEncoding];
+        
+        if (_segname == nil)
+            MK_PUSH_WARNING(segname, MK_EINVALID_DATA, @"Could not form a string with data.");
+        else if (length >= sizeof(lc->segname))
+            MK_PUSH_WARNING(segname, MK_EINVALID_DATA, @"String is not properly terminated.");
+    }
+    
+    // Load the sections
+    {
+        uint32_t sectionCount = self.nsects;
+        
+        NSMutableArray<MKLCSection*> *sections = [[NSMutableArray alloc] initWithCapacity:sectionCount];
+        mach_vm_offset_t offset = sizeof(*lc);
+        mach_vm_offset_t oldOffset;
+        
+        while (sectionCount--) {
+            @autoreleasepool {
+                NSError *sectionError = nil;
+                
+                // It is safe to pass the mach_vm_offset_t offset as the offset
+                // parameter because the offset can not grow beyond the node size,
+                // which is capped at UINT32_MAX.  Any uint32_t can be acurately
+                // represented by an mk_vm_offset_t.
+                
+                // NOTE: The sections array must contain each MKLCSection at its
+                //       matching index within this segment's load command.  Do
+                //       not attempt to continue after a MKLCSection fails to load
+                //       as this will break the ordering.
+                struct section *sec_ptr = (struct section *)((char *)lc + offset);
+                MKLCSection *sect = [[MKLCSection alloc] initWithSection:sec_ptr fromParent:self];
+                if (sect == nil) {
+                    // If we fail to instantiate an instance of MKLCSection it
+                    // means we've walked off the end of memory that can be mapped
+                    // by our MKMemoryMap.
+                    MK_PUSH_UNDERLYING_WARNING(sections, sectionError, @"Failed to instantiate section at index " PRIi32 "", (self.nsects - sectionCount));
+                    break;
+                }
+                
+                oldOffset = offset;
+                offset += sect.nodeSize;
+                
+                if (oldOffset > offset || offset > self.nodeSize) {
+                    // The kernel will refuse to load any Mach-O image in which the
+                    // number of sections specifed would not fit within the load
+                    // command's size.  We will match this behavior and throw away
+                    // any section which straddles the boundary.
+                    MK_PUSH_WARNING(sections, MK_EINVALID_DATA, @"Part of section at index " PRIi32 " is outside the enclosing load command.", (self.nsects - sectionCount));
+                    [sect release];
+                    break;
+                }
+                
+                [sections addObject:sect];
+                [sect release];
+            }}
+        
+        _sections = [sections copy];
+        [sections release];
+    }
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {
@@ -366,6 +450,52 @@
         if (_segname == nil)
             MK_PUSH_WARNING(segname, MK_EINVALID_DATA, @"Could not form a string with data.");
         else if (length >= sizeof(sect.sectname))
+            MK_PUSH_WARNING(segname, MK_EINVALID_DATA, @"String is not properly terminated.");
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithSection:(struct section *)sec_ptr fromParent:(MKBackedNode*)parent
+{
+    self = [super initWithOffset:0 fromParent:parent error:nil];
+    if (self == nil) return self;
+    
+    struct section *sect = (void *)sec_ptr;
+    
+    _addr = sect->addr;
+    _size = sect->size;
+    _offset = sect->offset;
+    _align = (typeof(_align))powf( 2, sect->align);
+    _reloff = sect->reloff;
+    _nreloc = sect->nreloc;
+    _flags = sect->flags;
+    _reserved1 = sect->reserved1;
+    _reserved2 = sect->reserved2;
+    
+    // Load sectname
+    {
+        const char *bytes = sect->sectname;
+        NSUInteger length = strnlen(bytes, sizeof(sect->sectname));
+        
+        _sectname = [[NSString alloc] initWithBytes:bytes length:length encoding:NSUTF8StringEncoding];
+        
+        if (_sectname == nil)
+            MK_PUSH_WARNING(sectname, MK_EINVALID_DATA, @"Could not form a string with data.");
+        else if (length >= sizeof(sect->sectname))
+            MK_PUSH_WARNING(sectname, MK_EINVALID_DATA, @"String is not properly terminated.");
+    }
+    
+    // Load segname
+    {
+        const char *bytes = sect->segname;
+        NSUInteger length = strnlen(bytes, sizeof(sect->segname));
+        
+        _segname = [[NSString alloc] initWithBytes:bytes length:length encoding:NSUTF8StringEncoding];
+        
+        if (_segname == nil)
+            MK_PUSH_WARNING(segname, MK_EINVALID_DATA, @"Could not form a string with data.");
+        else if (length >= sizeof(sect->sectname))
             MK_PUSH_WARNING(segname, MK_EINVALID_DATA, @"String is not properly terminated.");
     }
     

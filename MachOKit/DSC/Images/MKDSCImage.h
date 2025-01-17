@@ -28,6 +28,7 @@
 #include <MachOKit/macho.h>
 #import <Foundation/Foundation.h>
 #import <MachOKit/MKOffsetNode.h>
+#import <MachOKit/DyldSharedCache.h>
 #import "MKCString.h"
 #import "MKMachO.h"
 
@@ -59,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) MKCString *name;
 @property (nonatomic, readonly) MKMachOImage *macho;
 
+- (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKNode *)parent error:(NSError**)error;
 
 @end
 

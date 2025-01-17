@@ -68,6 +68,21 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct symtab_command *lc = (void *)lc_ptr;
+    
+    _symoff = lc->symoff;
+    _nsyms = lc->nsyms;
+    _stroff = lc->stroff;
+    _strsize = lc->strsize;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

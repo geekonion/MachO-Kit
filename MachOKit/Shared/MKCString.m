@@ -97,6 +97,17 @@
     return self;
 }
 
+- (instancetype)initWithParent:(MKBackedNode *)parent string:(NSString *)string {
+    if (![string isKindOfClass:[NSString class]]) {
+        NSLog(@"not a string obj");
+    }
+    if (self = [super initWithOffset:0 fromParent:parent error:nil]) {
+        _string = [string retain];
+    }
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {

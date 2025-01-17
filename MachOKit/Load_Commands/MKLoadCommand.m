@@ -166,6 +166,35 @@ extern const uint32_t _mk_load_command_classes_count;
     return self;
 }
 
++ (instancetype)loadCommandWithLC:(struct load_command *)lc parent:(nonnull MKBackedNode *)parent
+{
+    uint32_t commandId = lc->cmd;
+    
+    Class commandClass = [MKLoadCommand classForCommandID:commandId];
+    if (commandClass == NULL) {
+        NSString *reason = [NSString stringWithFormat:@"No class for load command %" PRIi32 "", commandId];
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
+    }
+    
+    return [[commandClass alloc] initWithLC:lc parent:parent];
+}
+
+- (instancetype)initWithLC:(struct load_command *)lc parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithOffset:0 fromParent:parent error:nil];
+    if (self == nil) return nil;
+    
+    _cmdId = lc->cmd;
+    _cmdSize = lc->cmdsize;
+    
+    if (![self.class isSubclassOfClass:[MKLoadCommand classForCommandID:_cmdId]]) {
+        NSString *reason = [NSString stringWithFormat:@"Cannot initialize %@ with load command data for %@", NSStringFromClass(self.class), NSStringFromClass([MKLoadCommand classForCommandID:_cmdId])];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:reason userInfo:nil];
+    }
+    
+    return self;
+}
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark - About This Load Command
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -83,6 +83,50 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct linker_option_command *lc = (void *)lc_ptr;
+    
+    _nstrings = lc->count;
+    
+    {
+        uint32_t stringCount = self.nstrings;
+        NSMutableArray<MKCString *> *strings = [[NSMutableArray alloc] initWithCapacity:stringCount];
+        mach_vm_offset_t offset = sizeof(*lc);
+        
+        while (stringCount--) {
+            @autoreleasepool {
+                
+                NSError *stringError = nil;
+                MKCString *string = [[MKCString alloc] initWithOffset:offset fromParent:self error:&stringError];
+                if (string == nil) {
+                    MK_PUSH_UNDERLYING_WARNING(strings, stringError, @"Failed to read string at index " PRIi32 "", (self.nstrings - (stringCount + 1 /** as already decremented */)));
+                    break;
+                }
+                
+                if (string.nodeSize < 1) {
+                    MK_PUSH_WARNING(strings, MK_EINVALID_DATA, @"String needs to contain at least terminating NULL char");
+                    break;
+                }
+                
+                
+                offset += string.nodeSize;
+                
+                [strings addObject:string];
+                [string release];
+            }
+        }
+        
+        _strings = [strings copy];
+        [strings release];
+    }
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithLoadCommandID:(uint32_t)commandID
 {

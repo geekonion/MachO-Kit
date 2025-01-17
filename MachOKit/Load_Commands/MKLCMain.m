@@ -64,6 +64,19 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct entry_point_command *lc = (void *)lc_ptr;
+    
+    _entryoff = lc->entryoff;
+    _stacksize = lc->stacksize;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

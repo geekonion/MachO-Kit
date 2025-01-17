@@ -38,38 +38,15 @@
 @implementation MKDSCImage
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
+- (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKNode *)parent error:(NSError**)error
 {
     NSParameterAssert(parent.dataModel);
     
-    self = [super initWithOffset:offset fromParent:parent error:error];
+    self = [super initWithParent:parent error:error];
     if (self == nil || *error) return nil;
     
-    struct dyld_cache_image_info scii;
-    if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&scii length:sizeof(scii) requireFull:YES error:error] < sizeof(scii))
-    { [self release]; return nil; }
-    
-    _address = MKSwapLValue64(scii.address, self.dataModel);
-    _modTime = MKSwapLValue64(scii.modTime, self.dataModel);
-    _inode = MKSwapLValue64(scii.inode, self.dataModel);
-    _pathFileOffset = MKSwapLValue32(scii.pathFileOffset, self.dataModel);
-    
-    MKSharedCache *dsc = nil;
-    MKNode *node = parent;
-    while (node) {
-        if ([node isKindOfClass:[MKSharedCache class]]) {
-            dsc = (MKSharedCache *)node;
-            break;
-        } else {
-            node = node.parent;
-        }
-    }
-    
-    NSError *err = nil;
-    _name = [[MKCString alloc] initWithOffset:_pathFileOffset fromParent:dsc error:&err];
-    if (err) {
-        *error = err;
-    }
+    _address = image->address;
+    _name = [[MKCString alloc] initWithParent:parent string:[NSString stringWithUTF8String:image->path]];
     
 //    MKDSCMapping *mapping = [dsc findMapping:_address];
 //    if (mapping) {
@@ -81,10 +58,14 @@
 //    _MKFileMemoryMap *map = dsc.memoryMap;
 //    NSData *data = [map data];
 //    void *bytes = data.bytes;
-    uint64_t content_offset = _address - dsc.nodeVMAddress;
-    _macho = [[MKMachOImage alloc] initWithName:_name.string.UTF8String flags:0 atAddress:content_offset inMapping:dsc.memoryMap error:&err];
-    if (err) {
-        *error = err;
+    BOOL needFree = NO;
+    void *buffer = dsc_find_buffer(dsc, image->address, image->size, &needFree);
+    if (!buffer) {
+        return self;
+    }
+    _macho = [[MKMachOImage alloc] initWithName:image->path flags:0 address:buffer];
+    if (needFree) {
+        free(buffer);
     }
     
     return self;
@@ -125,7 +106,11 @@
 }
 
 - (NSString *)description {
-    return _name.string.lastPathComponent ?: @"unknown";
+    NSString *str = _name.string;
+    if (str.length) {
+        return str.lastPathComponent;
+    }
+    return @"unknown";
 }
 
 @end

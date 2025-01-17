@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013ACBBA2D38D38D00A38E4B /* DSCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 013ACBB42D38D38D00A38E4B /* DSCHelper.h */; };
+		013ACBBF2D38D38D00A38E4B /* Util.h in Headers */ = {isa = PBXBuildFile; fileRef = 013ACBB72D38D38D00A38E4B /* Util.h */; };
+		013ACBC12D38D38D00A38E4B /* DyldSharedCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 013ACBAE2D38D38D00A38E4B /* DyldSharedCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		013ACBC22D38D38D00A38E4B /* Util.c in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBB82D38D38D00A38E4B /* Util.c */; };
+		013ACBC32D38D38D00A38E4B /* DSCHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBB52D38D38D00A38E4B /* DSCHelper.c */; };
+		013ACBC42D38D38D00A38E4B /* DyldSharedCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBAF2D38D38D00A38E4B /* DyldSharedCache.m */; };
 		D000F40A1AF541D20004DAF6 /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D000F4051AF5416B0004DAF6 /* Expecta.framework */; };
 		D000F40B1AF543A40004DAF6 /* base.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C617021A4772ED00BF4F5A /* base.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00205461E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h in Headers */ = {isa = PBXBuildFile; fileRef = D00205441E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -255,7 +261,7 @@
 		D04269E61DD931E40091AB2A /* MKPtr.m in Sources */ = {isa = PBXBuildFile; fileRef = D04269E41DD931E40091AB2A /* MKPtr.m */; };
 		D04269F71DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.h in Headers */ = {isa = PBXBuildFile; fileRef = D04269F51DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D04269F81DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.m in Sources */ = {isa = PBXBuildFile; fileRef = D04269F61DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.m */; };
-		D044640D1C645F1200CF15C2 /* dyld_cache_format.h in Headers */ = {isa = PBXBuildFile; fileRef = D044640C1C645F1200CF15C2 /* dyld_cache_format.h */; };
+		D044640D1C645F1200CF15C2 /* dyld_cache_format.h in Headers */ = {isa = PBXBuildFile; fileRef = D044640C1C645F1200CF15C2 /* dyld_cache_format.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D046E57A199B3EBD00371953 /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D0E2F92319949D0E00C38EC0 /* internal.h */; };
 		D0492C3D1F928A87009DDD18 /* load_command_build_version.h in Headers */ = {isa = PBXBuildFile; fileRef = D0492C3B1F928A87009DDD18 /* load_command_build_version.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0492C3E1F928A87009DDD18 /* load_command_build_version.c in Sources */ = {isa = PBXBuildFile; fileRef = D0492C3C1F928A87009DDD18 /* load_command_build_version.c */; };
@@ -1102,6 +1108,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		013ACBAE2D38D38D00A38E4B /* DyldSharedCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DyldSharedCache.h; sourceTree = "<group>"; };
+		013ACBAF2D38D38D00A38E4B /* DyldSharedCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DyldSharedCache.m; sourceTree = "<group>"; };
+		013ACBB42D38D38D00A38E4B /* DSCHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSCHelper.h; sourceTree = "<group>"; };
+		013ACBB52D38D38D00A38E4B /* DSCHelper.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = DSCHelper.c; sourceTree = "<group>"; };
+		013ACBB72D38D38D00A38E4B /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		013ACBB82D38D38D00A38E4B /* Util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Util.c; sourceTree = "<group>"; };
 		D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Framework.xcconfig; sourceTree = "<group>"; };
 		D00205441E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKNodeFieldDataOperationExtractSubrange.h; sourceTree = "<group>"; };
 		D00205451E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKNodeFieldDataOperationExtractSubrange.m; sourceTree = "<group>"; };
@@ -2000,6 +2012,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		013ACBB92D38D38D00A38E4B /* DyldSharedCache */ = {
+			isa = PBXGroup;
+			children = (
+				013ACBAE2D38D38D00A38E4B /* DyldSharedCache.h */,
+				013ACBAF2D38D38D00A38E4B /* DyldSharedCache.m */,
+				013ACBB42D38D38D00A38E4B /* DSCHelper.h */,
+				013ACBB52D38D38D00A38E4B /* DSCHelper.c */,
+				013ACBB72D38D38D00A38E4B /* Util.h */,
+				013ACBB82D38D38D00A38E4B /* Util.c */,
+			);
+			path = DyldSharedCache;
+			sourceTree = "<group>";
+		};
 		D0079FC91895BF9C00E9D0CF /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -2470,6 +2495,7 @@
 		D03CD7FE1B68808500F52FBB /* DSC */ = {
 			isa = PBXGroup;
 			children = (
+				013ACBB92D38D38D00A38E4B /* DyldSharedCache */,
 				D044640C1C645F1200CF15C2 /* dyld_cache_format.h */,
 				D0BD11151B6DE152009AEB8F /* MKNode+SharedCache.h */,
 				D0BD11161B6DE152009AEB8F /* MKNode+SharedCache.m */,
@@ -3617,6 +3643,7 @@
 				D0F6B51621DAADB50040E72D /* MKBeginNamedSectionSymbol.h in Headers */,
 				D0A1D8D019E4EEB80095870C /* load_command_main.h in Headers */,
 				D0A1D83F19E4EE170095870C /* context.h in Headers */,
+				D044640D1C645F1200CF15C2 /* dyld_cache_format.h in Headers */,
 				D08B3BDB1FFCA9E600471513 /* MKRebaseContext.h in Headers */,
 				D0A1D8E019E4EEB80095870C /* load_command_segment_split_info.h in Headers */,
 				D00EA1AD1C61CF5B002B0696 /* MKLCVersionMinWatchOS.h in Headers */,
@@ -3714,7 +3741,6 @@
 				D030301C1A23B86600288B3E /* MKLCLoadDylinker.h in Headers */,
 				D03EF60120411E9700B8022C /* MKNodeFieldObjCImageInfoFlagsType.h in Headers */,
 				D0A1D8DE19E4EEB80095870C /* load_command_segment_64.h in Headers */,
-				D044640D1C645F1200CF15C2 /* dyld_cache_format.h in Headers */,
 				D0A1D8D219E4EEB80095870C /* load_command_prebind_cksum.h in Headers */,
 				D090A28F1C782D9E0025B096 /* MKRebaseDoRebaseULEBTimes.h in Headers */,
 				D09D5D762569C3BC005F9C33 /* MKILP32DataModel.h in Headers */,
@@ -3927,6 +3953,8 @@
 				D061346C204528A200173476 /* NSNumber+MK.h in Headers */,
 				D0B9F6C11E57FC3200D0B35A /* MKNodeFieldType.h in Headers */,
 				D06CEC5222629736001FF343 /* MKBindThreaded.h in Headers */,
+				013ACBBA2D38D38D00A38E4B /* DSCHelper.h in Headers */,
+				013ACBBF2D38D38D00A38E4B /* Util.h in Headers */,
 				D0A1D84619E4EE320095870C /* logging_internal.h in Headers */,
 				D097ABCD1C70F8E0000F62C4 /* MKMachO+Segments.h in Headers */,
 				D090A2751C7821620025B096 /* MKRebaseAddAddressULEB.h in Headers */,
@@ -4006,6 +4034,7 @@
 				D09D5D802569C58D005F9C33 /* MKAbstractDataModel.h in Headers */,
 				D0539BD41A23F83A00D3A5F0 /* MKVersion.h in Headers */,
 				D0FF4F27201B05250095106A /* MKNodeFieldSegmentFlagsType.h in Headers */,
+				013ACBC12D38D38D00A38E4B /* DyldSharedCache.h in Headers */,
 				D0BC78BC1B71CCB700467975 /* MKSharedCache+Symbols.h in Headers */,
 				D0A1D8B219E4EEB80095870C /* load_command_code_signature.h in Headers */,
 				D030305C1A23D0C700288B3E /* MKLCEncryptionInfo.h in Headers */,
@@ -4597,6 +4626,9 @@
 				F37857F524CCD4CF009D37AB /* load_command_linker_option.c in Sources */,
 				D06CEC5322629736001FF343 /* MKBindThreaded.m in Sources */,
 				D096B04E201C2EFF003DA008 /* MKNodeFieldSectionFlagsType.m in Sources */,
+				013ACBC22D38D38D00A38E4B /* Util.c in Sources */,
+				013ACBC32D38D38D00A38E4B /* DSCHelper.c in Sources */,
+				013ACBC42D38D38D00A38E4B /* DyldSharedCache.m in Sources */,
 				D0539BA91A23D28400D3A5F0 /* MKLCVersionMinMacOSX.m in Sources */,
 				D060FA7F1A1877B1002A010C /* _MKFileMemoryMap.m in Sources */,
 				D06D59BF20155DFD00A99173 /* MKNodeFieldTypeString.m in Sources */,
@@ -4887,6 +4919,7 @@
 					"__FRAMEWORK__=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 			};
@@ -4907,6 +4940,7 @@
 					"__FRAMEWORK__=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 			};

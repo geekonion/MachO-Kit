@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKSharedCache (Slide)
 
 //!
-@property (nonatomic, readonly, nullable) MKDSCSlideInfo *slideInfo;
+//@property (nonatomic, readonly, nullable) MKDSCSlideInfo *slideInfo;
 
 @end
 

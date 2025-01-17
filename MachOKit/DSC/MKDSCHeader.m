@@ -28,11 +28,28 @@
 #import "MKDSCHeader.h"
 #import "NSError+MK.h"
 #import "MKMachO.h"
-
-#include "dyld_cache_format.h"
+#import "dyld_cache_format.h"
 
 //----------------------------------------------------------------------------//
 @implementation MKDSCHeader
+
+- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dsc:(DyldSharedCache *)dsc error:(NSError **)error {
+    NSParameterAssert(parent.dataModel);
+    
+    self = [super initWithOffset:offset fromParent:parent error:error];
+    if (self == nil) return nil;
+    
+    struct dyld_cache_header *header = &dsc->files[0]->header;
+    _magic = [[NSString alloc] initWithBytes:header->magic length:strnlen(header->magic, sizeof(header->magic)) encoding:NSUTF8StringEncoding];
+    if (_magic == nil)
+        MK_PUSH_WARNING(magic, MK_EINVALID_DATA, @"Could not form a string with data.");
+    
+    _mappingCount = dsc->mappingCount;
+    _imagesCount = dsc->containedImageCount;
+    _localSymbolsSize = dsc->symbolFile.nlistCount;
+    
+    return self;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
@@ -60,10 +77,10 @@
     
     // The slideInfo* fields are only present if the header size is >= 0x48.
     // Dyld actually checks for this so presumably caches without it exist.
-#define HAS_SLIDE_INFO (_mappingOffset >= offsetof(struct dyld_cache_header, slideInfoSize) + sizeof(sch.slideInfoSize))
+#define HAS_SLIDE_INFO (_mappingOffset >= offsetof(struct dyld_cache_header, slideInfoSizeUnused) + sizeof(sch.slideInfoSizeUnused))
     if (HAS_SLIDE_INFO) {
-        _slideInfoOffset = MKSwapLValue64(sch.slideInfoOffset, self.dataModel);
-        _slideInfoSize = MKSwapLValue64(sch.slideInfoSize, self.dataModel);
+        _slideInfoOffset = MKSwapLValue64(sch.slideInfoOffsetUnused, self.dataModel);
+        _slideInfoSize = MKSwapLValue64(sch.slideInfoSizeUnused, self.dataModel);
     }
     
     // The localSymbols* fields are only present if the header size is >= 0x58.
@@ -145,8 +162,8 @@
     
     if (HAS_SLIDE_INFO) {
         fields = [fields arrayByAddingObjectsFromArray:@[
-            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoOffset) description:@"Slide Info Offset" offset:offsetof(struct dyld_cache_header, slideInfoOffset) size:sizeof(sch.slideInfoOffset) format:MKNodeFieldFormatOffset],
-            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoSize) description:@"Slide Info Size" offset:offsetof(struct dyld_cache_header, slideInfoSize) size:sizeof(sch.slideInfoSize) format:MKNodeFieldFormatSize]
+            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoOffset) description:@"Slide Info Offset" offset:offsetof(struct dyld_cache_header, slideInfoOffsetUnused) size:sizeof(sch.slideInfoOffsetUnused) format:MKNodeFieldFormatOffset],
+            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoSize) description:@"Slide Info Size" offset:offsetof(struct dyld_cache_header, slideInfoSizeUnused) size:sizeof(sch.slideInfoSizeUnused) format:MKNodeFieldFormatSize]
         ]];
     }
     

@@ -84,6 +84,31 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct dyld_info_command *lc = (void *)lc_ptr;
+    
+    _rebase_off = lc->rebase_off;
+    _rebase_size = lc->rebase_size;
+    
+    _bind_off = lc->bind_off;
+    _bind_size = lc->bind_size;
+    
+    _weak_bind_off = lc->weak_bind_off;
+    _weak_bind_size = lc->weak_bind_size;
+    
+    _lazy_bind_off = lc->lazy_bind_off;
+    _lazy_bind_size = lc->lazy_bind_size;
+    
+    _export_off = lc->export_off;
+    _export_size = lc->export_size;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

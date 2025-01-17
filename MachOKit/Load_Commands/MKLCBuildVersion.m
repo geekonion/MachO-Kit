@@ -124,6 +124,74 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct build_version_command *lc = (void *)lc_ptr;
+    
+    _platform = lc->platform;
+    
+    _minos = [[MKVersion alloc] initWithMachVersion:lc->minos];
+    if (_minos == nil) { [self release]; return nil; }
+    
+    _sdk = [[MKVersion alloc] initWithMachVersion:lc->sdk];
+    if (_sdk == nil) { [self release]; return nil; }
+    
+    _ntools = lc->ntools;
+    
+    // Load the build tool versions
+    {
+        uint32_t toolCount = self.ntools;
+        
+        NSMutableArray<MKLCBuildToolVersion*> *tools = [[NSMutableArray alloc] initWithCapacity:toolCount];
+        mach_vm_offset_t offset = sizeof(*lc);
+        mach_vm_offset_t oldOffset;
+        
+        while (toolCount--) {
+            @autoreleasepool {
+                NSError *toolError = nil;
+                
+                // It is safe to pass the mach_vm_offset_t offset as the offset
+                // parameter because the offset can not grow beyond the node size,
+                // which is capped at UINT32_MAX.  Any uint32_t can be acurately
+                // represented by an mk_vm_offset_t.
+                struct build_tool_version *btv_ptr = (struct build_tool_version *)((char *)lc + offset);
+                MKLCBuildToolVersion *tool = [[MKLCBuildToolVersion alloc] initWithBTV:btv_ptr fromParent:self];
+                if (tool == nil) {
+                    // If we fail to instantiate an instance of the
+                    // MKLCBuildToolVersion it means we've walked off the end of
+                    // memory that can be mapped by our MKMemoryMap.
+                    MK_PUSH_UNDERLYING_WARNING(tools, toolError, @"Failed to instantiate build tool version at index " PRIi32 "", (self.ntools - toolCount));
+                    break;
+                }
+                
+                oldOffset = offset;
+                offset += tool.nodeSize;
+                
+                // We will attempt to load build tool versions that are (partially)
+                // beyond the end of this load command (as specified by the load
+                // command size).  Apple's tools don't appear to guard against this
+                // either.
+                
+                if (oldOffset > offset) {
+                    // This should be impossible - we would fail to load the next
+                    // build tool version first.  But just to be safe...
+                    break;
+                }
+                
+                [tools addObject:tool];
+                [tool release];
+            }}
+        
+        _tools = [tools copy];
+        [tools release];
+    }
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {
@@ -226,6 +294,19 @@
     
     _tool = MKSwapLValue32(btv.tool, self.macho.dataModel);
     _version = MKSwapLValue32(btv.version, self.macho.dataModel);
+    
+    return self;
+}
+
+- (instancetype)initWithBTV:(struct build_tool_version *)btv_ptr fromParent:(MKBackedNode*)parent
+{
+    self = [super initWithOffset:0 fromParent:parent error:nil];
+    if (self == nil) return self;
+    
+    struct build_tool_version *btv = (void *)btv_ptr;
+    
+    _tool = btv->tool;
+    _version = btv->version;
     
     return self;
 }

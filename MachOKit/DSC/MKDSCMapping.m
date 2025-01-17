@@ -40,64 +40,18 @@
 @synthesize initialProtection = _initialProtection;
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithSharedCache:(MKSharedCache*)sharedCache vmAddress:(mk_vm_address_t)vmAddress vmSize:(mk_vm_size_t)vmSize fileOffset:(mk_vm_offset_t)fileOffset initialProtection:(vm_prot_t)initialProtection maximumProtection:(vm_prot_t)maximumProtection error:(NSError**)error
+- (nullable instancetype)initWithDSCMapping:(DyldSharedCacheMapping *)mapping parent:(MKNode *)parent error:(NSError**)error
 {
-    mk_error_t err;
-    NSParameterAssert(sharedCache);
-    
-    self = [super initWithParent:sharedCache error:error];
+    self = [super initWithParent:parent error:error];
     if (self == nil) return nil;
     
-    _vmAddress = vmAddress;
-    _vmSize = vmSize;
-    _fileOffset = fileOffset;
-    _maximumProtection = maximumProtection;
-    _initialProtection = initialProtection;
-    
-    // contextAddress := vmAddress + slide - fileOffset
-    mk_vm_slide_t slide = sharedCache.slide;
-    
-    if ((err = mk_vm_address_apply_slide(vmAddress, slide, &_contextAddress))) {
-        MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_SLIDE_ARITHMETIC_ERROR(err, _contextAddress, slide);
-        [self release]; return nil;
-    }
-    
-    if ((err = mk_vm_address_subtract(_contextAddress, fileOffset, &_contextAddress))) {
-        MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_DEFFERENCE_ARITHMETIC_ERROR(err, _contextAddress, fileOffset);
-        [self release]; return nil;
-    }
-    
-    // dyld will refuse to load the shared cache if a region's fileOffset + size
-    // is greater than the actual size of the shared cache file on disk.
-    // We don't care however as long as adding the two does not trigger an
-    // overflow.
-    if ((err = mk_vm_address_check_length(_fileOffset, _vmSize))) {
-        MK_ERROR_OUT = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _fileOffset, _vmSize);
-        [self release]; return nil;
-    }
-    
-    // Also check the vmAddress + vmSize for potential overflow.
-    if ((err = mk_vm_address_check_length(_vmAddress, _vmSize))) {
-        MK_ERROR_OUT = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _vmAddress, _vmSize);
-        [self release]; return nil;
-    }
-    
-    // Make sure the region data is actually available
-    if ([sharedCache.memoryMap hasMappingAtOffset:0 fromAddress:_contextAddress length:_vmSize] == NO) {
-        MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Complete mapping does not exist at context-relative address %" MK_VM_PRIxADDR ".", _contextAddress];
-        [self release]; return nil;
-    }
+    _vmAddress = mapping->vmaddr;
+    _vmSize = mapping->size;
+    _fileOffset = mapping->fileoff;
+    _maximumProtection = mapping->maxProt;
+    _initialProtection = mapping->initProt;
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithDescriptor:(MKDSCMappingInfo*)descriptor error:(NSError**)error
-{
-    NSParameterAssert(descriptor);
-    MKSharedCache *sharedCache = descriptor.sharedCache;
-    
-    return [self initWithSharedCache:sharedCache vmAddress:descriptor.address vmSize:descriptor.size fileOffset:descriptor.fileOffset initialProtection:descriptor.initProt maximumProtection:descriptor.maxProt error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

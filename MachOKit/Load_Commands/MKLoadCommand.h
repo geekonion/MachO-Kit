@@ -72,6 +72,8 @@ NS_ASSUME_NONNULL_BEGIN
 //! parent \ref MachOImage.
 + (nullable instancetype)loadCommandAtOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 
++ (instancetype)loadCommandWithLC:(struct load_command *)lc_ptr parent:(MKBackedNode *)parent;
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(MKBackedNode *)parent;
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  About This Load Command
 //! @name       About This Load Command

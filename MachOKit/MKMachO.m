@@ -203,6 +203,152 @@
     return self;
 }
 
+- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address
+{
+    NSError *localError = nil;
+    
+    self = [super initWithParent:nil error:&localError];
+    if (self == nil) return nil;
+    
+    // TODO - Remove this eventually
+    _context.user_data = (void*)self;
+    _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
+    
+    _flags = flags;
+    
+    // Convert the name to an NSString
+    if (name)
+        _name = [[NSString alloc] initWithCString:name encoding:NSUTF8StringEncoding];
+    
+    struct mach_header *machHeader = (struct mach_header *)address;
+    // Read the Magic
+    uint32_t magic = machHeader->magic;
+    if (magic == 0) {
+        [self release]; return nil;
+    }
+    
+    // Load the appropriate data model for the Mach-O
+    switch (magic) {
+        case MH_CIGAM:
+        case MH_MAGIC:
+            // All 32-bit darwin ABIs use ILP32
+            _dataModel = [(magic == MH_MAGIC) ? [MKILP32DataModel dataModelWithHostEndianness] : [MKILP32DataModel dataModelWithByteSwappedEndianness] retain];
+            _header = [[MKMachHeader alloc] initWithHeader:machHeader dataModel:_dataModel];
+            break;
+        case MH_CIGAM_64:
+        case MH_MAGIC_64:
+            // All 64-bit darwin ABIs use LP64
+            _dataModel = [(magic == MH_MAGIC_64) ? [MKLP64DataModel dataModelWithHostEndianness] : [MKLP64DataModel dataModelWithByteSwappedEndianness] retain];
+            _header = [[MKMachHeader64 alloc] initWithHeader:machHeader dataModel:_dataModel];
+            break;
+        default:
+            localError = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad Mach-O magic: 0x%" PRIx32 ".", magic];
+            [self release]; return nil;
+    }
+    
+    // Now that the header is loaded, further specialize the data model based
+    // on the architecture, if needed.
+    switch (self.header.cputype) {
+        case CPU_TYPE_ARM64:
+            [_dataModel release];
+            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            break;
+        case CPU_TYPE_X86_64:
+            [_dataModel release];
+            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            break;
+        default:
+            break;
+    }
+    
+    // Only support a subset of the Mach-O types at this time
+    switch (_header.filetype) {
+        case MH_OBJECT:
+        case MH_EXECUTE:
+        case MH_DYLIB:
+        case MH_DYLINKER:
+        case MH_BUNDLE:
+            break;
+        default:
+            localError = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unsupported file type: %" PRIx32 ".", _header.filetype];
+            [self release]; return nil;
+    }
+    
+    // Parse load commands
+    {
+        uint32_t loadCommandLength = _header.sizeofcmds;
+        uint32_t loadCommandCount = _header.ncmds;
+        
+        // The kernel will refuse to load a Mach-O image in which the
+        // mach_header_size + header->sizeofcmds is greater than the size of the
+        // Mach-O image.  However, we can not know the size of the Mach-O here.
+        
+        // TODO - Premap the load commands once MKMemoryMap has support for that.
+        
+        NSMutableArray<MKLoadCommand*> *loadCommands = [[NSMutableArray alloc] initWithCapacity:loadCommandCount];
+        mach_vm_offset_t offset = _header.nodeSize;
+        mach_vm_offset_t oldOffset;
+        
+        while (loadCommandCount--)
+            @autoreleasepool {
+                
+                NSError *e = nil;
+                
+                // It is safe to pass the mach_vm_offset_t offset as the offset
+                // parameter because the offset can not grow beyond the header size,
+                // which is capped at UINT32_MAX.  Any uint32_t can be acurately
+                // represented by an mk_vm_offset_t.
+                
+                struct load_command *lc_ptr = (char *)machHeader + offset;
+                MKLoadCommand *lc = [MKLoadCommand loadCommandWithLC:lc_ptr parent:self];
+                if (lc == nil) {
+                    // If we fail to instantiate an instance of the MKLoadCommand it
+                    // means we've walked off the end of memory that can be mapped by
+                    // our MKMemoryMap.
+                    MK_PUSH_UNDERLYING_WARNING(loadCommands, e, @"Failed to instantiate load command at index %" PRIi32 ".", _header.ncmds - loadCommandCount);
+                    break;
+                }
+                
+                oldOffset = offset;
+                offset += lc.cmdSize;
+                
+                [loadCommands addObject:lc];
+                
+                // The kernel will refuse to load a Mach-O image if it detects that the
+                // kernel's offset into the load commands (when parsing the load
+                // commands) has exceeded the total mach header size (mach_header_size
+                // + mach_header->sizeofcmds).  However, we don't care as long as there
+                // was not an overflow...
+                if (oldOffset > offset) {
+                    MK_PUSH_WARNING(loadCommands, MK_EOVERFLOW, @"Encountered an overflow while advancing the parser to the load command following index %" PRIu32 ".", _header.ncmds - loadCommandCount);
+                    break;
+                }
+                // ...but we will add a warning.
+                if (offset > _header.nodeSize + (mach_vm_size_t)loadCommandLength)
+                    MK_PUSH_WARNING(loadCommands, MK_EINVALID_DATA, @"Part of load command at index %" PRIi32 " is beyond sizeofcmds.  This is invalid.", _header.ncmds - loadCommandCount);
+            }
+        
+        _loadCommands = [loadCommands copy];
+        [loadCommands release];
+    }
+    
+    // Determine the VM address and slide
+    {
+        mk_error_t err;
+        
+        NSArray *segmentLoadCommands = [self loadCommandsOfType:(self.dataModel.pointerSize == 8) ? LC_SEGMENT_64 : LC_SEGMENT];
+        for (id<MKLCSegment> segmentLC in segmentLoadCommands) {
+            // The VM address of the image is defined as the vmaddr of the
+            // *last* segment load command with a 0 fileoff and non-zero
+            // filesize.
+            if (segmentLC.mk_fileoff == 0 && segmentLC.mk_filesize != 0)
+                _vmAddress = segmentLC.mk_vmaddr;
+        }
+    }
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKBackedNode*)parent error:(NSError**)error
 {

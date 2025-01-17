@@ -66,6 +66,20 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct encryption_info_command *lc = (void *)lc_ptr;
+    
+    _cryptoff = lc->cryptoff;
+    _cryptsize = lc->cryptsize;
+    _cryptid = lc->cryptid;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

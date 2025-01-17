@@ -25,10 +25,10 @@
 //| SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------------------------------------//
 
-#include <MachOKit/macho.h>
+#import <MachOKit/macho.h>
 #import <Foundation/Foundation.h>
-
 #import <MachOKit/MKOffsetNode.h>
+#import <MachOKit/DyldSharedCache.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _mappingOffset;
     uint32_t _mappingCount;
     uint32_t _imagesOffset;
-    uint32_t _imagesCount;
+    uint64_t _imagesCount;
     uint64_t _dyldBaseAddress;
     uint64_t _codeSignatureOffset;
     uint64_t _codeSignatureSize;
@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint32_t mappingOffset;
 @property (nonatomic, readonly) uint32_t mappingCount;
 @property (nonatomic, readonly) uint32_t imagesOffset;
-@property (nonatomic, readonly) uint32_t imagesCount;
+@property (nonatomic, readonly) uint64_t imagesCount;
 @property (nonatomic, readonly) uint64_t dyldBaseAddress;
 @property (nonatomic, readonly) uint64_t codeSignatureOffset;
 @property (nonatomic, readonly) uint64_t codeSignatureSize;
@@ -76,6 +76,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint64_t localSymbolsSize;
 @property (nonatomic, readonly, nullable) NSUUID *uuid;
 @property (nonatomic, readonly) uint64_t cacheType;
+
+- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dsc:(DyldSharedCache *)dsc error:(NSError **)error;
 
 @end
 

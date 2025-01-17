@@ -104,6 +104,43 @@
     return self;
 }
 
+- (instancetype)initWithLC:(struct load_command *)lc_ptr parent:(nonnull MKBackedNode *)parent
+{
+    self = [super initWithLC:lc_ptr parent:parent];
+    if (self == nil) return nil;
+    
+    struct dysymtab_command *lc = (void *)lc_ptr;
+    
+    _ilocalsym = lc->ilocalsym;
+    _nlocalsym = lc->nlocalsym;
+    
+    _iextdefsym = lc->iextdefsym;
+    _nextdefsym = lc->nextdefsym;
+    
+    _iundefsym = lc->iundefsym;
+    _nundefsym = lc->nundefsym;
+    
+    _tocoff = lc->tocoff;
+    _ntoc = lc->ntoc;
+    
+    _modtaboff = lc->modtaboff;
+    _nmodtab = lc->nmodtab;
+    
+    _extrefsymoff = lc->extrefsymoff;
+    _nextrefsyms = lc->nextrefsyms;
+    
+    _indirectsymoff = lc->indirectsymoff;
+    _nindirectsyms = lc->nindirectsyms;
+    
+    _extreloff = lc->extreloff;
+    _nextrel = lc->nextrel;
+    
+    _locreloff = lc->locreloff;
+    _nlocrel = lc->nlocrel;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {

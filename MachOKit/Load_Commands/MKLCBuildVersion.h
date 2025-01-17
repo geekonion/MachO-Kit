@@ -81,6 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! The build tool version number.
 @property (nonatomic, readonly) uint32_t version;
 
+- (instancetype)initWithBTV:(struct build_tool_version *)btv_ptr fromParent:(MKBackedNode*)parent;
 @end
 
 NS_ASSUME_NONNULL_END
