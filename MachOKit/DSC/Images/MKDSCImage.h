@@ -29,8 +29,8 @@
 #import <Foundation/Foundation.h>
 #import <MachOKit/MKOffsetNode.h>
 #import <MachOKit/DyldSharedCache.h>
-#import "MKCString.h"
-#import "MKMachO.h"
+#import <MachOKit/MKCString.h>
+#import <MachOKit/MKMachO.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

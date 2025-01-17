@@ -28,7 +28,7 @@
 #include <MachOKit/macho.h>
 #import <Foundation/Foundation.h>
 #import <MachOKit/MKBackedNode.h>
-#import "DyldSharedCache.h"
+#import <MachOKit/DyldSharedCache.h>
 
 @class MKSharedCache;
 @class MKDSCMappingInfo;
