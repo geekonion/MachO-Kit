@@ -30,6 +30,11 @@
 #import "MKDSCMappingInfo.h"
 #import "MKSharedCache.h"
 
+@interface MKDSCMapping () {
+    DyldSharedCacheMapping *_mapping;
+}
+    
+@end
 //----------------------------------------------------------------------------//
 @implementation MKDSCMapping
 
@@ -50,6 +55,8 @@
     _fileOffset = mapping->fileoff;
     _maximumProtection = mapping->maxProt;
     _initialProtection = mapping->initProt;
+    
+    _mapping = mapping;
     
     return self;
 }
@@ -94,6 +101,12 @@
         [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(maximumProtection) description:@"Maximum VM Protection" format:MKNodeFieldFormatHexCompact],
         [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(initialProtection) description:@"Initial VM Protection" format:MKNodeFieldFormatHexCompact]
     ]];
+}
+
+- (NSString *)description {
+    const char *path = _mapping->file->filepath;
+    
+    return [NSString stringWithUTF8String:path].lastPathComponent;
 }
 
 @end
