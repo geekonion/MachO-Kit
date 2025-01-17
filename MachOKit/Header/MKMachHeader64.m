@@ -98,5 +98,9 @@
     ]];
 }
 
+- (NSString *)description {
+    return @"Mach64 Header";
+}
+
 @end
 

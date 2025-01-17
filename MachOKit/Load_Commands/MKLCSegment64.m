@@ -675,6 +675,6 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (NSString*)description
-{ return [NSString stringWithFormat:@"Section Header (%@)", self.sectname]; }
+{ return [NSString stringWithFormat:@"Section64 Header (%@)", self.sectname]; }
 
 @end

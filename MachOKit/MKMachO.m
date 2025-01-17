@@ -548,7 +548,7 @@
             break;
     }
     
-    char architecture[50];
+    char architecture[50] = {};
     size_t descriptionLen = mk_architecture_copy_description(self.architecture, architecture, sizeof(architecture));
     NSString *arch = [[[NSString alloc] initWithBytes:(void*)architecture length:descriptionLen encoding:NSASCIIStringEncoding] autorelease];
     
