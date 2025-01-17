@@ -61,13 +61,6 @@
     return self;
 }
 
-//|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
-{
-    NSAssert([parent isKindOfClass:MKDSCMappingInfo.class], @"Parent must be a MKDSCMappingInfo.");
-    return [self initWithDescriptor:(id)parent error:error];
-}
-
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark - MKNode
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -50,9 +50,9 @@
     return self;
 }
 
-- (instancetype)initWithHeader:(struct mach_header_64 *)header dataModel:(MKDataModel *)dataModel
+- (instancetype)initWithHeader:(struct mach_header_64 *)header dataModel:(MKDataModel *)dataModel parent:(MKBackedNode *)parent
 {
-    if (self = [super initWithHeader:header dataModel:dataModel]) {
+    if (self = [super initWithHeader:(struct mach_header *)header dataModel:dataModel parent:parent]) {
         _reserved = header->reserved;
     }
     

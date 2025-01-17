@@ -106,6 +106,8 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 
 - (nullable instancetype)initWithName:(nullable const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)mapping error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address NS_DESIGNATED_INITIALIZER;
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Retrieving the Initialization Context
 //! @name       Retrieving the Initialization Context
@@ -156,8 +158,6 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //! than the value of ncmds in the \ref header, if the Mach-O is malformed
 //! and trailing load commands could not be read.
 @property (nonatomic, readonly) NSArray<__kindof MKLoadCommand*> *loadCommands;
-
-- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address;
 
 //! Filters the \ref loadCommands array to those of the specified \a type
 //! and returns the result.  The relative ordering of the returned load

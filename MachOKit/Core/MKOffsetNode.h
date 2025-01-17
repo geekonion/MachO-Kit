@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! The offset of the node from the parent node.
 @property (nonatomic, readonly) mk_vm_offset_t nodeOffset;
-- (instancetype)init;
+
 @end
 
 NS_ASSUME_NONNULL_END

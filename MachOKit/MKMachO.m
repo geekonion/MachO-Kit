@@ -233,13 +233,13 @@
         case MH_MAGIC:
             // All 32-bit darwin ABIs use ILP32
             _dataModel = [(magic == MH_MAGIC) ? [MKILP32DataModel dataModelWithHostEndianness] : [MKILP32DataModel dataModelWithByteSwappedEndianness] retain];
-            _header = [[MKMachHeader alloc] initWithHeader:machHeader dataModel:_dataModel];
+            _header = [[MKMachHeader alloc] initWithHeader:machHeader dataModel:_dataModel parent:self];
             break;
         case MH_CIGAM_64:
         case MH_MAGIC_64:
             // All 64-bit darwin ABIs use LP64
             _dataModel = [(magic == MH_MAGIC_64) ? [MKLP64DataModel dataModelWithHostEndianness] : [MKLP64DataModel dataModelWithByteSwappedEndianness] retain];
-            _header = [[MKMachHeader64 alloc] initWithHeader:machHeader dataModel:_dataModel];
+            _header = [[MKMachHeader64 alloc] initWithHeader:(struct mach_header_64 *)machHeader dataModel:_dataModel parent:self];
             break;
         default:
             localError = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad Mach-O magic: 0x%" PRIx32 ".", magic];
@@ -299,7 +299,7 @@
                 // which is capped at UINT32_MAX.  Any uint32_t can be acurately
                 // represented by an mk_vm_offset_t.
                 
-                struct load_command *lc_ptr = (char *)machHeader + offset;
+                struct load_command *lc_ptr = (void *)(char *)machHeader + offset;
                 MKLoadCommand *lc = [MKLoadCommand loadCommandWithLC:lc_ptr parent:self];
                 if (lc == nil) {
                     // If we fail to instantiate an instance of the MKLoadCommand it
@@ -334,7 +334,6 @@
     
     // Determine the VM address and slide
     {
-        mk_error_t err;
         
         NSArray *segmentLoadCommands = [self loadCommandsOfType:(self.dataModel.pointerSize == 8) ? LC_SEGMENT_64 : LC_SEGMENT];
         for (id<MKLCSegment> segmentLC in segmentLoadCommands) {

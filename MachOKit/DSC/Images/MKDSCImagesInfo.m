@@ -48,7 +48,7 @@
     mk_vm_address_t sharedCacheAddress = sharedCache.nodeContextAddress;
     mk_vm_address_t sharedCacheVMAddress = sharedCache.nodeVMAddress;
     mk_vm_offset_t imagesInfoOffset = sharedCache.header.imagesOffset;
-    uint32_t imagesCount = sharedCache.header.imagesCount;
+    uint64_t imagesCount = sharedCache.header.imagesCount;
     
     if ((err = mk_vm_address_apply_offset(sharedCacheAddress, imagesInfoOffset, &_contextAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, sharedCacheAddress, imagesInfoOffset);
@@ -64,7 +64,7 @@
     
     // Load image descriptors
     {
-        uint32_t imageDescriptorCount = imagesCount;
+        uint64_t imageDescriptorCount = imagesCount;
         
         NSMutableArray<MKDSCImage*> *images = [[NSMutableArray alloc] initWithCapacity:imageDescriptorCount];
         

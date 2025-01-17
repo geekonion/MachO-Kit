@@ -16,7 +16,7 @@ typedef struct Fat Fat;
 
 typedef struct DyldSharedCacheFile {
 	char *filepath;
-	size_t filesize;
+    uint64_t filesize;
 	int fd;
 	struct dyld_cache_header header;
 } DyldSharedCacheFile;

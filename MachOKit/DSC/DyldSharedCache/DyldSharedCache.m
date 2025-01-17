@@ -8,7 +8,7 @@
 
 DyldSharedCacheMapping *dsc_lookup_mapping(DyldSharedCache *sharedCache, uint64_t vmaddr, uint64_t size)
 {
-    int32_t count = sharedCache->mappingCount;
+    int32_t count = (int32_t)sharedCache->mappingCount;
     for (int32_t i = 0; i < count; i++) {
         DyldSharedCacheMapping *mapping = &sharedCache->mappings[i];
         uint64_t mappingEndAddr = mapping->vmaddr + mapping->size;
@@ -36,7 +36,7 @@ void *dsc_find_buffer(DyldSharedCache *sharedCache, uint64_t vmaddr, uint64_t si
             void *buffer = calloc(size, sizeof(char));
             struct DyldSharedCacheFile *file = mapping->file;
             
-            off_t offset = mapping->fileoff + content_offset;
+            uint64_t offset = mapping->fileoff + content_offset;
             int fd = file->fd;
             if (lseek(fd, offset, SEEK_SET) == -1) {
                 return NULL;
@@ -48,7 +48,7 @@ void *dsc_find_buffer(DyldSharedCache *sharedCache, uint64_t vmaddr, uint64_t si
             return buffer;
         }
         
-        return (void *)(ptr + content_offset);
+        return (void *)((uint64_t)ptr + content_offset);
     }
 
     return NULL;
@@ -72,7 +72,7 @@ int dsc_read_from_vmaddr(DyldSharedCache *sharedCache, uint64_t vmaddr, size_t s
         if (mapping->ptr == (void *)-1) {
             return -1;
         }
-        memcpy((void *)((intptr_t)outBuf + (curAddr - startAddr)), (void *)((intptr_t)mapping->ptr + startOffset), copySize);
+        memcpy((void *)((uint64_t)outBuf + (curAddr - startAddr)), (void *)((uint64_t)mapping->ptr + startOffset), copySize);
         curAddr += copySize;
     }
 
@@ -91,7 +91,7 @@ DyldSharedCacheFile *_dsc_load_file(const char *dscPath, const char suffix[32]) 
     fd = open(filepath, O_RDONLY);
     if (fd <= 0) goto fail;
 
-    struct stat sb;
+    struct stat sb = {};
     if (fstat(fd, &sb) != 0) goto fail;
 
     if (sb.st_size < sizeof(struct dyld_cache_header)) goto fail;
@@ -250,7 +250,7 @@ DyldSharedCache *dsc_init_from_path_premapped(const char *path, uint32_t premapS
         sharedCache->mappingCount += header->mappingCount;
         sharedCache->mappings = realloc(sharedCache->mappings, sharedCache->mappingCount * sizeof(DyldSharedCacheMapping));
 
-        for (int k = 0; k < header->mappingCount; k++) {
+        for (int32_t k = 0; k < header->mappingCount; k++) {
             DyldSharedCacheMapping *thisMapping = &sharedCache->mappings[prevMappingCount + k];
 
             struct dyld_cache_mapping_and_slide_info fullInfo = {};
@@ -526,7 +526,7 @@ DyldSharedCacheImage *dsc_lookup_image_by_path(DyldSharedCache *sharedCache, con
 DyldSharedCacheImage *dsc_lookup_image_by_address(DyldSharedCache *sharedCache, uint64_t address)
 {
     DyldSharedCacheImage *image = NULL;
-    int64_t count = sharedCache->containedImageCount;
+    uint64_t count = sharedCache->containedImageCount;
     for (int64_t i = 0; i < count; i++) {
         DyldSharedCacheImage *tmp = &sharedCache->containedImages[i];
         if (address >= tmp->address && address < tmp->endAddr) {
@@ -539,7 +539,7 @@ DyldSharedCacheImage *dsc_lookup_image_by_address(DyldSharedCache *sharedCache, 
 DyldSharedCacheImage *dsc_lookup_image_by_vmaddr(DyldSharedCache *sharedCache, uint64_t vmaddr)
 {
     DyldSharedCacheImage *image = NULL;
-    int64_t count = sharedCache->containedImageCount;
+    uint64_t count = sharedCache->containedImageCount;
     for (int64_t i = 0; i < count; i++) {
         DyldSharedCacheImage *tmp = &sharedCache->containedImages[i];
         if (vmaddr == tmp->address) {

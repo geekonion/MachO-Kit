@@ -60,9 +60,9 @@
     return self;
 }
 
-- (instancetype)initWithHeader:(struct mach_header *)header dataModel:(MKDataModel *)dataModel
+- (instancetype)initWithHeader:(struct mach_header *)header dataModel:(MKDataModel *)dataModel parent:(MKBackedNode *)parent
 {
-    if (self = [super initWithOffset:0 fromParent:nil error:nil]) {
+    if (self = [super initWithOffset:0 fromParent:parent error:nil]) {
         _magic = header->magic;
         _cputype = header->cputype;
         _cpusubtype = header->cpusubtype;

@@ -267,5 +267,6 @@
     #import <MachOKit/MKObjCIVarSection.h>
     #import <MachOKit/MKObjCConstSection.h>
     #import <MachOKit/MKObjCDataSection.h>
+#import <MachOKit/MKNodeFieldCPUSubTypePowerPC64.h>
 
 #endif /* _MachOKit_H */

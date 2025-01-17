@@ -38,7 +38,7 @@
 @implementation MKDSCImage
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKNode *)parent error:(NSError**)error
+- (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKBackedNode *)parent error:(NSError**)error
 {
     NSParameterAssert(parent.dataModel);
     
@@ -58,7 +58,7 @@
 //    _MKFileMemoryMap *map = dsc.memoryMap;
 //    NSData *data = [map data];
 //    void *bytes = data.bytes;
-    BOOL needFree = NO;
+    bool needFree = false;
     void *buffer = dsc_find_buffer(dsc, image->address, image->size, &needFree);
     if (!buffer) {
         return self;

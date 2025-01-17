@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) MKCString *name;
 @property (nonatomic, readonly) MKMachOImage *macho;
 
-- (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKNode *)parent error:(NSError**)error;
+- (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKBackedNode *)parent error:(NSError**)error;
 
 @end
 

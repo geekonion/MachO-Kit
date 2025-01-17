@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint32_t sizeofcmds;
 @property (nonatomic, readonly) uint32_t flags;
 
-- (instancetype)initWithHeader:(struct mach_header *)header dataModel:(MKDataModel *)dataModel;
+- (instancetype)initWithHeader:(struct mach_header *)header dataModel:(MKDataModel *)dataModel parent:(MKBackedNode *)parent;
 
 @end
 

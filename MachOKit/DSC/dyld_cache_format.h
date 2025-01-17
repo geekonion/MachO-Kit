@@ -26,6 +26,7 @@
 
 #include <stdint.h>
 #include <uuid/uuid.h>
+#include <mach/vm_prot.h>
 
 //#include "fixup-chains.h"
 
@@ -136,8 +137,8 @@ struct dyld_cache_mapping_and_slide_info {
     uint64_t    slideInfoFileOffset;
     uint64_t    slideInfoFileSize;
     uint64_t    flags;
-    uint32_t    maxProt;
-    uint32_t    initProt;
+    vm_prot_t    maxProt;
+    vm_prot_t    initProt;
 };
 
 struct dyld_cache_image_info {

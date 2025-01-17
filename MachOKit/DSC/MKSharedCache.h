@@ -85,9 +85,7 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
     MKDSCLocalSymbols *_localSymbols;
 }
 
-- (instancetype)initWithFlags:(MKSharedCacheFlags)flags url:(NSURL *)url;
-//!
-- (nullable instancetype)initWithFlags:(MKSharedCacheFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memoryMap error:(NSError**)error NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithFlags:(MKSharedCacheFlags)flags url:(NSURL *)url NS_DESIGNATED_INITIALIZER;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Getting Shared Cache Metadata
