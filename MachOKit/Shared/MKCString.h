@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, nullable) NSString *string;
 
-- (instancetype)initWithParent:(MKBackedNode *)parent string:(NSString *)string;
+- (instancetype)initWithOffset:(mk_vm_offset_t)offset parent:(MKBackedNode *)parent string:(NSString *)string;
 @end
 
 NS_ASSUME_NONNULL_END

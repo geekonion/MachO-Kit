@@ -70,9 +70,10 @@
     
     struct dylib_command *lc = (void *)lc_ptr;
     
-    const char *ptr = (const char *)lc + lc->dylib.name.offset;
+    uint32_t offset = lc->dylib.name.offset;
+    const char *ptr = (const char *)lc + offset;
     NSString *str = [NSString stringWithUTF8String:ptr];
-    _name = [[MKCString alloc] initWithParent:self string:str];
+    _name = [[MKCString alloc] initWithOffset:offset parent:self string:str];
     
     _timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:lc->dylib.timestamp];
     

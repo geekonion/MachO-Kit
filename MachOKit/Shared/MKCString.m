@@ -97,11 +97,11 @@
     return self;
 }
 
-- (instancetype)initWithParent:(MKBackedNode *)parent string:(NSString *)string {
+- (instancetype)initWithOffset:(mk_vm_offset_t)offset parent:(MKBackedNode *)parent string:(NSString *)string {
     if (![string isKindOfClass:[NSString class]]) {
         NSLog(@"not a string obj");
     }
-    if (self = [super initWithOffset:0 fromParent:parent error:nil]) {
+    if (self = [super initWithOffset:offset fromParent:parent error:nil]) {
         _string = [string retain];
     }
     

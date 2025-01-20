@@ -70,9 +70,10 @@
     
     struct sub_framework_command *lc = (void *)lc_ptr;
     
-    const char *ptr = (const char *)lc + lc->umbrella.offset;
+    uint32_t offset = lc->umbrella.offset;
+    const char *ptr = (const char *)lc + offset;
     NSString *str = [NSString stringWithUTF8String:ptr];
-    _umbrella = [[MKCString alloc] initWithParent:self string:str];
+    _umbrella = [[MKCString alloc] initWithOffset:offset parent:self string:str];
     
     return self;
 }

@@ -46,7 +46,7 @@
     if (self == nil || *error) return nil;
     
     _address = image->address;
-    _name = [[MKCString alloc] initWithParent:parent string:[NSString stringWithUTF8String:image->path]];
+    _name = [[MKCString alloc] initWithOffset:0 parent:parent string:[NSString stringWithUTF8String:image->path]];
     
 //    MKDSCMapping *mapping = [dsc findMapping:_address];
 //    if (mapping) {

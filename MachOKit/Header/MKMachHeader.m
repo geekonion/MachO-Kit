@@ -41,21 +41,21 @@
     self = [super initWithOffset:offset fromParent:parent error:error];
     if (self == nil) return nil;
     
-    struct mach_header lc;
+    struct mach_header header;
     NSError *memoryMapError = nil;
     
-    if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc)) {
+    if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&header length:sizeof(header) requireFull:YES error:error] < sizeof(header)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read header."];
         [self release]; return nil;
     }
     
-    _magic = MKSwapLValue32(lc.magic, self.dataModel);
-    _cputype = MKSwapLValue32s(lc.cputype, self.dataModel);
-    _cpusubtype = MKSwapLValue32s(lc.cpusubtype, self.dataModel);
-    _filetype = MKSwapLValue32(lc.filetype, self.dataModel);
-    _ncmds = MKSwapLValue32(lc.ncmds, self.dataModel);
-    _sizeofcmds = MKSwapLValue32(lc.sizeofcmds, self.dataModel);
-    _flags = MKSwapLValue32(lc.flags, self.dataModel);
+    _magic = MKSwapLValue32(header.magic, self.dataModel);
+    _cputype = MKSwapLValue32s(header.cputype, self.dataModel);
+    _cpusubtype = MKSwapLValue32s(header.cpusubtype, self.dataModel);
+    _filetype = MKSwapLValue32(header.filetype, self.dataModel);
+    _ncmds = MKSwapLValue32(header.ncmds, self.dataModel);
+    _sizeofcmds = MKSwapLValue32(header.sizeofcmds, self.dataModel);
+    _flags = MKSwapLValue32(header.flags, self.dataModel);
     
     return self;
 }

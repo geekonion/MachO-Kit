@@ -47,6 +47,7 @@
     _mappingCount = dsc->mappingCount;
     _imagesCount = dsc->containedImageCount;
     _localSymbolsSize = dsc->symbolFile.nlistCount;
+    _dyldBaseAddress = dsc->baseAddress;
     
     return self;
 }
