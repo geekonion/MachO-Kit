@@ -108,6 +108,8 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 
 - (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address NS_DESIGNATED_INITIALIZER;
 
+- (void)extractTo:(NSString *)path;
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Retrieving the Initialization Context
 //! @name       Retrieving the Initialization Context

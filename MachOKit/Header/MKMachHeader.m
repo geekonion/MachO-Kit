@@ -33,7 +33,9 @@
 #import "MKNodeFieldMachOFlagsType.h"
 
 //----------------------------------------------------------------------------//
-@implementation MKMachHeader
+@implementation MKMachHeader {
+    const struct mach_header *_header;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
@@ -70,6 +72,7 @@
         _ncmds = header->ncmds;
         _sizeofcmds = header->sizeofcmds;
         _flags = header->flags;
+        _header = header;
     }
     
     return self;
@@ -171,6 +174,11 @@
         sizeofcmds.build,
         flags.build
     ]];
+}
+
+- (void)extractTo:(NSString *)path {
+    const struct mach_header *header = _header;
+    
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

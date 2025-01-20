@@ -62,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKBackedNode *)parent error:(NSError**)error;
 
+- (void)extractTo:(NSString *)path;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -582,4 +582,8 @@
     CFRelease(str);
 }
 
+- (void)extractTo:(NSString *)path {
+    [_header extractTo:path];
+}
+
 @end
