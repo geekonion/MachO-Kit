@@ -102,7 +102,7 @@
             _cpuSubtype = CPU_SUBTYPE_X86_64_ALL;
             sharedRegionBase = SHARED_REGION_BASE_X86_64;
         } else if (strcmp(magic, "dyld_v1  arm64e") == 0) {
-            _dataModel = [[MKLP64DataModel sharedDataModel] retain];
+            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
             _cpuType = CPU_TYPE_ARM64;
             _cpuSubtype = CPU_SUBTYPE_ARM64E;
             sharedRegionBase = SHARED_REGION_BASE_ARM64;
