@@ -30,6 +30,8 @@
 #import "MKMachO.h"
 #import "MKLCSymtab.h"
 #import "MKCString.h"
+#import "MKSegment.h"
+#import "MKMachO+Segments.h"
 
 //----------------------------------------------------------------------------//
 @implementation MKStringTable
@@ -54,24 +56,47 @@
     // Load Strings
     {
         NSMutableDictionary<NSNumber*, MKCString*> *strings = [NSMutableDictionary new];
-        mk_vm_offset_t offset = 0;
+        mk_vm_offset_t sym_off = 0;
+        BOOL isFromSharedCache = image.isFromSharedCache;
+        __block vm_address_t strTabAddr = 0;
+        /*
+         dyld_shared_cache中的镜像共享string table，非常耗性能，不解析
+         如果解析string table，symbol tab解析也会更耗性能
+         */
+        if (false && isFromSharedCache) {
+            MKSegment *linkEdit = [[[image segmentsWithName:@(SEG_LINKEDIT)] firstObject] value];
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:offset length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                strTabAddr = address;
+            }];
+        }
+        
+        if (isFromSharedCache && strTabAddr == 0) {
+            return self;
+        }
         
         // Cast to mk_vm_size_t is safe; nodeSize can't be larger than UINT32_MAX.
-        while ((mk_vm_size_t)offset < self.nodeSize)
+        while ((mk_vm_size_t)sym_off < self.nodeSize)
         {
             NSError *stringError = nil;
+            MKCString *string = NULL;
+            if (isFromSharedCache) {
+                const char *ptr = (void *)(strTabAddr + sym_off);
+                NSString *str = [NSString stringWithUTF8String:ptr];
+                string = [[MKCString alloc] initWithOffset:offset parent:self string:str];
+            } else {
+                string = [[MKCString alloc] initWithOffset:sym_off fromParent:self error:&stringError];
+            }
             
-            MKCString *string = [[MKCString alloc] initWithOffset:offset fromParent:self error:&stringError];
             if (string == nil) {
-                MK_PUSH_WARNING_WITH_ERROR(strings, MK_EINTERNAL_ERROR, stringError, @"Could not parse string at offset [%" MK_VM_PRIuOFFSET "].", offset);
+                MK_PUSH_WARNING_WITH_ERROR(strings, MK_EINTERNAL_ERROR, stringError, @"Could not parse string at offset [%" MK_VM_PRIuOFFSET "].", sym_off);
                 break;
             }
             
-            [strings setObject:string forKey:@(offset)];
+            [strings setObject:string forKey:@(sym_off)];
             [string release];
             
             // SAFE - All string nodes must be within the size of this node.
-            offset += string.nodeSize;
+            sym_off += string.nodeSize ?: 1;
         }
         
         _strings = [strings copy];
@@ -145,6 +170,10 @@
     strings.description = @"Strings";
     strings.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeContainerContents;
     
+    if (self.macho.isFromSharedCache) {
+        return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
+        ]];
+    }
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
         strings.build
     ]];

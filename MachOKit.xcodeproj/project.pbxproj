@@ -13,6 +13,8 @@
 		013ACBC22D38D38D00A38E4B /* Util.c in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBB82D38D38D00A38E4B /* Util.c */; };
 		013ACBC32D38D38D00A38E4B /* DSCHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBB52D38D38D00A38E4B /* DSCHelper.c */; };
 		013ACBC42D38D38D00A38E4B /* DyldSharedCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBAF2D38D38D00A38E4B /* DyldSharedCache.m */; };
+		013ACDFA2D408EC600A38E4B /* _MKMemoryMemoryMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 013ACDF82D408EC600A38E4B /* _MKMemoryMemoryMap.h */; };
+		013ACDFB2D408EC600A38E4B /* _MKMemoryMemoryMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 013ACDF92D408EC600A38E4B /* _MKMemoryMemoryMap.m */; };
 		D000F40A1AF541D20004DAF6 /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D000F4051AF5416B0004DAF6 /* Expecta.framework */; };
 		D000F40B1AF543A40004DAF6 /* base.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C617021A4772ED00BF4F5A /* base.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00205461E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h in Headers */ = {isa = PBXBuildFile; fileRef = D00205441E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1114,6 +1116,8 @@
 		013ACBB52D38D38D00A38E4B /* DSCHelper.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = DSCHelper.c; sourceTree = "<group>"; };
 		013ACBB72D38D38D00A38E4B /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		013ACBB82D38D38D00A38E4B /* Util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Util.c; sourceTree = "<group>"; };
+		013ACDF82D408EC600A38E4B /* _MKMemoryMemoryMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _MKMemoryMemoryMap.h; sourceTree = "<group>"; };
+		013ACDF92D408EC600A38E4B /* _MKMemoryMemoryMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _MKMemoryMemoryMap.m; sourceTree = "<group>"; };
 		D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Framework.xcconfig; sourceTree = "<group>"; };
 		D00205441E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKNodeFieldDataOperationExtractSubrange.h; sourceTree = "<group>"; };
 		D00205451E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKNodeFieldDataOperationExtractSubrange.m; sourceTree = "<group>"; };
@@ -3094,6 +3098,8 @@
 				D09F6C501A14847700AB21E3 /* MKMemoryMap.m */,
 				D060FA7C1A1877B1002A010C /* _MKFileMemoryMap.h */,
 				D060FA7D1A1877B1002A010C /* _MKFileMemoryMap.m */,
+				013ACDF82D408EC600A38E4B /* _MKMemoryMemoryMap.h */,
+				013ACDF92D408EC600A38E4B /* _MKMemoryMemoryMap.m */,
 				D01DF2C41A2EE4F100CB1510 /* _MKTaskMemoryMap.h */,
 				D01DF2C51A2EE4F100CB1510 /* _MKTaskMemoryMap.m */,
 			);
@@ -3713,6 +3719,7 @@
 				D0BD11111B6DCB76009AEB8F /* MKDSCMapping.h in Headers */,
 				D010F7101CB86F6B004025F5 /* MKObjCImageInfoSection.h in Headers */,
 				D0A1D85E19E4EE840095870C /* _mach_lcstr.h in Headers */,
+				013ACDFA2D408EC600A38E4B /* _MKMemoryMemoryMap.h in Headers */,
 				D096B037201C23B0003DA008 /* MKNodeFieldSectionUserAttributesType.h in Headers */,
 				D090A2971C78E17C0025B096 /* MKRebaseDoRebaseULEBTimesSkippingULEB.h in Headers */,
 				D0B16D591CA8961F00E2116C /* MKMachO+Symbols.h in Headers */,
@@ -4478,6 +4485,7 @@
 				D0C5640F1A94517100443090 /* string_table.c in Sources */,
 				D010B3881A747D0B00AED697 /* MKDylibVersion.m in Sources */,
 				D068864321F0489500F5E158 /* MKSplitSegmentInfoV1Entry.m in Sources */,
+				013ACDFB2D408EC600A38E4B /* _MKMemoryMemoryMap.m in Sources */,
 				D082FD3A20072CED00E6C3E5 /* MKNodeFieldCPUSubTypeX86.m in Sources */,
 				D0B16D6E1CA8D27700E2116C /* MKLEB.m in Sources */,
 				D01C75221CA74C8B00648CA6 /* MKBindDoBindULEBTimesSkippingULEB.m in Sources */,

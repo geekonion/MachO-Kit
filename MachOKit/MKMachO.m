@@ -31,6 +31,7 @@
 #import "MKMachHeader64.h"
 #import "MKLoadCommand.h"
 #import "MKLCSegment.h"
+#import "DyldSharedCache.h"
 
 #include "core_internal.h"
 
@@ -40,9 +41,9 @@
 @implementation MKMachOImage
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)mapping error:(NSError**)error
+- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memMap error:(NSError**)error
 {
-    NSParameterAssert(mapping);
+    NSParameterAssert(memMap);
     NSError *localError = nil;
     
     self = [super initWithParent:nil error:error];
@@ -52,7 +53,7 @@
     _context.user_data = (void*)self;
     _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
     
-    _mapping = [mapping retain];
+    _memMap = [memMap retain];
     _contextAddress = contextAddress;
     _flags = flags;
     
@@ -61,7 +62,7 @@
         _name = [[NSString alloc] initWithCString:name encoding:NSUTF8StringEncoding];
     
     // Read the Magic
-    uint32_t magic = [mapping readDoubleWordAtOffset:0 fromAddress:contextAddress withDataModel:nil error:error];
+    uint32_t magic = [memMap readDoubleWordAtOffset:0 fromAddress:contextAddress withDataModel:nil error:error];
     if (magic == 0) {
         [self release]; return nil;
     }
@@ -203,13 +204,14 @@
     return self;
 }
 
-- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address
+- (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address
 {
     NSError *localError = nil;
     
     self = [super initWithParent:nil error:&localError];
     if (self == nil) return nil;
     
+    _dsc = dsc;
     // TODO - Remove this eventually
     _context.user_data = (void*)self;
     _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
@@ -393,7 +395,7 @@
     [_name release];
     [_dataModel release];
 
-    [_mapping release];
+    [_memMap release];
     
     [super dealloc];
 }
@@ -455,7 +457,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKMemoryMap*)memoryMap
-{ return _mapping; }
+{ return _memMap; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (mk_vm_size_t)nodeSize

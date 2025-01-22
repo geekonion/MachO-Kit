@@ -28,11 +28,15 @@
 #import "MKSegment.h"
 #import "MKInternal.h"
 #import "MKMachO.h"
+#import "MKMachHeader.h"
+#import "MKLCSegment64.h"
 
 #import <objc/runtime.h>
 
 //----------------------------------------------------------------------------//
-@implementation MKSegment
+@implementation MKSegment {
+    MKMemoryMap *_memMap;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (id*)_subclassesCache
@@ -95,7 +99,10 @@
     _initialProtection = [segmentLoadCommand initprot];
     _flags = [segmentLoadCommand flags];
     
-    if (image.isFromMemory)
+    if (image.isFromSharedCache) {
+        
+    }
+    else if (image.isFromMemory)
     {
         _nodeContextSize = _vmSize;
         _nodeContextAddress = _vmAddress;
@@ -128,14 +135,14 @@
     // file offset to the file size would trigger an overflow.  It would also
     // refuse to load the image if this value was larger than the size of the
     // Mach-O, but we don't know the size of the Mach-O.
-    if ((err = mk_vm_address_check_length(_fileOffset, _fileSize))) {
+    if (!image.isFromSharedCache && (err = mk_vm_address_check_length(_fileOffset, _fileSize))) {
         arithmeticError = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _fileOffset, _fileSize);
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Invalid file offset or file size."];
         [self release]; return nil;
     }
     
     // Also check the vmAddress + vmSize for potential overflow.
-    if ((err = mk_vm_address_check_length(_vmAddress, _vmSize))) {
+    if (!image.isFromSharedCache && (err = mk_vm_address_check_length(_vmAddress, _vmSize))) {
         arithmeticError = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _vmAddress, _vmSize);
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Invalid VM address or VM size."];
         [self release]; return nil;
@@ -164,7 +171,7 @@
     }
     
     // Make sure the data is actually available
-    if ([self.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeContextSize] == NO) {
+    if (!image.isFromSharedCache && [self.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeContextSize] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Segment data does not exist in the memory map."];
         [self release]; return nil;
     }
@@ -216,6 +223,24 @@
     NSParameterAssert([parent conformsToProtocol:@protocol(MKLCSegment)]);
     
     return [self initWithLoadCommand:(id)parent error:error];
+}
+
+- (MKMemoryMap *)memoryMap {
+    MKMachOImage *macho = self.macho;
+    if (macho.isFromSharedCache && strcmp(self.name.UTF8String, SEG_LINKEDIT) == 0) {
+        if (!_memMap) {
+            DyldSharedCache *dsc = macho.dsc;
+            bool needFree = false;
+            void *addr = dsc_find_buffer(dsc, _vmAddress, _vmSize, &needFree);
+            if (addr) {
+                _memMap = [MKMemoryMap memoryMapWithAddress:(uint64_t)addr fileoff:_fileOffset size:_fileSize];
+            }
+        }
+        
+        return _memMap;
+    }
+    
+    return [super memoryMap];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

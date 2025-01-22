@@ -63,7 +63,7 @@
     if (!buffer) {
         return self;
     }
-    _macho = [[MKMachOImage alloc] initWithName:image->path flags:0 address:buffer];
+    _macho = [[MKMachOImage alloc] initWithDSC:dsc name:image->path flags:0 address:buffer];
     if (needFree) {
         free(buffer);
     }

@@ -28,6 +28,7 @@
 #import "MKMemoryMap.h"
 #import "MKInternal.h"
 #import "_MKFileMemoryMap.h"
+#import "_MKMemoryMemoryMap.h"
 #import "_MKTaskMemoryMap.h"
 
 //----------------------------------------------------------------------------//
@@ -36,7 +37,10 @@
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)memoryMapWithContentsOfFile:(NSURL*)fileURL error:(NSError**)error
 { return [[[_MKFileMemoryMap alloc] initWithURL:fileURL error:error] autorelease]; }
-
++ (nullable instancetype)memoryMapWithAddress:(uint64_t)addr fileoff:(uint64_t)fileoff size:(uint64_t)size {
+    // FIXME: 内存管理
+    return [[_MKMemoryMemoryMap alloc] initWithAddress:addr fileoff:fileoff size:size];
+}
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)memoryMapWithTask:(mach_port_t)task error:(NSError**)error
 { return [[[_MKTaskMemoryMap alloc] initWithTask:task error:error] autorelease]; }
@@ -134,8 +138,8 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (vm_size_t)copyBytesAtOffset:(mk_vm_offset_t)offset fromAddress:(mk_vm_address_t)contextAddress into:(void*)buffer length:(mk_vm_size_t)length requireFull:(BOOL)requireFull error:(NSError**)error
 {
-    __block vm_size_t retValue;
-    __block NSError *localError;
+    __block vm_size_t retValue = 0;
+    __block NSError *localError = nil;
     
     [self remapBytesAtOffset:offset fromAddress:contextAddress length:length requireFull:requireFull withHandler:^(vm_address_t address, vm_size_t mappingLength, NSError *error) {
         localError = [error retain];

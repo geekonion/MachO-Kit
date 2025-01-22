@@ -67,7 +67,8 @@ MKMakeSingletonInitializer(MKNodeFieldMachOFlagsType)
         _$((uint32_t)MH_DEAD_STRIPPABLE_DYLIB): @"MH_DEAD_STRIPPABLE_DYLIB",
         _$((uint32_t)MH_HAS_TLV_DESCRIPTORS): @"MH_HAS_TLV_DESCRIPTORS",
         _$((uint32_t)MH_NO_HEAP_EXECUTION): @"MH_NO_HEAP_EXECUTION",
-        _$((uint32_t)MH_APP_EXTENSION_SAFE): @"MH_APP_EXTENSION_SAFE"
+        _$((uint32_t)MH_APP_EXTENSION_SAFE): @"MH_APP_EXTENSION_SAFE",
+        _$((uint32_t)MH_DYLIB_IN_CACHE): @"MH_DYLIB_IN_CACHE"
     } retain];
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];

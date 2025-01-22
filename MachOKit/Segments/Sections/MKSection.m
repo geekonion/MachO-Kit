@@ -31,6 +31,8 @@
 #import "MKSegment.h"
 #import "MKLCSegment.h"
 #import "MKLCSegment64.h"
+#import "MKMachHeader.h"
+#import "DyldSharedCache.h"
 
 //----------------------------------------------------------------------------//
 @implementation MKSection
@@ -146,7 +148,7 @@
     
     // This should have already been verified at the segment level but we'll
     // verify again.
-    if (_nodeContextSize != 0 && [segment.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_size] == NO) {
+    if (!self.macho.isFromSharedCache && _nodeContextSize != 0 && [segment.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_size] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Section data does not exist in the memory map."];
         [self release]; return nil;
     }
@@ -218,9 +220,34 @@
     }
 }
 
+- (NSData *)data {
+    if (self.type == S_ZEROFILL) {
+        return nil;
+    }
+    MKMachOImage *macho = self.macho;
+    if (macho.isFromSharedCache) {
+        DyldSharedCache *dsc = macho.dsc;
+        bool needFree = false;
+        void *addr = dsc_find_buffer(dsc, _vmAddress, _size, &needFree);
+        if (addr) {
+            NSData *data = [NSData dataWithBytes:addr length:_size];
+            
+            // FIXME: 内存管理
+            return data;
+        }
+    }
+    
+    return [super data];
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    if (self.type != S_ZEROFILL) {
+        return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
+        ]];
+    }
+    
     MKNodeFieldBuilder *name = [MKNodeFieldBuilder
         builderWithProperty:MK_PROPERTY(name)
         type:MKNodeFieldTypeString.sharedInstance

@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! Creates and returns an \ref MKMemoryMap for the contents of the file
 //! at the provided \a fileURL.
 + (nullable instancetype)memoryMapWithContentsOfFile:(NSURL*)fileURL error:(NSError**)error;
++ (nullable instancetype)memoryMapWithAddress:(uint64_t)addr fileoff:(uint64_t)fileoff size:(uint64_t)size;
 
 //! Creates and returns an \ref MKMemoryMap for the contents of another
 //! task's memory.

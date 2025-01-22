@@ -32,6 +32,7 @@
 #import <MachOKit/MKMachOFieldType.h>
 #import <MachOKit/MKNode+MachO.h>
 #import <MachOKit/MKOffsetNode+AddressBasedInitialization.h>
+#import <MachOKit/DyldSharedCache.h>
 
 @protocol MKLCSegment;
 @class MKMachOImage;
@@ -69,7 +70,7 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 @interface MKMachOImage : MKBackedNode {
 @package
     mk_context_t _context;
-    MKMemoryMap *_mapping;
+    MKMemoryMap *_memMap;
     MKDataModel* _dataModel;
     MKMachOImageFlags _flags;
     NSString *_name;
@@ -104,9 +105,9 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
     MKResult<MKIndirectSymbolTable*> *_indirectSymbolTable;
 }
 
-- (nullable instancetype)initWithName:(nullable const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)mapping error:(NSError**)error NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithName:(nullable const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memMap error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address NS_DESIGNATED_INITIALIZER;
 
 - (void)extractTo:(NSString *)path;
 
@@ -145,6 +146,7 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 
 //! The header of this image.
 @property (nonatomic, readonly) MKMachHeader *header;
+@property (nonatomic, readonly) DyldSharedCache *dsc;
 
 //! The architecture of this image.
 @property (nonatomic, readonly) mk_architecture_t architecture;

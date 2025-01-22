@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface _MKMemoryMemoryMap : MKMemoryMap
-
+- (instancetype)initWithAddress:(uint64_t)addr fileoff:(uint64_t)fileoff size:(uint64_t)size;
 @end
 
 NS_ASSUME_NONNULL_END

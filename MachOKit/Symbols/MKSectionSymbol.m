@@ -80,4 +80,8 @@
     ]];
 }
 
+- (NSString *)description {
+    return @(self.address).stringValue;
+}
+
 @end
