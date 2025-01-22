@@ -167,7 +167,6 @@ DyldSharedCache *dsc_init_from_path_premapped(const char *path, uint32_t premapS
     uint32_t subCacheArrayCount = mainHeader->subCacheArrayCount;
 
     sharedCache->fileCount = 1 + subCacheArrayCount + symbolFileExists;
-    sharedCache->fileCount = 1 + subCacheArrayCount;
 
     sharedCache->files = calloc(sharedCache->fileCount, sizeof(struct DyldSharedCacheFile *));
     sharedCache->files[0] = mainFile;

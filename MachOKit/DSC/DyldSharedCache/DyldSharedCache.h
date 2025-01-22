@@ -6,7 +6,7 @@
 #include <MachOKit/dyld_cache_format.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include <sys/_types/_uuid_t.h>
+#include <uuid/uuid.h>
 #include <mach/vm_prot.h>
 
 typedef struct MachO MachO;
