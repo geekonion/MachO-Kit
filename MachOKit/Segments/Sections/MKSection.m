@@ -225,8 +225,9 @@
         return nil;
     }
     MKMachOImage *macho = self.macho;
-    if (macho.isFromSharedCache) {
-        DyldSharedCache *dsc = macho.dsc;
+    // 从dyld_shared_cache中导出的文件，没有dsc，作为普通macho文件处理
+    DyldSharedCache *dsc = macho.dsc;
+    if (dsc && macho.isFromSharedCache) {
         bool needFree = false;
         void *addr = dsc_find_buffer(dsc, _vmAddress, _size, &needFree);
         if (addr) {

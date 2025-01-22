@@ -227,9 +227,10 @@
 
 - (MKMemoryMap *)memoryMap {
     MKMachOImage *macho = self.macho;
-    if (macho.isFromSharedCache && strcmp(self.name.UTF8String, SEG_LINKEDIT) == 0) {
+    // 从dyld_shared_cache中导出的文件，没有dsc，作为普通macho文件处理
+    DyldSharedCache *dsc = macho.dsc;
+    if (dsc && macho.isFromSharedCache && strcmp(self.name.UTF8String, SEG_LINKEDIT) == 0) {
         if (!_memMap) {
-            DyldSharedCache *dsc = macho.dsc;
             bool needFree = false;
             void *addr = dsc_find_buffer(dsc, _vmAddress, _vmSize, &needFree);
             if (addr) {
