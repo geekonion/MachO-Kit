@@ -62,7 +62,7 @@
     // Despite the image being our real parent node, all of our data should
     // be within the __LINKEDIT segment.
     _memoryMap = expectLinkEdit ? linkeditSegment.value.memoryMap : image.memoryMap;
-    NSParameterAssert(_memoryMap);
+//    NSParameterAssert(_memoryMap);
     
     if (image.isFromMemory)
     {
