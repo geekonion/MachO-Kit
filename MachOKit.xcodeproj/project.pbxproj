@@ -15,6 +15,7 @@
 		013ACBC42D38D38D00A38E4B /* DyldSharedCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 013ACBAF2D38D38D00A38E4B /* DyldSharedCache.m */; };
 		013ACDFA2D408EC600A38E4B /* _MKMemoryMemoryMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 013ACDF82D408EC600A38E4B /* _MKMemoryMemoryMap.h */; };
 		013ACDFB2D408EC600A38E4B /* _MKMemoryMemoryMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 013ACDF92D408EC600A38E4B /* _MKMemoryMemoryMap.m */; };
+		013ACE272D4213C100A38E4B /* MKExtractable.h in Headers */ = {isa = PBXBuildFile; fileRef = 013ACE262D4213C100A38E4B /* MKExtractable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D000F40A1AF541D20004DAF6 /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D000F4051AF5416B0004DAF6 /* Expecta.framework */; };
 		D000F40B1AF543A40004DAF6 /* base.h in Headers */ = {isa = PBXBuildFile; fileRef = D0C617021A4772ED00BF4F5A /* base.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00205461E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h in Headers */ = {isa = PBXBuildFile; fileRef = D00205441E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1118,6 +1119,7 @@
 		013ACBB82D38D38D00A38E4B /* Util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Util.c; sourceTree = "<group>"; };
 		013ACDF82D408EC600A38E4B /* _MKMemoryMemoryMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _MKMemoryMemoryMap.h; sourceTree = "<group>"; };
 		013ACDF92D408EC600A38E4B /* _MKMemoryMemoryMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _MKMemoryMemoryMap.m; sourceTree = "<group>"; };
+		013ACE262D4213C100A38E4B /* MKExtractable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MKExtractable.h; sourceTree = "<group>"; };
 		D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Framework.xcconfig; sourceTree = "<group>"; };
 		D00205441E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKNodeFieldDataOperationExtractSubrange.h; sourceTree = "<group>"; };
 		D00205451E555E87006AD5E5 /* MKNodeFieldDataOperationExtractSubrange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKNodeFieldDataOperationExtractSubrange.m; sourceTree = "<group>"; };
@@ -3146,6 +3148,7 @@
 				D061346B204528A200173476 /* NSNumber+MK.m */,
 				D010F6FC1CB868EF004025F5 /* MKResult.h */,
 				D010F6FD1CB868EF004025F5 /* MKResult.m */,
+				013ACE262D4213C100A38E4B /* MKExtractable.h */,
 				D0C3B2ED19F463C000CAFE58 /* Core */,
 				D061B18E1FFAC84B004A3047 /* Shared */,
 				D09959EC1A6A29B8007134CE /* Fat */,
@@ -3642,6 +3645,7 @@
 				D0CF9D78200DC13900B508C4 /* MKFunction.h in Headers */,
 				D021C866211019B30054E943 /* MKNodeFieldSTABType.h in Headers */,
 				D01C751D1CA74B9000648CA6 /* MKBindDoBindAddAddressImmediateScaled.h in Headers */,
+				013ACE272D4213C100A38E4B /* MKExtractable.h in Headers */,
 				D010F7041CB86D66004025F5 /* MKObjCClassListSection.h in Headers */,
 				D082FD352007292700E6C3E5 /* MKNodeFieldCPUSubTypeARM64.h in Headers */,
 				D03030301A23BFFD00288B3E /* MKLCSubLibrary.h in Headers */,

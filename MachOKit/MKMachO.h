@@ -33,6 +33,7 @@
 #import <MachOKit/MKNode+MachO.h>
 #import <MachOKit/MKOffsetNode+AddressBasedInitialization.h>
 #import <MachOKit/DyldSharedCache.h>
+#import <MachOKit/MKExtractable.h>
 
 @protocol MKLCSegment;
 @class MKMachOImage;
@@ -67,7 +68,7 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //----------------------------------------------------------------------------//
 //! An instance of \c MKMachOImage parses a single Mach-O.
 //
-@interface MKMachOImage : MKBackedNode {
+@interface MKMachOImage : MKBackedNode <MKExtractable> {
 @package
     mk_context_t _context;
     MKMemoryMap *_memMap;
@@ -108,8 +109,6 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 - (nullable instancetype)initWithName:(nullable const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memMap error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address size:(uint64_t)size NS_DESIGNATED_INITIALIZER;
-
-- (void)extractTo:(NSString *)path;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Retrieving the Initialization Context

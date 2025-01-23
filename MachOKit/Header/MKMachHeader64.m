@@ -27,8 +27,11 @@
 
 #import "MKMachHeader64.h"
 #import "MKInternal.h"
+#import "DyldSharedCache.h"
+#import "MKMachO.h"
+#import "MKSegment.h"
 
-void writeSegment(struct segment_command_64 *seg, int fd, uint64_t slide, uint64_t offset, uint64_t base_offset);
+void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint32_t *offset2_ptr, DyldSharedCache *dsc);
 
 //----------------------------------------------------------------------------//
 @implementation MKMachHeader64
@@ -71,28 +74,135 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t slide, uint64
     
     const struct mach_header_64 *header = (void *)self.header;
     const char *base = (const char *)header;
-    uint64_t offset = sizeof(struct mach_header_64);
+    uint64_t offset1 = sizeof(struct mach_header_64);
     
     NSLog(@"写入数据 header");
-    write(fd, header, offset);
+    write(fd, header, offset1);
     
-    uint64_t slide = 0;
-    uint64_t text_fileoff = 0;
-    for (int i = 0; i < header->ncmds; ++i) {
-        struct load_command *lc = (void *)(base + offset);
+    MKMachOImage *macho = (MKMachOImage *)self.parent;
+    DyldSharedCache *dsc = [macho dsc];
+    MKSegment *linkEdit = [[[macho segmentsWithName:@(SEG_LINKEDIT)] firstObject] value];
+    uint32_t offset2 = 0;
+    for (int32_t i = 0; i < header->ncmds; ++i) {
+        struct load_command *lc = (void *)(base + offset1);
         if (lc->cmd == LC_SEGMENT_64) {
-            struct segment_command_64 *segment = (void *)lc;
-            if (strcmp(segment->segname, SEG_TEXT) == 0) {
-                text_fileoff = segment->fileoff;
-                slide = (uint64_t)header - segment->vmaddr;
+            struct segment_command_64 *seg = (void *)lc;
+            if (strcmp(seg->segname, SEG_TEXT) == 0) {
+                char *section_start = (char *)seg + sizeof(struct segment_command_64);
+                struct section_64 *sec = (void *)section_start;
+                offset2 = (uint32_t)(sec->offset - seg->fileoff);
             }
-            writeSegment(segment, fd, slide, offset, text_fileoff);
+            writeSegment(seg, fd, offset1, &offset2, dsc);
+        } else if (lc->cmd == LC_DYLD_INFO
+                   || lc->cmd == LC_DYLD_INFO_ONLY) {
+            struct dyld_info_command *seg = (void *)lc;
+            struct dyld_info_command dic = *seg;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:dic.rebase_off length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, dic.rebase_size);
+            }];
+            dic.rebase_off = offset2;
+            offset2 += dic.rebase_size;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:dic.bind_off length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, dic.bind_size);
+            }];
+            dic.bind_off = offset2;
+            offset2 += dic.bind_size;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:dic.weak_bind_off length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, dic.weak_bind_size);
+            }];
+            dic.weak_bind_off = offset2;
+            offset2 += dic.weak_bind_size;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:dic.lazy_bind_off length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, dic.lazy_bind_size);
+            }];
+            dic.lazy_bind_off = offset2;
+            offset2 += dic.lazy_bind_size;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:dic.export_off length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, dic.export_size);
+            }];
+            dic.export_off = offset2;
+            offset2 += dic.export_size;
+            
+            lseek(fd, offset1, SEEK_SET);
+            write(fd, &dic, lc->cmdsize);
+        } else if (lc->cmd == LC_SYMTAB) {
+            struct symtab_command *seg = (void *)lc;
+            struct symtab_command sc = *seg;
+            
+            uint32_t sym_size = sc.stroff - sc.symoff;
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:sc.symoff length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, sym_size);
+            }];
+            sc.symoff = offset2;
+            offset2 += sym_size;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:sc.stroff length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, sc.strsize);
+            }];
+            sc.stroff = offset2;
+            offset2 += sc.strsize;
+            
+            lseek(fd, offset1, SEEK_SET);
+            write(fd, &sc, lc->cmdsize);
+        } else if (lc->cmd == LC_DYSYMTAB) {
+            struct dysymtab_command *seg = (void *)lc;
+            struct dysymtab_command dc = *seg;
+            if (dc.tocoff || dc.modtaboff || dc.extreloff) {
+                NSAssert(false, @"off need handle");
+            }
+            
+            uint32_t isyms_size = dc.nindirectsyms * 4;
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:dc.indirectsymoff length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, isyms_size);
+            }];
+            dc.indirectsymoff = offset2;
+            offset2 += isyms_size;
+            
+            lseek(fd, offset1, SEEK_SET);
+            write(fd, &dc, lc->cmdsize);
+        } else if (lc->cmd == LC_FUNCTION_STARTS
+                   || lc->cmd == LC_DATA_IN_CODE
+                   || lc->cmd == LC_CODE_SIGNATURE) {
+            struct linkedit_data_command *seg = (void *)lc;
+            struct linkedit_data_command ldc = *seg;
+            
+            [linkEdit.memoryMap remapBytesAtOffset:0 fromAddress:ldc.dataoff length:0 requireFull:YES withHandler:^(vm_address_t address, vm_size_t length, NSError * _Nullable error) {
+                
+                lseek(fd, offset2, SEEK_SET);
+                write(fd, (void *)address, ldc.datasize);
+            }];
+            ldc.dataoff = offset2;
+            offset2 += ldc.datasize;
+            
+            lseek(fd, offset1, SEEK_SET);
+            write(fd, &ldc, lc->cmdsize);
         } else {
-            lseek(fd, offset, SEEK_SET);
+            lseek(fd, offset1, SEEK_SET);
             write(fd, lc, lc->cmdsize);
         }
         
-        offset += lc->cmdsize;
+        offset1 += lc->cmdsize;
     }
 }
 
@@ -142,43 +252,66 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t slide, uint64
 
 @end
 
-void writeSegment(struct segment_command_64 *seg, int fd, uint64_t slide, uint64_t offset, uint64_t base_offset) {
-    static uint64_t last_data_addr = 0;
-    
+void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint32_t *offset2_ptr, DyldSharedCache *dsc) {
+    uint32_t offset2 = *offset2_ptr;
     struct segment_command_64 tmp_seg = *seg;
-    tmp_seg.fileoff -= base_offset;
+    const char *segname = seg->segname;
+    BOOL isSegText = strcmp(segname, SEG_TEXT) == 0;
+    if (isSegText) {
+        tmp_seg.fileoff = 0;
+    } else {
+        tmp_seg.fileoff = offset2;
+    }
     
     // 将segment_command_64信息写入文件
     uint64_t seg_size = sizeof(tmp_seg);
-    NSLog(@"写入数据 seg %s, offset %d", seg->segname, offset);
-    lseek(fd, offset, SEEK_SET);
+    NSLog(@"写入数据 seg %s, offset %llu", seg->segname, offset1);
+    lseek(fd, offset1, SEEK_SET);
     write(fd, &tmp_seg, seg_size);
-    offset += seg_size;
+    offset1 += seg_size;
     
     uint32_t nsects = seg->nsects;
     char *section_start = (char *)seg + sizeof(struct segment_command_64);
     for (uint32_t i = 0; i < nsects; i++) {
         struct section_64 *sec = (void *)section_start;
-        uint64_t sec_size = sizeof(struct section_64);
+        uint64_t tmp_size = sizeof(struct section_64);
         
         // 将section_64信息写入文件
         struct section_64 tmp_sec = *sec;
-        tmp_sec.offset -= base_offset;
-        NSLog(@"写入数据 sec %s.%s, offset %d", sec->segname, sec->sectname, offset);
-        lseek(fd, offset, SEEK_SET);
-        write(fd, &tmp_sec, sec_size);
-        offset += sec_size;
+        tmp_sec.offset = offset2;
+        NSLog(@"写入数据 sec %s.%s, offset %llu", sec->segname, sec->sectname, offset1);
+        lseek(fd, offset1, SEEK_SET);
+        write(fd, &tmp_sec, tmp_size);
+        offset1 += tmp_size;
         
         // 将section数据写入文件
-        int64_t data_off = sec->offset - base_offset;
-        if (data_off > last_data_addr) {
-            last_data_addr = slide + sec->addr;
-            void *sec_data = (void *)last_data_addr;
-            NSLog(@"写入数据 data %s, offset %d", sec->sectname, data_off);
-            lseek(fd, data_off, SEEK_SET);
-            write(fd, sec_data, sec->size);
-        }
+        bool needFree = false;
+        void *sec_data = dsc_find_buffer(dsc, sec->addr, sec->size, &needFree);
+        NSLog(@"写入数据 data %s, offset %u", sec->sectname, offset2);
+        lseek(fd, offset2, SEEK_SET);
+        write(fd, sec_data, sec->size);
         
-        section_start += sec_size;
+        section_start += tmp_size;
+        offset2 += sec->size;
+    }
+    
+    if (nsects == 0) {
+        if (strcmp(segname, "__OBJC_RO") == 0
+            || strcmp(segname, "__OBJC_RW") == 0) {
+            // 将segment数据整体写入文件
+            bool needFree = false;
+            void *seg_data = dsc_find_buffer(dsc, seg->vmaddr, seg->filesize, &needFree);
+            NSLog(@"写入数据 data %s, offset %u", segname, offset2);
+            lseek(fd, offset2, SEEK_SET);
+            write(fd, seg_data, seg->filesize);
+            
+            //offset2 += seg->filesize;
+        }
+    }
+    
+    if (isSegText) {
+        *offset2_ptr = (uint32_t)seg->filesize;
+    } else {
+        *offset2_ptr = *offset2_ptr + (uint32_t)seg->filesize;
     }
 }

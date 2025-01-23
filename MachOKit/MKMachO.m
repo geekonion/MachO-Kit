@@ -605,7 +605,11 @@
 }
 
 - (void)extractTo:(NSString *)path {
-    [_header extractTo:path];
+    [_header extractTo:[path stringByAppendingPathComponent:self.name.lastPathComponent]];
+}
+
+- (BOOL)extractable {
+    return self.isImageInSharedCache && [_header isKindOfClass:[MKMachHeader64 class]];
 }
 
 @end

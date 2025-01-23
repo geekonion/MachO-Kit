@@ -114,9 +114,11 @@
 }
 
 - (void)extractTo:(NSString *)path {
-    NSString *name = [self description];
-    
-    [_macho extractTo:[path stringByAppendingPathComponent:name]];
+    [_macho extractTo:path];
+}
+
+- (BOOL)extractable {
+    return YES;
 }
 
 @end

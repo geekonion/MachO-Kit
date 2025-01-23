@@ -31,11 +31,12 @@
 #import <MachOKit/DyldSharedCache.h>
 #import <MachOKit/MKCString.h>
 #import <MachOKit/MKMachO.h>
+#import <MachOKit/MKExtractable.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 //----------------------------------------------------------------------------//
-@interface MKDSCImage : MKOffsetNode {
+@interface MKDSCImage : MKOffsetNode <MKExtractable> {
 @package
     uint64_t _address;
     uint64_t _modTime;
@@ -61,8 +62,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) MKMachOImage *macho;
 
 - (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKBackedNode *)parent error:(NSError**)error;
-
-- (void)extractTo:(NSString *)path;
 
 @end
 
