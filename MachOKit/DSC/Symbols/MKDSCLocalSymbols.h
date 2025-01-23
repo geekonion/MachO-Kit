@@ -54,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithSharedCache:(MKSharedCache*)sharedCache error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)initWithSharedCache:(MKSharedCache*)sharedCache NS_DESIGNATED_INITIALIZER;
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Header and Symbols
 //! @name       Header and Symbols

@@ -43,8 +43,8 @@
 - (instancetype)initWithSharedCache:(MKSharedCache*)sharedCache error:(NSError**)error
 {
     NSParameterAssert(sharedCache);
-    NSError *localError;
-    mk_error_t err;
+    NSError *localError = nil;
+    mk_error_t err = MK_ESUCCESS;
     
     // The slide info resides in the readonly mapping.  This should always be
     // the final mapping.

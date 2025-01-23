@@ -42,8 +42,8 @@
 - (instancetype)initWithSharedCache:(MKSharedCache*)sharedCache error:(NSError**)error
 {
     NSParameterAssert(sharedCache);
-    NSError *localError;
-    mk_error_t err;
+    NSError *localError = nil;
+    mk_error_t err = MK_ESUCCESS;
     
     self = [super initWithParent:sharedCache error:error];
     if (self == nil) return nil;

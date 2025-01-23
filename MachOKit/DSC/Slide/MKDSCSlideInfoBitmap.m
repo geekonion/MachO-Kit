@@ -36,7 +36,7 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset size:(mk_vm_size_t)size fromParent:(MKBackedNode*)parent error:(NSError**)error
 {
-    NSError *localError;
+    NSError *localError = nil;
     
     self = [super initWithOffset:offset fromParent:parent error:error];
     if (self == nil) return nil;

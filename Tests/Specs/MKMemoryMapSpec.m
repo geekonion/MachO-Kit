@@ -34,7 +34,7 @@ describe(@"a file memory map", ^{
     __block NSData *fileData;
     
     beforeAll(^{
-        NSError *error;
+        NSError *error = nil;
         NSURL *foundationURL = [NSURL fileURLWithPath:@"/System/Library/Frameworks/Foundation.framework/Foundation"];
         map = [MKMemoryMap memoryMapWithContentsOfFile:foundationURL error:&error];
         expect(map).toNot.beNil();
@@ -43,9 +43,9 @@ describe(@"a file memory map", ^{
     });
     
     it(@"should properly remap a valid address", ^{
-        __block vm_address_t address;
-        __block mach_vm_size_t length;
-        __block NSError *error;
+        __block vm_address_t address = 0;
+        __block mach_vm_size_t length = 0;
+        __block NSError *error = nil;
         
         // First test - Pass offset as context address
         [map remapBytesAtOffset:0 fromAddress:4096 length:5484640 requireFull:NO withHandler:^(vm_address_t a, vm_size_t l, NSError *e) {
@@ -78,7 +78,7 @@ describe(@"a task memory map", ^{
     __block MKMemoryMap *map;
     
     beforeAll(^{
-        NSError *error;
+        NSError *error = nil;
         map = [MKMemoryMap memoryMapWithTask:mach_task_self() error:&error];
         expect(map).toNot.beNil();
         expect(error).to.beNil();
