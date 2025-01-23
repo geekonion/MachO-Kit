@@ -51,6 +51,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent targetClass:(nullable Class)targetClass error:(NSError**)error;
 
+- (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent mask:(mk_vm_address_t)mask context:(NSDictionary*)context error:(NSError**)error NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent targetClass:(Class)targetClass error:(NSError**)error;
+
 //! The address referenced by the pointer.
 @property (nonatomic, readonly) mk_vm_address_t address;
 

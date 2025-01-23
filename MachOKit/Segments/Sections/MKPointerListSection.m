@@ -28,6 +28,9 @@
 #import "MKPointerListSection.h"
 #import "MKInternal.h"
 #import "MKNodeDescription.h"
+#import "DyldSharedCache.h"
+#import "MKMachO.h"
+#import "MKNode+MachO.h"
 
 #include <objc/message.h>
 
@@ -64,11 +67,24 @@
         if ([self.class respondsToSelector:sel_getUid("classForGenericArgumentAtIndex:")])
             targetClass = ((Class(*)(id, SEL, NSUInteger))objc_msgSend)(self.class, sel_getUid("classForGenericArgumentAtIndex:"), 0);
         
+        MKMachOImage *macho = self.macho;
+        BOOL isInSharedCache = macho.isImageInSharedCache;
+        void *addr = NULL;
+        if (isInSharedCache) {
+            DyldSharedCache *dsc = macho.dsc;
+            bool needFree = false;
+            addr = dsc_find_buffer(dsc, sectionLoadCommand.mk_addr, sectionLoadCommand.mk_size, &needFree);
+        }
         while (offset < self.nodeSize)
         {
             NSError *pointerError = nil;
             
-            MKPointerNode *pointer = [[MKPointerNode alloc] initWithOffset:offset fromParent:self targetClass:targetClass error:&pointerError];
+            MKPointerNode *pointer = nil;
+            if (isInSharedCache && addr) {
+                pointer = [[MKPointerNode alloc] initWithAddress:(mk_vm_address_t)addr offset:offset fromParent:self targetClass:targetClass error:&pointerError];
+            } else {
+                pointer = [[MKPointerNode alloc] initWithOffset:offset fromParent:self targetClass:targetClass error:&pointerError];
+            }
             if (pointer == nil) {
                 MK_PUSH_WARNING_WITH_ERROR(references, MK_EINTERNAL_ERROR, pointerError, @"Could not parse pointer at offset [%" MK_VM_PRIuOFFSET "].", offset);
                 break;

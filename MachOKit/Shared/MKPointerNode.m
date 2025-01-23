@@ -80,6 +80,43 @@
 { return [self initWithOffset:offset fromParent:parent mask:~(mk_vm_address_t)0 targetClass:targetClass error:error]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
+- (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent mask:(mk_vm_address_t)mask context:(NSDictionary*)context error:(NSError**)error
+{
+    self = [super initWithOffset:offset fromParent:parent error:error];
+    if (self == nil) return nil;
+    
+    mk_vm_address_t *ptr = (mk_vm_address_t *)(addr + offset);
+    mk_vm_address_t address = *ptr & mask;
+    
+    if (MKPtrInitialize(mk_ptr_struct(self), parent, address, context, error) == false) {
+        [self release]; return nil;
+    }
+    
+    return self;
+}
+
+//|++++++++++++++++++++++++++++++++++++|//
+- (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent context:(NSDictionary*)context error:(NSError**)error
+{ return [self initWithAddress:addr offset:offset fromParent:parent mask:~(mk_vm_address_t)0 context:context error:error]; }
+
+//|++++++++++++++++++++++++++++++++++++|//
+- (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent mask:(mk_vm_address_t)mask targetClass:(Class)targetClass error:(NSError**)error
+{
+    NSDictionary *context = nil;
+    if (targetClass) {
+        context = @{
+            MKInitializationContextTargetClass: targetClass
+        };
+    }
+    
+    return [self initWithAddress:addr offset:offset fromParent:parent mask:mask context:context error:error];
+}
+
+//|++++++++++++++++++++++++++++++++++++|//
+- (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent targetClass:(Class)targetClass error:(NSError**)error
+{ return [self initWithAddress:addr offset:offset fromParent:parent mask:~(mk_vm_address_t)0 targetClass:targetClass error:error]; }
+
+//|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
 { return [self initWithOffset:offset fromParent:parent targetClass:nil error:error]; }
 
