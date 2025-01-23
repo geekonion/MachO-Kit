@@ -99,7 +99,7 @@
     _initialProtection = [segmentLoadCommand initprot];
     _flags = [segmentLoadCommand flags];
     
-    if (image.isFromSharedCache) {
+    if (image.isImageInSharedCache) {
         
     }
     else if (image.isFromMemory)
@@ -135,14 +135,14 @@
     // file offset to the file size would trigger an overflow.  It would also
     // refuse to load the image if this value was larger than the size of the
     // Mach-O, but we don't know the size of the Mach-O.
-    if (!image.isFromSharedCache && (err = mk_vm_address_check_length(_fileOffset, _fileSize))) {
+    if (!image.isImageInSharedCache && (err = mk_vm_address_check_length(_fileOffset, _fileSize))) {
         arithmeticError = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _fileOffset, _fileSize);
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Invalid file offset or file size."];
         [self release]; return nil;
     }
     
     // Also check the vmAddress + vmSize for potential overflow.
-    if (!image.isFromSharedCache && (err = mk_vm_address_check_length(_vmAddress, _vmSize))) {
+    if (!image.isImageInSharedCache && (err = mk_vm_address_check_length(_vmAddress, _vmSize))) {
         arithmeticError = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _vmAddress, _vmSize);
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Invalid VM address or VM size."];
         [self release]; return nil;
@@ -171,7 +171,7 @@
     }
     
     // Make sure the data is actually available
-    if (!image.isFromSharedCache && [self.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeContextSize] == NO) {
+    if (!image.isImageInSharedCache && [self.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeContextSize] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Segment data does not exist in the memory map."];
         [self release]; return nil;
     }
@@ -228,9 +228,9 @@
 - (MKMemoryMap *)memoryMap {
     MKMachOImage *macho = self.macho;
     // 从dyld_shared_cache中导出的文件，没有dsc，作为普通macho文件处理
-    DyldSharedCache *dsc = macho.dsc;
-    if (dsc && macho.isFromSharedCache && strcmp(self.name.UTF8String, SEG_LINKEDIT) == 0) {
+    if (macho.isImageInSharedCache && strcmp(self.name.UTF8String, SEG_LINKEDIT) == 0) {
         if (!_memMap) {
+            DyldSharedCache *dsc = macho.dsc;
             bool needFree = false;
             void *addr = dsc_find_buffer(dsc, _vmAddress, _vmSize, &needFree);
             if (addr) {

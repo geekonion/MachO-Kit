@@ -32,13 +32,16 @@
 #import "MKLoadCommand.h"
 #import "MKLCSegment.h"
 #import "DyldSharedCache.h"
-
+#import "_MKFileMemoryMap.h"
 #include "core_internal.h"
 
 #include <objc/runtime.h>
 
 //----------------------------------------------------------------------------//
-@implementation MKMachOImage
+@implementation MKMachOImage {
+    void *_imageAddr;
+    uint64_t _imageSize;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithName:(const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memMap error:(NSError**)error
@@ -204,13 +207,15 @@
     return self;
 }
 
-- (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address
+- (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address size:(uint64_t)size
 {
     NSError *localError = nil;
     
     self = [super initWithParent:nil error:&localError];
     if (self == nil) return nil;
     
+    _imageAddr = address;
+    _imageSize = size;
     _dsc = dsc;
     // TODO - Remove this eventually
     _context.user_data = (void*)self;
@@ -425,6 +430,11 @@
     return !!(self.header.flags & MH_DYLIB_IN_CACHE);
 }
 
+- (BOOL)isImageInSharedCache
+{
+    return self.isFromSharedCache && _dsc != nil;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (BOOL)isFromMemory
 {
@@ -477,8 +487,18 @@
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (NSData*)data
-{ return nil; }
+- (NSData *)data {
+    if (self.isImageInSharedCache) {
+        return [NSData dataWithBytes:_imageAddr length:_imageSize];
+    }
+    
+    MKMemoryMap *memMap = self.memoryMap;
+    if ([memMap isKindOfClass:[_MKFileMemoryMap class]]) {
+        return [(_MKFileMemoryMap *)memMap data];
+    }
+    
+    return nil;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
@@ -488,7 +508,7 @@
         type:[MKNodeFieldTypeNode typeWithNodeType:MKMachHeader.class]
     ];
     header.description = @"Mach Header";
-    header.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeContainerContents;
+    header.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
     
     MKNodeFieldBuilder *loadCommands = [MKNodeFieldBuilder
         builderWithProperty:MK_PROPERTY(loadCommands)

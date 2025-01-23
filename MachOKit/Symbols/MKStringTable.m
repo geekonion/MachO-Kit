@@ -62,6 +62,7 @@
         /*
          dyld_shared_cache中的镜像共享string table，非常耗性能，不解析
          如果解析string table，symbol tab解析也会更耗性能
+         从dyld_shared_cache中提取出来的二进制，提取了完整的string table，也不解析
          */
         if (false && isFromSharedCache) {
             MKSegment *linkEdit = [[[image segmentsWithName:@(SEG_LINKEDIT)] firstObject] value];
@@ -170,7 +171,7 @@
     strings.description = @"Strings";
     strings.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeContainerContents;
     
-    if (self.macho.isFromSharedCache) {
+    if (self.macho.isImageInSharedCache) {
         return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
         ]];
     }

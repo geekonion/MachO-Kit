@@ -127,16 +127,23 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
-    MKNodeFieldBuilder *entries = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(entries)
-        type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDataInCodeEntry.class]]
-    ];
-    entries.description = @"Entries";
-    entries.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeContainerContents;
+    NSArray *fields = nil;
+    if (self.nodeSize == 0) {
+        MKNodeField *sizeNode = [MKNodeField nodeFieldWithProperty:MK_PROPERTY(nodeSize) description:@"Data Size"];
+        fields = @[sizeNode];
+    } else {
+        MKNodeFieldBuilder *entries = [MKNodeFieldBuilder
+                                       builderWithProperty:MK_PROPERTY(entries)
+                                       type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDataInCodeEntry.class]]
+        ];
+        entries.description = @"Entries";
+        entries.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeContainerContents;
+        fields = @[
+            entries.build
+        ];
+    }
     
-    return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        entries.build
-    ]];
+    return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:fields];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

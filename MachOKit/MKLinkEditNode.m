@@ -107,7 +107,7 @@
     _nodeSize = size;
     
     // Make sure the node data is available
-    if (!self.macho.isFromSharedCache) {
+    if (!self.macho.isImageInSharedCache) {
         NSError *localError = nil;
         
         if ([_memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeSize error:&localError] == NO) {

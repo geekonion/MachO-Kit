@@ -148,7 +148,7 @@
     
     // This should have already been verified at the segment level but we'll
     // verify again.
-    if (!self.macho.isFromSharedCache && _nodeContextSize != 0 && [segment.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_size] == NO) {
+    if (!self.macho.isImageInSharedCache && _nodeContextSize != 0 && [segment.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_size] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Section data does not exist in the memory map."];
         [self release]; return nil;
     }
@@ -226,8 +226,8 @@
     }
     MKMachOImage *macho = self.macho;
     // 从dyld_shared_cache中导出的文件，没有dsc，作为普通macho文件处理
-    DyldSharedCache *dsc = macho.dsc;
-    if (dsc && macho.isFromSharedCache) {
+    if (macho.isImageInSharedCache) {
+        DyldSharedCache *dsc = macho.dsc;
         bool needFree = false;
         void *addr = dsc_find_buffer(dsc, _vmAddress, _size, &needFree);
         if (addr) {
@@ -244,77 +244,80 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    NSArray *fields = nil;
     if (self.type != S_ZEROFILL) {
-        return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        ]];
+        fields = @[];
+    } else {
+        
+        MKNodeFieldBuilder *name = [MKNodeFieldBuilder
+                                    builderWithProperty:MK_PROPERTY(name)
+                                    type:MKNodeFieldTypeString.sharedInstance
+        ];
+        name.description = @"Section Name";
+        name.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *alignment = [MKNodeFieldBuilder
+                                         builderWithProperty:MK_PROPERTY(alignment)
+                                         type:MKNodeFieldTypeDoubleWord.sharedInstance
+        ];
+        alignment.description = @"Alignment";
+        alignment.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *fileOffset = [MKNodeFieldBuilder
+                                          builderWithProperty:MK_PROPERTY(fileOffset)
+                                          type:MKNodeFieldTypeAddress.sharedInstance
+        ];
+        fileOffset.description = @"File offset";
+        fileOffset.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *vmAddress = [MKNodeFieldBuilder
+                                         builderWithProperty:MK_PROPERTY(vmAddress)
+                                         type:MKNodeFieldTypeAddress.sharedInstance
+        ];
+        vmAddress.description = @"VM Address";
+        vmAddress.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *size = [MKNodeFieldBuilder
+                                    builderWithProperty:MK_PROPERTY(size)
+                                    type:MKNodeFieldTypeSize.sharedInstance
+        ];
+        size.description = @"Size";
+        size.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *type = [MKNodeFieldBuilder
+                                    builderWithProperty:MK_PROPERTY(type)
+                                    type:MKNodeFieldSectionType.sharedInstance
+        ];
+        type.description = @"Section Type";
+        type.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *userAttributes = [MKNodeFieldBuilder
+                                              builderWithProperty:MK_PROPERTY(userAttributes)
+                                              type:MKNodeFieldSectionUserAttributesType.sharedInstance
+        ];
+        userAttributes.description = @"User Attributes";
+        userAttributes.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        MKNodeFieldBuilder *systemAttributes = [MKNodeFieldBuilder
+                                                builderWithProperty:MK_PROPERTY(systemAttributes)
+                                                type:MKNodeFieldSectionUserAttributesType.sharedInstance
+        ];
+        systemAttributes.description = @"System Attributes";
+        systemAttributes.options = MKNodeFieldOptionDisplayAsDetail;
+        
+        fields = @[
+            name.build,
+            alignment.build,
+            fileOffset.build,
+            vmAddress.build,
+            size.build,
+            type.build,
+            userAttributes.build,
+            systemAttributes.build
+        ];
     }
     
-    MKNodeFieldBuilder *name = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(name)
-        type:MKNodeFieldTypeString.sharedInstance
-    ];
-    name.description = @"Section Name";
-    name.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *alignment = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(alignment)
-        type:MKNodeFieldTypeDoubleWord.sharedInstance
-    ];
-    alignment.description = @"Alignment";
-    alignment.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *fileOffset = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(fileOffset)
-        type:MKNodeFieldTypeAddress.sharedInstance
-    ];
-    fileOffset.description = @"File offset";
-    fileOffset.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *vmAddress = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(vmAddress)
-        type:MKNodeFieldTypeAddress.sharedInstance
-    ];
-    vmAddress.description = @"VM Address";
-    vmAddress.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *size = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(size)
-        type:MKNodeFieldTypeSize.sharedInstance
-    ];
-    size.description = @"Size";
-    size.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *type = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(type)
-        type:MKNodeFieldSectionType.sharedInstance
-    ];
-    type.description = @"Section Type";
-    type.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *userAttributes = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(userAttributes)
-        type:MKNodeFieldSectionUserAttributesType.sharedInstance
-    ];
-    userAttributes.description = @"User Attributes";
-    userAttributes.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    MKNodeFieldBuilder *systemAttributes = [MKNodeFieldBuilder
-        builderWithProperty:MK_PROPERTY(systemAttributes)
-        type:MKNodeFieldSectionUserAttributesType.sharedInstance
-    ];
-    systemAttributes.description = @"System Attributes";
-    systemAttributes.options = MKNodeFieldOptionDisplayAsDetail;
-    
-    return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        name.build,
-        alignment.build,
-        fileOffset.build,
-        vmAddress.build,
-        size.build,
-        type.build,
-        userAttributes.build,
-        systemAttributes.build
-    ]];
+    return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:fields];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -107,7 +107,7 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 
 - (nullable instancetype)initWithName:(nullable const char*)name flags:(MKMachOImageFlags)flags atAddress:(mk_vm_address_t)contextAddress inMapping:(MKMemoryMap*)memMap error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDSC:(DyldSharedCache *)dsc name:(const char*)name flags:(MKMachOImageFlags)flags address:(void *)address size:(uint64_t)size NS_DESIGNATED_INITIALIZER;
 
 - (void)extractTo:(NSString *)path;
 
@@ -135,6 +135,7 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 
 //! Indicates whether this Mach-O image is from dyld's shared cache.
 @property (nonatomic, readonly) BOOL isFromSharedCache;
+@property (nonatomic, readonly) BOOL isImageInSharedCache;
 
 //! Indicates whether this Mach-O image is from a memory dump (or live memory).
 @property (nonatomic, readonly) BOOL isFromMemory;
