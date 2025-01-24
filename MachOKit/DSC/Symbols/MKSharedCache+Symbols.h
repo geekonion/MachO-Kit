@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKSharedCache (Symbols)
 
 //!
-@property (nonatomic, readonly) MKDSCLocalSymbols *localSymbols;
+@property (nonatomic, strong, readonly) MKDSCLocalSymbols *localSymbols;
 
 @end
 

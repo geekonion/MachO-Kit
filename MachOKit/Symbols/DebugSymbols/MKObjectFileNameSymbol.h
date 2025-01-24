@@ -36,9 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKObjectFileNameSymbol : MKDebugSymbol
 
 //! The low byte of the cpu sub-type for the object file.
-@property (nonatomic, readonly) cpu_subtype_t cpuSubType;
+@property (nonatomic, assign, readonly) cpu_subtype_t cpuSubType;
 
-@property (nonatomic, readonly) uint64_t modificationTime;
+@property (nonatomic, assign, readonly) uint64_t modificationTime;
 
 @end
 

@@ -43,9 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithOffset:(uint32_t)bitOffset inEntryForPage:(MKDSCSlideInfoPage*)page error:(NSError**)error;
 
-@property (nonatomic, readonly) MKDSCSlideInfoPage *page;
+@property (nonatomic, strong, readonly) MKDSCSlideInfoPage *page;
 
-@property (nonatomic, readonly) mk_vm_offset_t pointerOffset;
+@property (nonatomic, assign, readonly) mk_vm_offset_t pointerOffset;
 
 // TODO - pointerVMAddress, mapping (always __DATA), image, ...
 

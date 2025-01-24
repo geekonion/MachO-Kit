@@ -62,20 +62,20 @@ NS_ASSUME_NONNULL_BEGIN
 //!             header without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) NSString *magic;
-@property (nonatomic, readonly) uint32_t mappingOffset;
-@property (nonatomic, readonly) uint32_t mappingCount;
-@property (nonatomic, readonly) uint32_t imagesOffset;
-@property (nonatomic, readonly) uint64_t imagesCount;
-@property (nonatomic, readonly) uint64_t dyldBaseAddress;
-@property (nonatomic, readonly) uint64_t codeSignatureOffset;
-@property (nonatomic, readonly) uint64_t codeSignatureSize;
-@property (nonatomic, readonly) uint64_t slideInfoOffset;
-@property (nonatomic, readonly) uint64_t slideInfoSize;
-@property (nonatomic, readonly) uint64_t localSymbolsOffset;
-@property (nonatomic, readonly) uint64_t localSymbolsSize;
-@property (nonatomic, readonly, nullable) NSUUID *uuid;
-@property (nonatomic, readonly) uint64_t cacheType;
+@property (nonatomic, strong, readonly) NSString *magic;
+@property (nonatomic, assign, readonly) uint32_t mappingOffset;
+@property (nonatomic, assign, readonly) uint32_t mappingCount;
+@property (nonatomic, assign, readonly) uint32_t imagesOffset;
+@property (nonatomic, assign, readonly) uint64_t imagesCount;
+@property (nonatomic, assign, readonly) uint64_t dyldBaseAddress;
+@property (nonatomic, assign, readonly) uint64_t codeSignatureOffset;
+@property (nonatomic, assign, readonly) uint64_t codeSignatureSize;
+@property (nonatomic, assign, readonly) uint64_t slideInfoOffset;
+@property (nonatomic, assign, readonly) uint64_t slideInfoSize;
+@property (nonatomic, assign, readonly) uint64_t localSymbolsOffset;
+@property (nonatomic, assign, readonly) uint64_t localSymbolsSize;
+@property (nonatomic, strong, readonly, nullable) NSUUID *uuid;
+@property (nonatomic, assign, readonly) uint64_t cacheType;
 
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dsc:(DyldSharedCache *)dsc error:(NSError **)error;
 

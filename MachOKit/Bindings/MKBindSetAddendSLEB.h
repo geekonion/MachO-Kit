@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) int64_t addend;
+@property (nonatomic, assign, readonly) int64_t addend;
 
 @end
 

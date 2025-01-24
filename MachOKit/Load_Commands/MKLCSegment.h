@@ -37,34 +37,34 @@ NS_ASSUME_NONNULL_BEGIN
 
 //----------------------------------------------------------------------------//
 @protocol MKLCSegment <NSObject>
-@property (nonatomic, readonly) MKMachOImage *macho;
-@property (nonatomic, readonly) NSArray /*MKLCSection*/ *sections;
-@property (nonatomic, readonly, nullable) NSString *segname;
-@property (nonatomic, readonly) mk_vm_address_t mk_vmaddr;
-@property (nonatomic, readonly) mk_vm_size_t mk_vmsize;
-@property (nonatomic, readonly) mk_vm_address_t mk_fileoff;
-@property (nonatomic, readonly) mk_vm_size_t mk_filesize;
-@property (nonatomic, readonly) vm_prot_t maxprot;
-@property (nonatomic, readonly) vm_prot_t initprot;
-@property (nonatomic, readonly) uint32_t nsects;
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, strong, readonly) MKMachOImage *macho;
+@property (nonatomic, strong, readonly) NSArray /*MKLCSection*/ *sections;
+@property (nonatomic, strong, readonly, nullable) NSString *segname;
+@property (nonatomic, assign, readonly) mk_vm_address_t mk_vmaddr;
+@property (nonatomic, assign, readonly) mk_vm_size_t mk_vmsize;
+@property (nonatomic, assign, readonly) mk_vm_address_t mk_fileoff;
+@property (nonatomic, assign, readonly) mk_vm_size_t mk_filesize;
+@property (nonatomic, assign, readonly) vm_prot_t maxprot;
+@property (nonatomic, assign, readonly) vm_prot_t initprot;
+@property (nonatomic, assign, readonly) uint32_t nsects;
+@property (nonatomic, assign, readonly) uint32_t flags;
 @end
 
 
 //----------------------------------------------------------------------------//
 @protocol MKLCSection <NSObject>
-@property (nonatomic, readonly) MKMachOImage *macho;
-@property (nonatomic, readonly, nullable) NSString *sectname;
-@property (nonatomic, readonly, nullable) NSString *segname;
-@property (nonatomic, readonly) mk_vm_address_t mk_addr;
-@property (nonatomic, readonly) mk_vm_size_t mk_size;
-@property (nonatomic, readonly) mk_vm_address_t mk_offset;
-@property (nonatomic, readonly) uint32_t align;
-@property (nonatomic, readonly) uint32_t reloff;
-@property (nonatomic, readonly) uint32_t nreloc;
-@property (nonatomic, readonly) uint32_t flags;
-@property (nonatomic, readonly) uint32_t reserved1;
-@property (nonatomic, readonly) uint32_t reserved2;
+@property (nonatomic, strong, readonly) MKMachOImage *macho;
+@property (nonatomic, strong, readonly, nullable) NSString *sectname;
+@property (nonatomic, strong, readonly, nullable) NSString *segname;
+@property (nonatomic, assign, readonly) mk_vm_address_t mk_addr;
+@property (nonatomic, assign, readonly) mk_vm_size_t mk_size;
+@property (nonatomic, assign, readonly) mk_vm_address_t mk_offset;
+@property (nonatomic, assign, readonly) uint32_t align;
+@property (nonatomic, assign, readonly) uint32_t reloff;
+@property (nonatomic, assign, readonly) uint32_t nreloc;
+@property (nonatomic, assign, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t reserved1;
+@property (nonatomic, assign, readonly) uint32_t reserved2;
 @end
 
 
@@ -93,26 +93,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! An array of \ref MKLCSection instances, each representing a section
 //! specified in the load command.
-@property (nonatomic, readonly) NSArray<MKLCSection*> *sections;
+@property (nonatomic, strong, readonly) NSArray<MKLCSection*> *sections;
 
 //! Segment name.
-@property (nonatomic, readonly, nullable) NSString *segname;
+@property (nonatomic, strong, readonly, nullable) NSString *segname;
 //! The memory address of the segment.
-@property (nonatomic, readonly) uint32_t vmaddr;
+@property (nonatomic, assign, readonly) uint32_t vmaddr;
 //! The memory size of the segment.
-@property (nonatomic, readonly) uint32_t vmsize;
+@property (nonatomic, assign, readonly) uint32_t vmsize;
 //! File offset of the segment.
-@property (nonatomic, readonly) uint32_t fileoff;
+@property (nonatomic, assign, readonly) uint32_t fileoff;
 //! The number of bytes to map from the file.
-@property (nonatomic, readonly) uint32_t filesize;
+@property (nonatomic, assign, readonly) uint32_t filesize;
 //! Maximum VM protection.
-@property (nonatomic, readonly) vm_prot_t maxprot;
+@property (nonatomic, assign, readonly) vm_prot_t maxprot;
 //! Initial VM protection.
-@property (nonatomic, readonly) vm_prot_t initprot;
+@property (nonatomic, assign, readonly) vm_prot_t initprot;
 //! Number of sections in the segment.
-@property (nonatomic, readonly) uint32_t nsects;
+@property (nonatomic, assign, readonly) uint32_t nsects;
 //! Flags.
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t flags;
 
 @end
 
@@ -137,27 +137,27 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The name of the section.
-@property (nonatomic, readonly, nullable) NSString *sectname;
+@property (nonatomic, strong, readonly, nullable) NSString *sectname;
 //! The name of the segment the section is within.
-@property (nonatomic, readonly, nullable) NSString *segname;
+@property (nonatomic, strong, readonly, nullable) NSString *segname;
 //! Memory address of the section.
-@property (nonatomic, readonly) uint32_t addr;
+@property (nonatomic, assign, readonly) uint32_t addr;
 //! Size in bytes of the section.
-@property (nonatomic, readonly) uint32_t size;
+@property (nonatomic, assign, readonly) uint32_t size;
 //! File offset of the section.
-@property (nonatomic, readonly) uint32_t offset;
+@property (nonatomic, assign, readonly) uint32_t offset;
 //! The alignment of the section, in bytes.
-@property (nonatomic, readonly) uint32_t align;
+@property (nonatomic, assign, readonly) uint32_t align;
 //! File offset of the relocation entries.
-@property (nonatomic, readonly) uint32_t reloff;
+@property (nonatomic, assign, readonly) uint32_t reloff;
 //! The number of relocation entries.
-@property (nonatomic, readonly) uint32_t nreloc;
+@property (nonatomic, assign, readonly) uint32_t nreloc;
 //! Flags (section type and attributes).
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t flags;
 //! Reserved (for offset or index).
-@property (nonatomic, readonly) uint32_t reserved1;
+@property (nonatomic, assign, readonly) uint32_t reserved1;
 //! Reserved (for count or sizeof).
-@property (nonatomic, readonly) uint32_t reserved2;
+@property (nonatomic, assign, readonly) uint32_t reserved2;
 
 - (instancetype)initWithSection:(struct section *)sec_ptr fromParent:(MKBackedNode*)parent;
 @end

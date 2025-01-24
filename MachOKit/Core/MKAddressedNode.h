@@ -68,11 +68,11 @@ typedef NS_CLOSED_ENUM(NSUInteger, MKNodeAddressType) {
 
 //! Shortcut for calling the \ref -nodeAddress: method with the
 //! \ref MKNodeContextAddress address type.
-@property (nonatomic, readonly) mk_vm_address_t nodeContextAddress;
+@property (nonatomic, assign, readonly) mk_vm_address_t nodeContextAddress;
 
 //! Shortcut for calling the \ref -nodeAddress: method with the
 //! \ref MKNodeVMAddress address type.
-@property (nonatomic, readonly) mk_vm_address_t nodeVMAddress;
+@property (nonatomic, assign, readonly) mk_vm_address_t nodeVMAddress;
 
 //! Subclasses must implement this method.
 - (mk_vm_address_t)nodeAddress:(MKNodeAddressType)type;

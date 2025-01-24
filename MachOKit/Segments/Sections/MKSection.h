@@ -88,19 +88,19 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The name of the section, as specified in the load command.
-@property (nonatomic, readonly, nullable) NSString *name;
+@property (nonatomic, strong, readonly, nullable) NSString *name;
 //! The load command identifying the section.
-@property (nonatomic, readonly) id<MKLCSection> loadCommand;
+@property (nonatomic, strong, readonly) id<MKLCSection> loadCommand;
 
-@property (nonatomic, readonly) uint32_t alignment;
+@property (nonatomic, assign, readonly) uint32_t alignment;
 
-@property (nonatomic, readonly) mk_vm_address_t fileOffset;
-@property (nonatomic, readonly) mk_vm_address_t vmAddress;
-@property (nonatomic, readonly) mk_vm_size_t size;
+@property (nonatomic, assign, readonly) mk_vm_address_t fileOffset;
+@property (nonatomic, assign, readonly) mk_vm_address_t vmAddress;
+@property (nonatomic, assign, assign, readonly) mk_vm_size_t size;
 
-@property (nonatomic, readonly) MKSectionType type;
-@property (nonatomic, readonly) MKSectionUserAttributes userAttributes;
-@property (nonatomic, readonly) MKSectionSystemAttributes systemAttributes;
+@property (nonatomic, assign, readonly) MKSectionType type;
+@property (nonatomic, assign, readonly) MKSectionUserAttributes userAttributes;
+@property (nonatomic, assign, readonly) MKSectionSystemAttributes systemAttributes;
 
 @end
 

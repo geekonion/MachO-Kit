@@ -159,7 +159,7 @@ extern NSString * const MKPropertyKey;
 
 //! The value associated with the \ref MKPropertyKey in this error's
 //! \c userInfo dictionary.
-@property (nonatomic, readonly, nullable) NSString *mk_property;
+@property (nonatomic, strong, readonly, nullable) NSString *mk_property;
 
 @end
 

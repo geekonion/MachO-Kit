@@ -67,13 +67,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! \c YES if the result is empty - does not contain a value and does not
 //! contain an error.
-@property (readonly) BOOL none;
+@property (assign, readonly) BOOL none;
 
 //! The result value.
-@property (readonly, nullable) ObjectType value;
+@property (assign, readonly, nullable) ObjectType value;
 
 //! If \c value is \c nil, an error describing why no value could be provided.
-@property (readonly, nullable) NSError *error;
+@property (strong, readonly, nullable) NSError *error;
 
 @end
 

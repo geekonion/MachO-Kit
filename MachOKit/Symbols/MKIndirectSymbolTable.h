@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! An array of \ref MKIndirectSymbol instances, each corresponding to an entry
 //! in the indirect symbol table.  The order of this array matches the
 //! ordering of the entries in the Mach-O.
-@property (nonatomic, readonly) NSArray<MKIndirectSymbol*> *indirectSymbols;
+@property (nonatomic, strong, readonly) NSArray<MKIndirectSymbol*> *indirectSymbols;
 
 @end
 

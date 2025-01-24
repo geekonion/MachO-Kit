@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKIncludedFileNameSymbol : MKDebugSymbol
 
 //! The text address corresponding to the start of the included file.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 @end
 

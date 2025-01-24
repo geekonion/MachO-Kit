@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The offset applied to the segment base address.
-@property (nonatomic, readonly) int64_t offset;
+@property (nonatomic, assign, readonly) int64_t offset;
 
 @end
 

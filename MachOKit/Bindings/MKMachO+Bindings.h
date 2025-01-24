@@ -46,15 +46,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! The bindings information.  The returned optional may contain a \c nil
 //! value and a \c nil error if the image has no bindings information.
-@property (nonatomic, readonly) MKResult<MKBindingsInfo*> *bindingsInfo;
+@property (nonatomic, strong, readonly) MKResult<MKBindingsInfo*> *bindingsInfo;
 
 //! The weak bindings information.  The returned optional may contain a \c nil
 //! value and a \c nil error if the image has no weak bindings information.
-@property (nonatomic, readonly) MKResult<MKWeakBindingsInfo*> *weakBindingsInfo;
+@property (nonatomic, strong, readonly) MKResult<MKWeakBindingsInfo*> *weakBindingsInfo;
 
 //! The lazy bindings information.  The returned optional may contain a \c nil
 //! value and a \c nil error if the image has no lazy bindings information.
-@property (nonatomic, readonly) MKResult<MKLazyBindingsInfo*> *lazyBindingsInfo;
+@property (nonatomic, strong, readonly) MKResult<MKLazyBindingsInfo*> *lazyBindingsInfo;
 
 + (MKNodeFieldBuilder*)_bindingsInfoFieldBuilder;
 + (MKNodeFieldBuilder*)_weakBindingsInfoFieldBuilder;

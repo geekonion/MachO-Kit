@@ -42,11 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
     mk_vm_address_t _implementation;
 }
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *name;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *types;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *types;
 
-@property (nonatomic, readonly) mk_vm_address_t implementation;
+@property (nonatomic, assign, readonly) mk_vm_address_t implementation;
 
 @end
 

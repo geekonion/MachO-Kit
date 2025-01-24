@@ -40,19 +40,19 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKRegularSymbol : MKSymbol
 
 //! The entry in the string table referenced by this symbol.
-@property (nonatomic, readonly) MKResult<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKResult<MKCString*> *name;
 
 //! The section referenced by this symbol.
-@property (nonatomic, readonly) MKResult<MKSection*> *section;
+@property (nonatomic, strong, readonly) MKResult<MKSection*> *section;
 
 //! The symbol type.
-@property (nonatomic, readonly) MKSymbolType symbolType;
+@property (nonatomic, assign, readonly) MKSymbolType symbolType;
 
 //! \c True if this is a private external symbol.
-@property (nonatomic, readonly, getter=isPrivateExternal) BOOL privateExternal;
+@property (nonatomic, assign, readonly, getter=isPrivateExternal) BOOL privateExternal;
 
 //! \c True if this is an external symbol.
-@property (nonatomic, readonly, getter=isExternal) BOOL external;
+@property (nonatomic, assign, readonly, getter=isExternal) BOOL external;
 
 + (MKNodeFieldBuilder*)_nameFieldBuilder;
 + (MKNodeFieldBuilder*)_sectionFieldBuilder;

@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! 
-@property (nonatomic, copy, nullable) NSArray<NSFormatter*> *formatters;
+@property (nonatomic, strong, nullable) NSArray<NSFormatter*> *formatters;
 
 @end
 

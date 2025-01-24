@@ -131,29 +131,29 @@ typedef NS_OPTIONS(NSUInteger, MKNodeFieldOptions) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The field options.
-@property (nonatomic, readonly) MKNodeFieldOptions options;
+@property (nonatomic, assign, readonly) MKNodeFieldOptions options;
 
 //! The name of the field.
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSString *name;
 
 //! A short description of the field.
-@property (nonatomic, readonly, nullable) NSString *description;
+@property (nonatomic, strong, readonly, nullable) NSString *description;
 
 //! The type of the field.
-@property (nonatomic, readonly, nullable) id<MKNodeFieldType> type;
+@property (nonatomic, strong, readonly, nullable) id<MKNodeFieldType> type;
 
 //! The steps to retrieve the value for the field from a node.
-@property (nonatomic, readonly) id<MKNodeFieldValueRecipe> valueRecipe;
+@property (nonatomic, strong, readonly) id<MKNodeFieldValueRecipe> valueRecipe;
 
 //! The steps to retreive the data for the field from a node.
-@property (nonatomic, readonly, nullable) id<MKNodeFieldDataRecipe> dataRecipe;
+@property (nonatomic, strong, readonly, nullable) id<MKNodeFieldDataRecipe> dataRecipe;
 
 //! A formatter used to format the value of the field.
-@property (nonatomic, readonly, nullable) NSFormatter *valueFormatter;
+@property (nonatomic, strong, readonly, nullable) NSFormatter *valueFormatter;
 
 //! A field that contains the same value, but typically formatted in a more
 //! human readable way.  The named field must be part of the same node.
-@property (nonatomic, readonly, nullable) NSString *alternateFieldName;
+@property (nonatomic, strong, readonly, nullable) NSString *alternateFieldName;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Obtaining a Formatted Description

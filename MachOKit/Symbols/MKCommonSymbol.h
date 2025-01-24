@@ -37,9 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! The alignment of the common symbol.  A value of zero means the natural
 //! alignment based on the size is used.
-@property (nonatomic, readonly) size_t alignment;
+@property (nonatomic, assign, readonly) size_t alignment;
 
-@property (nonatomic, readonly) size_t size;
+@property (nonatomic, assign, readonly) size_t size;
 
 @end
 

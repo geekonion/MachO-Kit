@@ -48,13 +48,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithImage:(MKMachOImage*)image error:(NSError**)error;
 
 //!
-@property (nonatomic, readonly) NSArray<__kindof MKSplitSegmentInfoV1Entry*> *entries;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKSplitSegmentInfoV1Entry*> *entries;
 
 //!
-@property (nonatomic, readonly, nullable) MKSplitSegmentInfoV1Terminator *terminator;
+@property (nonatomic, strong, readonly, nullable) MKSplitSegmentInfoV1Terminator *terminator;
 
 //! 
-@property (nonatomic, readonly) NSArray<MKSplitSegmentInfoV1Fixup*> *fixups;
+@property (nonatomic, strong, readonly) NSArray<MKSplitSegmentInfoV1Fixup*> *fixups;
 
 @end
 

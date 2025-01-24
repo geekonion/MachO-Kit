@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The offset to the next fixup address.
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
 @end
 

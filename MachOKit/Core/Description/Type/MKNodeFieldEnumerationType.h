@@ -34,7 +34,7 @@ typedef NSDictionary<NSNumber*, NSString*> MKNodeFieldEnumerationElements;
 //----------------------------------------------------------------------------//
 @protocol MKNodeFieldEnumerationType <MKNodeFieldNumericType>
 
-@property (nonatomic, readonly) MKNodeFieldEnumerationElements *elements;
+@property (nonatomic, strong, readonly) MKNodeFieldEnumerationElements *elements;
 
 @end
 

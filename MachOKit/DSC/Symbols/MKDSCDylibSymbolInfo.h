@@ -54,9 +54,9 @@ NS_ASSUME_NONNULL_BEGIN
 //!             entry structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint64_t dylibOffset;
-@property (nonatomic, readonly) uint32_t nlistStartIndex;
-@property (nonatomic, readonly) uint32_t nlistCount;
+@property (nonatomic, assign, readonly) uint64_t dylibOffset;
+@property (nonatomic, assign, readonly) uint32_t nlistStartIndex;
+@property (nonatomic, assign, readonly) uint32_t nlistCount;
 
 - (instancetype)initWithIndex:(uint32_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 @end

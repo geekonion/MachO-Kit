@@ -64,11 +64,11 @@ typedef NS_ENUM(int, MKDataEndianness) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The endianess of the data.
-@property (readonly) MKDataEndianness endianness;
+@property (readonly, assign) MKDataEndianness endianness;
 
 //! A structure of functions used to convert between the endianess of this
 //! data model and the endianess of the host process.
-@property (readonly) const mk_byteorder_t *byteOrder;
+@property (readonly, assign) const mk_byteorder_t *byteOrder;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Pointers
@@ -76,9 +76,9 @@ typedef NS_ENUM(int, MKDataEndianness) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The natural size of a pointer, in bytes.
-@property (readonly) size_t pointerSize;
+@property (readonly, assign) size_t pointerSize;
 //! The natural alignment of a pointer, in bytes.
-@property (readonly) size_t pointerAlignment;
+@property (readonly, assign) size_t pointerAlignment;
 
 //! A mask that specifies which of the pointer's bits hold the "canonical form"
 //! address, as specified by the processor architecture and ABI.
@@ -92,7 +92,7 @@ typedef NS_ENUM(int, MKDataEndianness) {
 //! The OS ABI may further reduce the total possible virtual address space,
 //! which confines the target address to an even smaller subset of the pointer's
 //! bits.
-@property (readonly) uint64_t pointerMask;
+@property (readonly, assign) uint64_t pointerMask;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Fundamental (C) Types
@@ -100,24 +100,24 @@ typedef NS_ENUM(int, MKDataEndianness) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The natural size of a \c short, in bytes.
-@property (readonly) size_t shortSize;
+@property (readonly, assign) size_t shortSize;
 //! The natural alignment of a \c short, in bytes.
-@property (readonly) size_t shortAlignment;
+@property (readonly, assign) size_t shortAlignment;
 
 //! The natural size of an \c int, in bytes.
-@property (readonly) size_t intSize;
+@property (readonly, assign) size_t intSize;
 //! The natural alignment of an \c int, in bytes.
-@property (readonly) size_t intAlignment;
+@property (readonly, assign) size_t intAlignment;
 
 //! The natural size of a \c long, in bytes.
-@property (readonly) size_t longSize;
+@property (readonly, assign) size_t longSize;
 //! The natural alignment of a \c long, in bytes.
-@property (readonly) size_t longAlignment;
+@property (readonly, assign) size_t longAlignment;
 
 //! The natural size of a \c long \c long, in bytes.
-@property (readonly) size_t longlongSize;
+@property (readonly, assign) size_t longlongSize;
 //! The natural alignment of a \c long \c long, in bytes.
-@property (readonly) size_t longlongAlignment;
+@property (readonly, assign) size_t longlongAlignment;
 
 @end
 

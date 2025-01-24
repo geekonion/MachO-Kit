@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The 128-bit uuid.
-@property (nonatomic, readonly) NSUUID *uuid;
+@property (nonatomic, strong, readonly) NSUUID *uuid;
 
 @end
 

@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithImage:(MKMachOImage*)image error:(NSError**)error;
 
 //! 
-@property (nonatomic, readonly, nullable) MKSplitSegmentInfoV1 *v1;
+@property (nonatomic, strong, readonly, nullable) MKSplitSegmentInfoV1 *v1;
 
 @end
 

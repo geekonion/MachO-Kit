@@ -37,13 +37,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKDebugSymbol : MKSymbol
 
 //! The type of the symbolic debugger symbol.
-@property (nonatomic, readonly) MKSTABType stabType;
+@property (nonatomic, assign, readonly) MKSTABType stabType;
 
 //! The entry in the string table referenced by this symbol.
-@property (nonatomic, readonly) MKResult<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKResult<MKCString*> *name;
 
 //! The section referenced by this symbol.
-@property (nonatomic, readonly) MKResult<MKSection*> *section;
+@property (nonatomic, strong, readonly) MKResult<MKSection*> *section;
 
 @end
 

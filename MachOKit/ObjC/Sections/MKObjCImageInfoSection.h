@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
     MKResult<MKObjCImageInfo*> *_imageInfo;
 }
 
-@property (nonatomic, readonly) MKResult<MKObjCImageInfo*> *imageInfo;
+@property (nonatomic, strong, readonly) MKResult<MKObjCImageInfo*> *imageInfo;
 
 @end
 

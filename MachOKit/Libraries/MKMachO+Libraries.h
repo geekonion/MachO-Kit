@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! An array of the libraries that the binary depends on, in their load order.
-@property (nonatomic, readonly) NSArray<MKResult<MKDependentLibrary*>*> *dependentLibraries;
+@property (nonatomic, strong, readonly) NSArray<MKResult<MKDependentLibrary*>*> *dependentLibraries;
 
 @end
 

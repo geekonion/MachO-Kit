@@ -43,13 +43,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) int64_t sourceLibraryOrdinal;
+@property (nonatomic, assign, readonly) int64_t sourceLibraryOrdinal;
 
 //!
-@property (nonatomic, readonly, nullable) MKDependentLibrary *sourceLibrary;
+@property (nonatomic, strong, readonly, nullable) MKDependentLibrary *sourceLibrary;
 
 //!
-@property (nonatomic, readonly, nullable) NSString *importedName;
+@property (nonatomic, strong, readonly, nullable) NSString *importedName;
 
 @end
 

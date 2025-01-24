@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithImage:(MKMachOImage*)image error:(NSError**)error;
 
 //! An array of bind commands.
-@property (nonatomic, readonly) NSArray<__kindof MKBindCommand*> *commands;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKBindCommand*> *commands;
 
 //! An array of bind actions derived from the bind commands.
 //!
@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! also contain rebase actions (represented by instances of
 //! \ref MKBindActionThreadedRebase).  Filter the array for subclasses of
 //! \ref MKBindActionBind if you are only interested in the bindings.
-@property (nonatomic, readonly) NSArray<__kindof MKBindAction*> *actions;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKBindAction*> *actions;
 
 @end
 

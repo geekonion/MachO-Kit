@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The path to add to run path.
-@property (nonatomic, readonly) MKCString *path;
+@property (nonatomic, strong, readonly) MKCString *path;
 
 @end
 

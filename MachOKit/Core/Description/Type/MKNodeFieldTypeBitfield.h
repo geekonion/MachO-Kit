@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) id<MKNodeFieldNumericType> type;
 @property (nonatomic, strong, nullable) NSNumber *mask;
-@property (nonatomic, readwrite) int shift;
+@property (nonatomic, assign, readwrite) int shift;
 
 @end
 

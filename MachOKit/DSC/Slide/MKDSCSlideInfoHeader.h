@@ -53,12 +53,12 @@ NS_ASSUME_NONNULL_BEGIN
 //!             info structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint32_t version;
-@property (nonatomic, readonly) uint32_t tocOffset;
-@property (nonatomic, readonly) uint32_t tocCount;
-@property (nonatomic, readonly) uint32_t entriesOffset;
-@property (nonatomic, readonly) uint32_t entriesCount;
-@property (nonatomic, readonly) uint32_t entriesSize;
+@property (nonatomic, assign, readonly) uint32_t version;
+@property (nonatomic, assign, readonly) uint32_t tocOffset;
+@property (nonatomic, assign, readonly) uint32_t tocCount;
+@property (nonatomic, assign, readonly) uint32_t entriesOffset;
+@property (nonatomic, assign, readonly) uint32_t entriesCount;
+@property (nonatomic, assign, readonly) uint32_t entriesSize;
 
 @end
 

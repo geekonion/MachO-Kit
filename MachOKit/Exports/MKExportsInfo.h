@@ -46,10 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithImage:(MKMachOImage*)image error:(NSError**)error;
 
 //! An array of nodes comprising the exports trie.
-@property (nonatomic, readonly) NSArray<__kindof MKExportTrieNode*> *nodes;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKExportTrieNode*> *nodes;
 
 //! An array of exports derived from the exports trie.
-@property (nonatomic, readonly) NSArray<__kindof MKExport*> *exports;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKExport*> *exports;
 
 @end
 

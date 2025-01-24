@@ -46,11 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! File offset of encrypted range.
-@property (nonatomic, readonly) uint32_t cryptoff;
+@property (nonatomic, assign, readonly) uint32_t cryptoff;
 //! File size of encrypted range.
-@property (nonatomic, readonly) uint32_t cryptsize;
+@property (nonatomic, assign, readonly) uint32_t cryptsize;
 //! The enryption system.  Zero means not-encrypted yet.
-@property (nonatomic, readonly) uint32_t cryptid;
+@property (nonatomic, assign, readonly) uint32_t cryptid;
 
 @end
 

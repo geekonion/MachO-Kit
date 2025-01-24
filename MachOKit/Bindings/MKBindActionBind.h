@@ -58,19 +58,19 @@ typedef NS_ENUM(int64_t, MKLibraryOrdinal) {
 }
 
 //!
-@property (nonatomic, readonly) MKLibraryOrdinal sourceLibraryOrdinal;
+@property (nonatomic, assign, readonly) MKLibraryOrdinal sourceLibraryOrdinal;
 
 //!
-@property (nonatomic, readonly, nullable) MKDependentLibrary *sourceLibrary;
+@property (nonatomic, strong, readonly, nullable) MKDependentLibrary *sourceLibrary;
 
 //!
-@property (nonatomic, readonly) NSString *symbolName;
+@property (nonatomic, strong, readonly) NSString *symbolName;
 
 //!
-@property (nonatomic, readonly) MKBindSymbolFlags symbolFlags;
+@property (nonatomic, assign, readonly) MKBindSymbolFlags symbolFlags;
 
 //!
-@property (nonatomic, readonly) int64_t addend;
+@property (nonatomic, assign, readonly) int64_t addend;
 
 @end
 

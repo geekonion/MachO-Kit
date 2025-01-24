@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The client name.
-@property (nonatomic, readonly) MKCString *client;
+@property (nonatomic, strong, readonly) MKCString *client;
 
 @end
 

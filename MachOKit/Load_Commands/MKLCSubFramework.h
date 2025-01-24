@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The umbrella framework name.
-@property (nonatomic, readonly) MKCString *umbrella;
+@property (nonatomic, strong, readonly) MKCString *umbrella;
 
 @end
 

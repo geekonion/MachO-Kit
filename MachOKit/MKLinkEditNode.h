@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 //
 @interface MKLinkEditNode : MKBackedNode {
 @package
-    __unsafe_unretained MKMemoryMap *_memoryMap;
+    MKMemoryMap *_memoryMap;
     mk_vm_address_t _nodeContextAddress;
     mk_vm_address_t _nodeVMAddress;
     mk_vm_size_t _nodeSize;

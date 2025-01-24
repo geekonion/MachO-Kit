@@ -41,10 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) MKCString *symbolName;
+@property (nonatomic, strong, readonly) MKCString *symbolName;
 
 //!
-@property (nonatomic, readonly) uint8_t symbolFlags;
+@property (nonatomic, assign, readonly) uint8_t symbolFlags;
 
 @end
 

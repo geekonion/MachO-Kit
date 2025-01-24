@@ -41,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithMachVersion:(uint32_t)version NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, readonly) uint16_t major;
-@property (nonatomic, readonly) uint8_t minor;
-@property (nonatomic, readonly) uint8_t patch;
+@property (nonatomic, assign, readonly) uint16_t major;
+@property (nonatomic, assign, readonly) uint8_t minor;
+@property (nonatomic, assign, readonly) uint8_t patch;
 
 @end
 

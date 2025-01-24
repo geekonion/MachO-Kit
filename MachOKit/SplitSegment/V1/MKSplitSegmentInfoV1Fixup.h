@@ -47,13 +47,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithParent:(null_unspecified MKNode*)parent error:(NSError**)error NS_UNAVAILABLE;
 
 //! The VM address of the fixup location.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! The fixup type.
-@property (nonatomic, readonly) MKSplitSegmentInfoV1FixupType kind;
+@property (nonatomic, assign, readonly) MKSplitSegmentInfoV1FixupType kind;
 
 //! Extra data.
-@property (nonatomic, readonly) uint8_t extra;
+@property (nonatomic, assign, readonly) uint8_t extra;
 
 @end
 

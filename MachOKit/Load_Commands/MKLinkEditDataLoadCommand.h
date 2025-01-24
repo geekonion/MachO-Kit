@@ -44,9 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The file offset of data in __LINKEDIT segment.
-@property (nonatomic, readonly) uint32_t dataoff;
+@property (nonatomic, assign, readonly) uint32_t dataoff;
 //! The file size of data in __LINKEDIT segment.
-@property (nonatomic, readonly) uint32_t datasize;
+@property (nonatomic, assign, readonly) uint32_t datasize;
 
 @end
 

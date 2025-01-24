@@ -40,8 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) NSNumber *mask;
 @property (nonatomic, strong, nullable) NSFormatter *formatter;
-@property (nonatomic, readwrite) int shift;
-@property (nonatomic, readwrite) BOOL ignoreZero;
+@property (nonatomic, assign) int shift;
+@property (nonatomic, assign) BOOL ignoreZero;
 
 @end
 
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! @name       Configuring Formatter Behavior
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, copy, nullable) NSArray<MKBitfieldFormatterMask*> *bits;
+@property (nonatomic, strong, nullable) NSArray<MKBitfieldFormatterMask*> *bits;
 
 @end
 

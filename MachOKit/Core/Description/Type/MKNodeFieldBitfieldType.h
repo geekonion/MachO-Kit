@@ -34,7 +34,7 @@ typedef NSArray<NSNumber*/*Mask*/> MKNodeFieldBitfieldMasks;
 //----------------------------------------------------------------------------//
 @protocol MKNodeFieldBitfieldType <MKNodeFieldNumericType>
 
-@property (nonatomic, readonly) MKNodeFieldBitfieldMasks *bits;
+@property (nonatomic, strong, readonly) MKNodeFieldBitfieldMasks *bits;
 
 - (nullable id<MKNodeFieldNumericType>)typeForMask:(NSNumber*)mask;
 

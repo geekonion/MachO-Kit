@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKBindSetTypeImmediate : MKBindCommand
 
 //! The type of subsequent bindings.
-@property (nonatomic, readonly) uint8_t type;
+@property (nonatomic, assign, readonly) uint8_t type;
 
 @end
 

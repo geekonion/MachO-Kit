@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) NSArray<MKFunctionOffset*> *offsets;
+@property (nonatomic, strong, readonly) NSArray<MKFunctionOffset*> *offsets;
 
 //!
-@property (nonatomic, readonly) NSArray<MKFunction*> *functions;
+@property (nonatomic, strong, readonly) NSArray<MKFunction*> *functions;
 
 @end
 

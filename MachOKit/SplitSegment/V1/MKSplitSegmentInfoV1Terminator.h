@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The terminator value.  Will always be zero.
-@property (nonatomic, readonly) uint8_t terminatorValue;
+@property (nonatomic, assign, readonly) uint8_t terminatorValue;
 
 @end
 

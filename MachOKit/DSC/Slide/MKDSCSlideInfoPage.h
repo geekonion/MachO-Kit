@@ -42,11 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The page number in the read/write mapping.
-@property (nonatomic, readonly) uint32_t pageIndex;
+@property (nonatomic, assign, readonly) uint32_t pageIndex;
 
-@property (nonatomic, readonly) uint16_t entryIndex;
+@property (nonatomic, assign, readonly) uint16_t entryIndex;
 
-@property (nonatomic, readonly, nullable) MKDSCSlideInfoBitmap *bitmap;
+@property (nonatomic, strong, readonly, nullable) MKDSCSlideInfoBitmap *bitmap;
 
 @end
 

@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! The function starts information.  The returned optional may contain a \c nil
 //! value and a \c nil error if the image has no function starts information.
-@property (nonatomic, readonly) MKResult<MKFunctionStarts*> *functionStarts;
+@property (nonatomic, strong, readonly) MKResult<MKFunctionStarts*> *functionStarts;
 
 + (MKNodeFieldBuilder*)_functionStartsFieldBuilder;
 @end

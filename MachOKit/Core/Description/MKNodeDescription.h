@@ -45,15 +45,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithParentDescription:(nullable MKNodeDescription*)parent fields:(nullable NSArray<MKNodeField*> *)fields NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, readonly, nullable) MKNodeDescription* parent;
+@property (nonatomic, strong, readonly, nullable) MKNodeDescription* parent;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Working with Fields
 //! @name       Working with Fields
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) NSArray<MKNodeField*> *fields;
-@property (nonatomic, readonly) NSArray<MKNodeField*> *allFields;
+@property (nonatomic, strong, readonly) NSArray<MKNodeField*> *fields;
+@property (nonatomic, strong, readonly) NSArray<MKNodeField*> *allFields;
 
 //! Returns the *first* fields with the provided \a name.
 - (nullable MKNodeField*)fieldWithName:(NSString*)name searchAllFields:(BOOL)searchAllFields;

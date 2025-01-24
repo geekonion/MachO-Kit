@@ -63,18 +63,18 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! 
-@property (nonatomic, readonly) MKDSCLocalSymbolsHeader *header;
+@property (nonatomic, strong, readonly) MKDSCLocalSymbolsHeader *header;
 
 //!
-@property (nonatomic, readonly, nullable) MKDSCSymbolTable *symbolTable;
+@property (nonatomic, strong, readonly, nullable) MKDSCSymbolTable *symbolTable;
 
 //!
-@property (nonatomic, readonly, nullable) MKDSCStringTable *stringTable;
+@property (nonatomic, strong, readonly, nullable) MKDSCStringTable *stringTable;
 
 //!
-@property (nonatomic, readonly, nullable) MKDSCDylibInfos *entriesTable;
+@property (nonatomic, strong, readonly, nullable) MKDSCDylibInfos *entriesTable;
 
-@property (nonatomic, readonly, nullable) DyldSharedCache *dsc;
+@property (nonatomic, assign, readonly, nullable) DyldSharedCache *dsc;
 
 @end
 

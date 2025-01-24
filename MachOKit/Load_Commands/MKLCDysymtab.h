@@ -57,32 +57,32 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _nlocrel;
 }
 
-@property (nonatomic, readonly) uint32_t ilocalsym;
-@property (nonatomic, readonly) uint32_t nlocalsym;
+@property (nonatomic, assign, readonly) uint32_t ilocalsym;
+@property (nonatomic, assign, readonly) uint32_t nlocalsym;
 
-@property (nonatomic, readonly) uint32_t iextdefsym;
-@property (nonatomic, readonly) uint32_t nextdefsym;
+@property (nonatomic, assign, readonly) uint32_t iextdefsym;
+@property (nonatomic, assign, readonly) uint32_t nextdefsym;
 
-@property (nonatomic, readonly) uint32_t iundefsym;
-@property (nonatomic, readonly) uint32_t nundefsym;
+@property (nonatomic, assign, readonly) uint32_t iundefsym;
+@property (nonatomic, assign, readonly) uint32_t nundefsym;
 
-@property (nonatomic, readonly) uint32_t tocoff;
-@property (nonatomic, readonly) uint32_t ntoc;
+@property (nonatomic, assign, readonly) uint32_t tocoff;
+@property (nonatomic, assign, readonly) uint32_t ntoc;
 
-@property (nonatomic, readonly) uint32_t modtaboff;
-@property (nonatomic, readonly) uint32_t nmodtab;
+@property (nonatomic, assign, readonly) uint32_t modtaboff;
+@property (nonatomic, assign, readonly) uint32_t nmodtab;
 
-@property (nonatomic, readonly) uint32_t extrefsymoff;
-@property (nonatomic, readonly) uint32_t nextrefsyms;
+@property (nonatomic, assign, readonly) uint32_t extrefsymoff;
+@property (nonatomic, assign, readonly) uint32_t nextrefsyms;
 
-@property (nonatomic, readonly) uint32_t indirectsymoff;
-@property (nonatomic, readonly) uint32_t nindirectsyms;
+@property (nonatomic, assign, readonly) uint32_t indirectsymoff;
+@property (nonatomic, assign, readonly) uint32_t nindirectsyms;
 
-@property (nonatomic, readonly) uint32_t extreloff;
-@property (nonatomic, readonly) uint32_t nextrel;
+@property (nonatomic, assign, readonly) uint32_t extreloff;
+@property (nonatomic, assign, readonly) uint32_t nextrel;
 
-@property (nonatomic, readonly) uint32_t locreloff;
-@property (nonatomic, readonly) uint32_t nlocrel;
+@property (nonatomic, assign, readonly) uint32_t locreloff;
+@property (nonatomic, assign, readonly) uint32_t nlocrel;
 
 @end
 

@@ -46,11 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Owner name
-@property (nonatomic, readonly, nullable) NSString *data_owner;
+@property (nonatomic, strong, readonly, nullable) NSString *data_owner;
 //! File offset of the data
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 //! File size of the data
-@property (nonatomic, readonly) uint64_t size;
+@property (nonatomic, assign, readonly) uint64_t size;
 
 @end
 

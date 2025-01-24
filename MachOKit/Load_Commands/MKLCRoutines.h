@@ -55,16 +55,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Address of initialization routine.
-@property (nonatomic, readonly) uint32_t init_address;
+@property (nonatomic, assign, readonly) uint32_t init_address;
 //! Index into the module table that the init routine is defined in.
-@property (nonatomic, readonly) uint32_t init_module;
+@property (nonatomic, assign, readonly) uint32_t init_module;
 
-@property (nonatomic, readonly) uint32_t reserved1;
-@property (nonatomic, readonly) uint32_t reserved2;
-@property (nonatomic, readonly) uint32_t reserved3;
-@property (nonatomic, readonly) uint32_t reserved4;
-@property (nonatomic, readonly) uint32_t reserved5;
-@property (nonatomic, readonly) uint32_t reserved6;
+@property (nonatomic, assign, readonly) uint32_t reserved1;
+@property (nonatomic, assign, readonly) uint32_t reserved2;
+@property (nonatomic, assign, readonly) uint32_t reserved3;
+@property (nonatomic, assign, readonly) uint32_t reserved4;
+@property (nonatomic, assign, readonly) uint32_t reserved5;
+@property (nonatomic, assign, readonly) uint32_t reserved6;
 
 @end
 

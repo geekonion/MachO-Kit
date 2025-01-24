@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 //----------------------------------------------------------------------------//
 @protocol MKNodeFieldNodeType <MKNodeFieldContainerType>
 
-@property (nonatomic, readonly, nullable) Class nodeClass;
+@property (nonatomic, strong, readonly, nullable) Class nodeClass;
 
 @end
 

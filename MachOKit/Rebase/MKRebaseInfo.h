@@ -46,10 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithImage:(MKMachOImage*)image error:(NSError**)error;
 
 //! An array of rebasing commands.
-@property (nonatomic, readonly) NSArray<__kindof MKRebaseCommand*> *commands;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKRebaseCommand*> *commands;
 
 //! An array of fixups derived from the rebasing commands.
-@property (nonatomic, readonly) NSArray<MKFixup*> *fixups;
+@property (nonatomic, strong, readonly) NSArray<MKFixup*> *fixups;
 
 @end
 

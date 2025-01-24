@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) id<MKNodeFieldDataRecipe> dataRecipe;
 
-@property (nonatomic, readwrite) MKNodeFieldOptions options;
+@property (nonatomic, assign, readwrite) MKNodeFieldOptions options;
 
 @property (nonatomic, strong, nullable) NSFormatter *formatter;
 

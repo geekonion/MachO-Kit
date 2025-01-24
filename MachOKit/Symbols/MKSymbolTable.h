@@ -54,18 +54,18 @@ NS_ASSUME_NONNULL_BEGIN
 //! An array of \ref MKSymbol instances, each corresponding to an entry in the
 //! symbol table.  The order of this array matches the ordering of the
 //! symbol structures in the Mach-O.
-@property (nonatomic, readonly) NSArray<__kindof MKSymbol*> *symbols;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKSymbol*> *symbols;
 
 //! The range of indexes in the \ref symbols array which correspond to
 //! local symbols.  These symbols are typically included for debugging.
-@property (nonatomic, readonly) NSRange localSymbols;
+@property (nonatomic, assign, readonly) NSRange localSymbols;
 //! The range of indexes in the \ref symbols array which correspond to
 //! external symbols.  These symbols are expected to be found in a specific
 //! external library that will dynamically linked at runtime.
-@property (nonatomic, readonly) NSRange externalSymbols;
+@property (nonatomic, assign, readonly) NSRange externalSymbols;
 //! The range of indexes in the \ref symbols array which correspond to
 //! undefined symbols.
-@property (nonatomic, readonly) NSRange undefinedSymbols;
+@property (nonatomic, assign, readonly) NSRange undefinedSymbols;
 
 @end
 

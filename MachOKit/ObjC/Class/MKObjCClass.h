@@ -50,26 +50,26 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) MKPointer<MKObjCClass*> *metaClass;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClass*> *metaClass;
 
 //!
-@property (nonatomic, readonly) MKPointerNode<MKObjCClass*> *superClass;
+@property (nonatomic, strong, readonly) MKPointerNode<MKObjCClass*> *superClass;
 
 //!
-@property (nonatomic, readonly) MKPointer *cache;
+@property (nonatomic, strong, readonly) MKPointer *cache;
 
 //!
-@property (nonatomic, readonly) uint32_t mask;
+@property (nonatomic, assign, readonly) uint32_t mask;
 
 //!
-@property (nonatomic, readonly) uint32_t occupied;
+@property (nonatomic, assign, readonly) uint32_t occupied;
 
 //!
-@property (nonatomic, readonly) MKPointer<MKObjCClassData*> *classData;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassData*> *classData;
 
-@property (nonatomic, readonly) BOOL isSwiftLegacy;
+@property (nonatomic, assign, readonly) BOOL isSwiftLegacy;
 
-@property (nonatomic, readonly) BOOL isSwiftStable;
+@property (nonatomic, assign, readonly) BOOL isSwiftStable;
 
 @end
 

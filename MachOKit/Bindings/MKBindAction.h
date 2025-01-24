@@ -84,19 +84,19 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The bind action type.
-@property (nonatomic, readonly) MKBindType type;
+@property (nonatomic, assign, readonly) MKBindType type;
 
 //! The segment where bind location resides.
-@property (nonatomic, readonly) MKSegment *segment;
+@property (nonatomic, strong, readonly) MKSegment *segment;
 
 //! The offset from the start of the segment to the bind location.
-@property (nonatomic, readonly) mk_vm_offset_t offset;
+@property (nonatomic, assign, readonly) mk_vm_offset_t offset;
 
 //! The VM address of the bind location.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! The section where the bind location resides.
-@property (nonatomic, readonly) MKResult<MKSection*> *section;
+@property (nonatomic, strong, readonly) MKResult<MKSection*> *section;
 
 @end
 

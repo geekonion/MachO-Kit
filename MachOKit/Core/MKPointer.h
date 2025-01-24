@@ -64,13 +64,13 @@ extern NSString * const MKInitializationContextDeferredProvider;
 - (nullable instancetype)initWithAddress:(mk_vm_address_t)address node:(MKBackedNode*)sourceNode context:(nullable NSDictionary<NSString*, id>*)context error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
 //! The address referenced by the pointer.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! The class of the node that the pointer is expected to reference.
-@property (nonatomic, readonly, nullable) Class targetClass;
+@property (nonatomic, strong, readonly, nullable) Class targetClass;
 
 //! The node referenced by the pointer.
-@property (nonatomic, readonly) MKResult<Pointee> *pointee;
+@property (nonatomic, strong, readonly) MKResult<Pointee> *pointee;
 
 @end
 

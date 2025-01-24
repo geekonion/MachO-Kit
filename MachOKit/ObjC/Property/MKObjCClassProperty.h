@@ -41,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
     MKPointer *_attributes;
 }
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *name;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *attributes;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *attributes;
 
 @end
 

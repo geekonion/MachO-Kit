@@ -81,13 +81,13 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //!
-@property (nonatomic, readonly) uint64_t terminalInformationSize;
+@property (nonatomic, assign, readonly) uint64_t terminalInformationSize;
 
 //!
-@property (nonatomic, readonly) uint8_t childCount;
+@property (nonatomic, assign, readonly) uint8_t childCount;
 
 //! 
-@property (nonatomic, readonly) NSArray<MKExportTrieBranch*> *branches;
+@property (nonatomic, strong, readonly) NSArray<MKExportTrieBranch*> *branches;
 
 @end
 

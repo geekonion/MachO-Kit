@@ -32,8 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 //----------------------------------------------------------------------------//
 @interface MKNodeFieldTypeNode : NSObject <MKNodeFieldNodeType> {
-@package
-    Class _nodeClass;
 }
 
 + (instancetype)typeWithNodeType:(nullable Class)nodeType;

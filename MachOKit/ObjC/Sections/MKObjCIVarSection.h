@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<MKObjCIVarOffset*> *_ivarOffsets;
 }
 
-@property (nonatomic, readonly) NSArray<MKObjCIVarOffset*> *elements;
+@property (nonatomic, strong, readonly) NSArray<MKObjCIVarOffset*> *elements;
 
 @end
 

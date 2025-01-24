@@ -47,10 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _stubSize;
 }
 
-@property (nonatomic, readonly) NSArray<MKStub*> *stubs;
+@property (nonatomic, strong, readonly) NSArray<MKStub*> *stubs;
 
-@property (nonatomic, readonly) uint32_t indirectSymbolTableIndex;
-@property (nonatomic, readonly) uint32_t stubSize;
+@property (nonatomic, assign, readonly) uint32_t indirectSymbolTableIndex;
+@property (nonatomic, assign, readonly) uint32_t stubSize;
 
 @end
 

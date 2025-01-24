@@ -84,13 +84,13 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The export kind.
-@property (nonatomic, readonly) MKExportKind kind;
+@property (nonatomic, assign, readonly) MKExportKind kind;
 
 //! The export options.
-@property (nonatomic, readonly) MKExportOptions options;
+@property (nonatomic, assign, readonly) MKExportOptions options;
 
 //! The export name.
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSString *name;
 
 - (NSString*)_optionsDescription;
 

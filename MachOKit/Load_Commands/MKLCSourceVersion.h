@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
     MKSourceVersion *_version;
 }
 
-@property (nonatomic, readonly) MKSourceVersion *version;
+@property (nonatomic, strong, readonly) MKSourceVersion *version;
 
 @end
 

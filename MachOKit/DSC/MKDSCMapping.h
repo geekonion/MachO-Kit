@@ -49,12 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithDSCMapping:(DyldSharedCacheMapping *)mapping parent:(MKNode *)parent error:(NSError**)error;
 
-@property (nonatomic, readonly) mk_vm_address_t vmAddress;
-@property (nonatomic, readonly) mk_vm_size_t vmSize;
-@property (nonatomic, readonly) mk_vm_offset_t fileOffset;
+@property (nonatomic, assign, readonly) mk_vm_address_t vmAddress;
+@property (nonatomic, assign, readonly) mk_vm_size_t vmSize;
+@property (nonatomic, assign, readonly) mk_vm_offset_t fileOffset;
 
-@property (nonatomic, readonly) vm_prot_t maximumProtection;
-@property (nonatomic, readonly) vm_prot_t initialProtection;
+@property (nonatomic, assign, readonly) vm_prot_t maximumProtection;
+@property (nonatomic, assign, readonly) vm_prot_t initialProtection;
 
 @end
 

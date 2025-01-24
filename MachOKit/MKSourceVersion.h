@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithMachVersion:(uint64_t)version NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, readonly) NSArray<NSNumber*> *components;
+@property (nonatomic, strong, readonly) NSArray<NSNumber*> *components;
 
 @end
 

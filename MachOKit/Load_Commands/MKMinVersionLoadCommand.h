@@ -45,9 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The minimum version of the OS the binary was built to run on.
-@property (nonatomic, readonly) MKVersion *version;
+@property (nonatomic, strong, readonly) MKVersion *version;
 //! The minimum SDK the binary can be linked with.
-@property (nonatomic, readonly) MKVersion *sdk;
+@property (nonatomic, strong, readonly) MKVersion *sdk;
 
 @end
 

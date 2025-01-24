@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithOffset:(mk_vm_offset_t)offset methodCount:(uint32_t)count fromParent:(MKBackedNode*)parent error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, readonly) NSArray<MKPointerNode<MKCString*>*> *elements;
+@property (nonatomic, strong, readonly) NSArray<MKPointerNode<MKCString*>*> *elements;
 
 @end
 

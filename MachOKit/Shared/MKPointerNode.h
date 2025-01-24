@@ -55,13 +55,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithAddress:(mk_vm_address_t)addr offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent targetClass:(Class)targetClass error:(NSError**)error;
 
 //! The address referenced by the pointer.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! The class of the node that the pointer is expected to reference.
-@property (nonatomic, readonly, nullable) Class targetClass;
+@property (nonatomic, strong, readonly, nullable) Class targetClass;
 
 //! The node referenced by the pointer.
-@property (nonatomic, readonly) MKResult<Pointee> *pointee;
+@property (nonatomic, strong, readonly) MKResult<Pointee> *pointee;
 
 @end
 

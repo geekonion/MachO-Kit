@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 //!
 //! A layout describes the fields parsed from the range of the data represented
 //! by this node.
-@property (nonatomic, readonly) MKNodeDescription *layout;
+@property (nonatomic, strong, readonly) MKNodeDescription *layout;
 
 //! A description that captures node specific information such as class,
 //! address, and size (for backed nodes).  Useful when forming error messages
@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
 //!	@note
 //!	Never call \c -compactDescription from within your subclass \c -description
 //!	method.
-@property (nonatomic, readonly) NSString *compactDescription;
+@property (nonatomic, strong, readonly) NSString *compactDescription;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Accessing Related Objects
@@ -93,17 +93,17 @@ NS_ASSUME_NONNULL_BEGIN
 //! The memory map for the node.  By default this is the memory map of the
 //! node's parent.  Subclasses should override the getter for this property
 //! to provide the \ref MKMemoryMap that is to be used by their child nodes.
-@property (nonatomic, readonly) MKMemoryMap *memoryMap;
+@property (nonatomic, strong, readonly) MKMemoryMap *memoryMap;
 
 //! The data model used for accessing memory in this node.  By default this is
 //! the data model of this node's parent.  Subclasses should override the
 //! getter for this property to provide the \ref MKDataModel that is to be used
 //! by their child nodes.
-@property (nonatomic, readonly) MKDataModel* dataModel;
+@property (nonatomic, strong, readonly) MKDataModel* dataModel;
 
 //! An array of warnings raised while initiaizing the node.  Each warning
 //! is represented by an instance of \c NSError.
-@property (nonatomic, copy) NSArray<NSError*> *warnings;
+@property (nonatomic, strong) NSArray<NSError*> *warnings;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Navigating the Node Tree
@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The parent node, or \c nil if the node has no parent.
-@property (nonatomic, readonly, nullable) MKNode *parent;
+@property (nonatomic, weak, readonly, nullable) MKNode *parent;
 
 //! Returns the nearest ancestor node of type \a cls.
 - (nullable __kindof MKNode*)nearestAncestorOfType:(Class)cls;

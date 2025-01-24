@@ -116,10 +116,10 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The libMachO context.
-@property (nonatomic, readonly) mk_context_t *context;
+@property (nonatomic, assign, readonly) mk_context_t *context;
 
 //! The flags that this Mach-O image was initialized with.
-@property (nonatomic, readonly) MKMachOImageFlags flags;
+@property (nonatomic, assign, readonly) MKMachOImageFlags flags;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Getting Image Metadata
@@ -127,17 +127,17 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The name that this Mach-O image was initialized with.
-@property (nonatomic, readonly, nullable) NSString *name;
+@property (nonatomic, strong, readonly, nullable) NSString *name;
 
 //! The slide value for this Mach-O image.
-@property (nonatomic, readonly) mk_vm_slide_t slide;
+@property (nonatomic, assign, readonly) mk_vm_slide_t slide;
 
 //! Indicates whether this Mach-O image is from dyld's shared cache.
-@property (nonatomic, readonly) BOOL isFromSharedCache;
-@property (nonatomic, readonly) BOOL isImageInSharedCache;
+@property (nonatomic, assign, readonly) BOOL isFromSharedCache;
+@property (nonatomic, assign, readonly) BOOL isImageInSharedCache;
 
 //! Indicates whether this Mach-O image is from a memory dump (or live memory).
-@property (nonatomic, readonly) BOOL isFromMemory;
+@property (nonatomic, assign, readonly) BOOL isFromMemory;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Header
@@ -145,11 +145,11 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The header of this image.
-@property (nonatomic, readonly) MKMachHeader *header;
-@property (nonatomic, readonly) DyldSharedCache *dsc;
+@property (nonatomic, strong, readonly) MKMachHeader *header;
+@property (nonatomic, assign, readonly) DyldSharedCache *dsc;
 
 //! The architecture of this image.
-@property (nonatomic, readonly) mk_architecture_t architecture;
+@property (nonatomic, assign, readonly) mk_architecture_t architecture;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Load Commands
@@ -161,7 +161,7 @@ typedef NS_OPTIONS(NSUInteger, MKMachOImageFlags) {
 //! appear in the Mach-O header.  The count of the returned array may be less
 //! than the value of ncmds in the \ref header, if the Mach-O is malformed
 //! and trailing load commands could not be read.
-@property (nonatomic, readonly) NSArray<__kindof MKLoadCommand*> *loadCommands;
+@property (nonatomic, strong, readonly) NSArray<__kindof MKLoadCommand*> *loadCommands;
 
 //! Filters the \ref loadCommands array to those of the specified \a type
 //! and returns the result.  The relative ordering of the returned load

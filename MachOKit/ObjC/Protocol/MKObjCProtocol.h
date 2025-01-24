@@ -57,37 +57,37 @@ NS_ASSUME_NONNULL_BEGIN
     MKPointer *_classProperties;
 }
 
-@property (nonatomic, readonly) MKPointer *isa;
+@property (nonatomic, strong, readonly) MKPointer *isa;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *mangledName;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *mangledName;
 
-@property (nonatomic, readonly) MKPointer<MKObjCProtocolList*> *protocols;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCProtocolList*> *protocols;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *instanceMethods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *instanceMethods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *classMethods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *classMethods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *optionalInstanceMethods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *optionalInstanceMethods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *optionalClassMethods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *optionalClassMethods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassPropertyList*> *instanceProperties;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassPropertyList*> *instanceProperties;
 
-@property (nonatomic, readonly) uint32_t size;
+@property (nonatomic, assign, readonly) uint32_t size;
 
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t flags;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Extended Protocol Fields
 //! @name       Extended Protocol Fields
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly, nullable) MKPointer<MKObjCProtocolMethodTypesList*> *extendedMethodTypes;
+@property (nonatomic, strong, readonly, nullable) MKPointer<MKObjCProtocolMethodTypesList*> *extendedMethodTypes;
 
 //! This will point to NULL for Objective-C protocols.
-@property (nonatomic, readonly, nullable) MKPointer<MKCString*> *demangledName;
+@property (nonatomic, strong, readonly, nullable) MKPointer<MKCString*> *demangledName;
 
-@property (nonatomic, readonly, nullable) MKPointer<MKObjCClassPropertyList*> *classProperties;
+@property (nonatomic, strong, readonly, nullable) MKPointer<MKObjCClassPropertyList*> *classProperties;
 
 @end
 

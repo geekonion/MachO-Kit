@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKDefinedSymbol : MKRegularSymbol
 
 //! Symbol flags.
-@property (nonatomic, readonly) MKDefinedSymbolFlagsType symbolFlags;
+@property (nonatomic, assign, readonly) MKDefinedSymbolFlagsType symbolFlags;
 
 @end
 

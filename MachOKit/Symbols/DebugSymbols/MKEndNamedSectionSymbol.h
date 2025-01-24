@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! entry in the pair contains the procedure start address.  The N_ENSYM
 //! entry contains the procedure *length*. There is no mention of N_ENSYM in
 //! the STABS docs.  It is not clear if this is an Apple extension.
-@property (nonatomic, readonly) uint64_t address;
+@property (nonatomic, assign, readonly) uint64_t address;
 
 @end
 
