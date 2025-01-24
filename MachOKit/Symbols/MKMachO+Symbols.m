@@ -48,8 +48,7 @@
             return [[MKStringTable alloc] initWithParent:self error:error];
         }];
         
-        _stringTable = [stringTable retain];
-        [stringTable release];
+        _stringTable = stringTable;
     }
     
     return _stringTable;
@@ -64,8 +63,7 @@
             return [[MKSymbolTable alloc] initWithParent:self error:error];
         }];
         
-        _symbolTable = [symbolTable retain];
-        [symbolTable release];
+        _symbolTable = symbolTable;
     }
     
     return _symbolTable;
@@ -80,9 +78,7 @@
             return [[MKIndirectSymbolTable alloc] initWithParent:self error:error];
         }];
         
-        _indirectSymbolTable = [indirectSymbolTable retain];
-        
-        [indirectSymbolTable release];
+        _indirectSymbolTable = indirectSymbolTable;
     }
     
     return _indirectSymbolTable;

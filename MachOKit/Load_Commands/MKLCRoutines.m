@@ -62,7 +62,7 @@
     
     struct routines_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _init_address = MKSwapLValue32(lc.init_address, self.macho.dataModel);
     _init_module = MKSwapLValue32(lc.init_module, self.macho.dataModel);

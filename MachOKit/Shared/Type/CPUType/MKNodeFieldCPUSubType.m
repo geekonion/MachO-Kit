@@ -70,10 +70,6 @@ static NSFormatter *s_Formatter = nil;
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_Formatter = formatter;
-    
-    [bits release];
-    [capabilitiesMask release];
-    [subtypeMask release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

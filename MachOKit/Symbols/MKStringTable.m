@@ -49,7 +49,7 @@
     // occur in valid Mach-O images?
     if (self.nodeSize == 0) {
         // Still need to assign a value to the strings dictionary.
-        _strings = [@{} retain];
+        _strings = @{};
         return self;
     }
     
@@ -94,14 +94,12 @@
             }
             
             [strings setObject:string forKey:@(sym_off)];
-            [string release];
             
             // SAFE - All string nodes must be within the size of this node.
             sym_off += string.nodeSize ?: 1;
         }
         
-        _strings = [strings copy];
-        [strings release];
+        _strings = strings;
     }
     
     return self;
@@ -122,7 +120,7 @@
         if (commands.count == 0) {
             // TODO - Is this really an error?
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_SYMTAB load command."];
-            [self release]; return nil;
+            return nil;
         }
         
         symtabLoadCommand = commands.firstObject;
@@ -134,14 +132,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_strings release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKPointer

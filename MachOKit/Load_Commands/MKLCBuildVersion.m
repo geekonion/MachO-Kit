@@ -59,17 +59,17 @@
     
     struct build_version_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
  
     _platform = MKSwapLValue32(lc.platform, self.macho.dataModel);
     
     MKSwapLValue32(lc.minos, self.macho.dataModel);
     _minos = [[MKVersion alloc] initWithMachVersion:lc.minos];
-    if (_minos == nil) { [self release]; return nil; }
+    if (_minos == nil) { return nil; }
     
     MKSwapLValue32(lc.sdk, self.macho.dataModel);
     _sdk = [[MKVersion alloc] initWithMachVersion:lc.sdk];
-    if (_sdk == nil) { [self release]; return nil; }
+    if (_sdk == nil) { return nil; }
     
     _ntools = MKSwapLValue32(lc.ntools, self.macho.dataModel);
     
@@ -114,11 +114,9 @@
             }
             
             [tools addObject:tool];
-            [tool release];
         }}
 		
-		_tools = [tools copy];
-		[tools release];
+		_tools = tools;
     }
     
     return self;
@@ -134,10 +132,10 @@
     _platform = lc->platform;
     
     _minos = [[MKVersion alloc] initWithMachVersion:lc->minos];
-    if (_minos == nil) { [self release]; return nil; }
+    if (_minos == nil) { return nil; }
     
     _sdk = [[MKVersion alloc] initWithMachVersion:lc->sdk];
-    if (_sdk == nil) { [self release]; return nil; }
+    if (_sdk == nil) { return nil; }
     
     _ntools = lc->ntools;
     
@@ -182,24 +180,12 @@
                 }
                 
                 [tools addObject:tool];
-                [tool release];
             }}
         
-        _tools = [tools copy];
-        [tools release];
+        _tools = tools;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_minos release];
-    [_sdk release];
-    [_tools release];
-    
-    [super dealloc];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -290,7 +276,7 @@
     
     struct build_tool_version btv;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&btv length:sizeof(btv) requireFull:YES error:error] < sizeof(btv))
-    { [self release]; return nil; }
+    { return nil; }
     
     _tool = MKSwapLValue32(btv.tool, self.macho.dataModel);
     _version = MKSwapLValue32(btv.version, self.macho.dataModel);

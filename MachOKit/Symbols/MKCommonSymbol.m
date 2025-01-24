@@ -78,9 +78,6 @@
     desc.type = [MKNodeFieldTypeBitfield bitfieldWithType:(id)desc.type bits:@[symbolFlagsMask, commAlign] name:nil];
     desc.formatter = desc.type.formatter;
     
-    [commAlign release];
-    [symbolFlagsMask release];
-    
     return desc;
 }
 

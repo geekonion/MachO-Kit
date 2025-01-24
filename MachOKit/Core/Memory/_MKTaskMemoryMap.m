@@ -42,7 +42,7 @@
     kern_return_t err = mach_port_mod_refs(mach_task_self(), _task, MACH_PORT_RIGHT_SEND, 1);
     if (err) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:NSMachErrorDomain code:err description:@"Failed to retain the target task port."];
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -52,8 +52,6 @@
 - (void)dealloc
 {
     mach_port_mod_refs(mach_task_self(), _task, MACH_PORT_RIGHT_SEND, -1);
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

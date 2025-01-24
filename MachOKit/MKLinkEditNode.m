@@ -53,7 +53,7 @@
         } else {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not have a __LINKEDIT segment."];
         }
-        [self release]; return nil;
+        return nil;
     }
     
     self = [super initWithParent:image error:error];
@@ -71,18 +71,18 @@
         
         if ((err = mk_vm_address_apply_offset(linkeditSegment.value.vmAddress, offset, &_nodeContextAddress))) {
             MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, linkeditSegment.value.vmAddress, offset);
-            [self release]; return nil;
+            return nil;
         }
         
         if ((err = mk_vm_address_subtract(_nodeContextAddress, linkeditSegment.value.fileOffset, &_nodeContextAddress))) {
             MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_DEFFERENCE_ARITHMETIC_ERROR(err, _nodeContextAddress, linkeditSegment.value.fileOffset);
-            [self release]; return nil;
+            return nil;
         }
         
         // Slide the context address.
         if ((err = mk_vm_address_apply_slide(_nodeContextAddress, image.slide, &_nodeContextAddress))) {
             MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_SLIDE_ARITHMETIC_ERROR(err, _nodeContextAddress, image.slide);
-            [self release]; return nil;
+            return nil;
         }
         
         _nodeVMAddress = _nodeContextAddress;
@@ -94,13 +94,13 @@
         // Context Address
         if ((err = mk_vm_address_apply_offset(image.nodeContextAddress, offset, &_nodeContextAddress))) {
             MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, image.nodeContextAddress, offset);
-            [self release]; return nil;
+            return nil;
         }
         
         // VM Address
         if ((err = mk_vm_address_apply_offset(image.nodeVMAddress, offset, &_nodeVMAddress))) {
             MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, image.nodeContextAddress, offset);
-            [self release]; return nil;
+            return nil;
         }
     }
     
@@ -112,7 +112,7 @@
         
         if ([_memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeSize error:&localError] == NO) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND underlyingError:localError description:@"%@ data does not exist at address 0x%" MK_VM_PRIxADDR " for image %@.", NSStringFromClass(self.class), _nodeContextAddress, image];
-            [self release]; return nil;
+            return nil;
         }
     }
     

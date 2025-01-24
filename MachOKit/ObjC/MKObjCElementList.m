@@ -51,7 +51,7 @@ struct objc_entlist {
     struct objc_entlist lst;
     if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&lst length:sizeof(lst) requireFull:YES error:error] < sizeof(lst)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read entity list header."];
-        [self release]; return nil;
+        return nil;
     }
     
     _entsizeAndFlags = MKSwapLValue32(lst.entsizeAndFlags, dataModel);
@@ -60,7 +60,7 @@ struct objc_entlist {
     // Compute the node size
     if ((err = mk_vm_size_add_with_multiply(sizeof(struct objc_entlist), self.entsize, _count, &_nodeSize))) {
         MK_ERROR_OUT = MK_MAKE_VM_SIZE_ADD_WITH_MULTIPLY_ARITHMETIC_ERROR(err, _nodeSize, self.entsize, _count);
-        [self release]; return nil;
+        return nil;
     }
     
     // Check if the full length is mappable.  If it is not, shrink the size to
@@ -76,7 +76,7 @@ struct objc_entlist {
     
     if (memoryMapError) {
         MK_ERROR_OUT = memoryMapError;
-        [self release]; return nil;
+        return nil;
     }
     
     // In the interest of robustness, we won't care if all/part of the node
@@ -122,27 +122,16 @@ struct objc_entlist {
             // data.
             if (offset > _nodeSize) {
                 MK_PUSH_WARNING(elements, MK_EOUT_OF_RANGE, @"Part of element at index [%" PRIu32 "] is beyond element list size.", i);
-                [element release];
                 break;
             }
             
             [elements addObject:element];
-            [element release];
         }
         
-        _elements = [elements copy];
-        [elements release];
+        _elements = elements;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_elements release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

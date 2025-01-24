@@ -44,7 +44,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
     self = [super init];
     if (self == nil) return nil;
     
-    objc_storeWeak(&_parent, parent);
+    _parent = parent;
     
     return self;
 }
@@ -57,9 +57,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
 - (void)dealloc
 {
     self.delegate = nil;
-    objc_storeWeak(&_parent, nil);
-    
-    [super dealloc];
+    _parent = nil;
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
@@ -73,7 +71,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
-{ return [[MKNodeDescription new] autorelease]; }
+{ return [MKNodeDescription new]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (NSString*)compactDescription
@@ -154,33 +152,35 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
++ (void **)_subclassesCache
 { return NULL; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSSet*)subclasses
 {
-    id* cache = [self _subclassesCache];
+    void **cache = [self _subclassesCache];
+    if (!cache) {
+        return nil;
+    }
     
     // Check if we have cached data and return it.
-    NSSet *retValue = cache ? objc_loadWeak(cache) : nil;
+    void *retValue = *cache;
     if (retValue)
-        return retValue;
+        return CFBridgingRelease(retValue);
     
-    @synchronized(self)
-    {
+    @synchronized(self) {
         // Make sure another thread did not beat us.
-        retValue = cache ? objc_loadWeak(cache) : nil;
+        retValue = *cache;
         if (retValue)
-            return retValue;
+            return CFBridgingRelease(retValue);
         
-        NSMutableSet *subclasses = [[NSMutableSet alloc] init];
+        NSMutableSet <Class>*subclasses = [NSMutableSet set];
         
         unsigned classCount;
         Class *classes = objc_copyClassList(&classCount);
         Class specClass = objc_getClass("SPTSpec");
 
-        for (unsigned int i=0; i<classCount; i++) {
+        for (unsigned int i = 0; i < classCount; i++) {
             Class cls = classes[i];
 
             // Without this, Specta breaks.  Technically only needed during testing.
@@ -191,21 +191,20 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
             // to run (if it has one).  Avoid that.
             for (Class s = cls; s != nil; s = class_getSuperclass(s)) {
                 if (s == self)
-                    [subclasses addObject:classes[i]];
+                    [subclasses addObject:cls];
             }
         }
         
-        retValue = [subclasses copy];
+        retValue = CFBridgingRetain(subclasses);
         
         free(classes);
-        [subclasses release];
         
         if (cache)
-            objc_storeWeak(cache, retValue);
+            *cache = retValue;
     }
     
     NSAssert(retValue != nil, @"Expected to have a list of subclasses before returning.");
-    return retValue;
+    return CFBridgingRelease(retValue);
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -225,7 +224,6 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
         }];
         
         Class retValue = [subclasses lastObject];
-        [subclasses release];
         
         if (rank(retValue) > 0)
             return retValue;
@@ -233,7 +231,6 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
             return self;
     }
     
-    [subclasses release];
     return self;
 }
 
@@ -274,12 +271,9 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
             CFStringAppendCharacters((CFMutableStringRef)description, &character, 1);
         }
         
-        cachedDescription = [description copy];
+        cachedDescription = description;
         
         objc_setAssociatedObject(self, AssociatedDescription, cachedDescription, OBJC_ASSOCIATION_RETAIN);
-        
-        [cachedDescription release];
-        [description release];
     }
     
     return cachedDescription;

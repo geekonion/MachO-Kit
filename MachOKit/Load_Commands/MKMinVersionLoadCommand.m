@@ -43,15 +43,15 @@
     
     struct version_min_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     MKSwapLValue32(lc.version, self.macho.dataModel);
     _version = [[MKVersion alloc] initWithMachVersion:lc.version];
-    if (_version == nil) { [self release]; return nil; }
+    if (_version == nil) { return nil; }
     
     MKSwapLValue32(lc.sdk, self.macho.dataModel);
     _sdk = [[MKVersion alloc] initWithMachVersion:lc.sdk];
-    if (_sdk == nil) { [self release]; return nil; }
+    if (_sdk == nil) { return nil; }
     
     return self;
 }
@@ -64,21 +64,12 @@
     struct version_min_command *lc = (void *)lc_ptr;
 
     _version = [[MKVersion alloc] initWithMachVersion:lc->version];
-    if (_version == nil) { [self release]; return nil; }
+    if (_version == nil) { return nil; }
     
     _sdk = [[MKVersion alloc] initWithMachVersion:lc->sdk];
-    if (_sdk == nil) { [self release]; return nil; }
+    if (_sdk == nil) { return nil; }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_version release];
-    [_sdk release];
-    
-    [super dealloc];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

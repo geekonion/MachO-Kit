@@ -43,11 +43,11 @@ MKMakeSingletonInitializer(MKNodeFieldExportOptionsType)
     if (s_Options != nil && s_Formatter != nil)
         return;
     
-    s_Options = [@{
+    s_Options = @{
         _$((uint64_t)EXPORT_SYMBOL_FLAGS_WEAK_DEFINITION): @"EXPORT_SYMBOL_FLAGS_WEAK_DEFINITION",
         _$((uint64_t)EXPORT_SYMBOL_FLAGS_REEXPORT): @"EXPORT_SYMBOL_FLAGS_REEXPORT",
         _$((uint64_t)EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER): @"EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_Options;

@@ -65,7 +65,7 @@
     
     struct segment_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _vmaddr = MKSwapLValue32(lc.vmaddr, self.macho.dataModel);
     _vmsize = MKSwapLValue32(lc.vmsize, self.macho.dataModel);
@@ -129,16 +129,13 @@
                 // command's size.  We will match this behavior and throw away
                 // any section which straddles the boundary.
                 MK_PUSH_WARNING(sections, MK_EINVALID_DATA, @"Part of section at index " PRIi32 " is outside the enclosing load command.", (self.nsects - sectionCount));
-                [sect release];
                 break;
             }
                 
             [sections addObject:sect];
-            [sect release];
         }}
         
-        _sections = [sections copy];
-        [sections release];
+        _sections = sections;
     }
     
     return self;
@@ -213,28 +210,16 @@
                     // command's size.  We will match this behavior and throw away
                     // any section which straddles the boundary.
                     MK_PUSH_WARNING(sections, MK_EINVALID_DATA, @"Part of section at index " PRIi32 " is outside the enclosing load command.", (self.nsects - sectionCount));
-                    [sect release];
                     break;
                 }
                 
                 [sections addObject:sect];
-                [sect release];
             }}
         
-        _sections = [sections copy];
-        [sections release];
+        _sections = sections;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_sections release];
-    [_segname release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -415,7 +400,7 @@
     
     struct section sect;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&sect length:sizeof(sect) requireFull:YES error:error] < sizeof(sect))
-    { [self release]; return nil; }
+    { return nil; }
     
     _addr = MKSwapLValue32(sect.addr, self.macho.dataModel);
     _size = MKSwapLValue32(sect.size, self.macho.dataModel);
@@ -500,15 +485,6 @@
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_sectname release];
-    [_segname release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

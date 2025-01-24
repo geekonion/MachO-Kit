@@ -57,7 +57,7 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read ivar offset."];;
-        [self release]; return nil;
+        return nil;
     }
     
     return self;

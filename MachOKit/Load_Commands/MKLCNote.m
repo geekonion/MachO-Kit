@@ -57,7 +57,7 @@
     
     struct note_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _offset = MKSwapLValue64(lc.offset, self.macho.dataModel);
     _size = MKSwapLValue64(lc.size, self.macho.dataModel);
@@ -76,14 +76,6 @@
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_data_owner release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

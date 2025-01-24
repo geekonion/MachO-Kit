@@ -43,11 +43,11 @@ MKMakeSingletonInitializer(MKNodeFieldExportKindType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)EXPORT_SYMBOL_FLAGS_KIND_REGULAR): @"EXPORT_SYMBOL_FLAGS_KIND_REGULAR",
         _$((uint8_t)EXPORT_SYMBOL_FLAGS_KIND_THREAD_LOCAL): @"EXPORT_SYMBOL_FLAGS_KIND_THREAD_LOCAL",
         _$((uint8_t)EXPORT_SYMBOL_FLAGS_KIND_ABSOLUTE): @"EXPORT_SYMBOL_FLAGS_KIND_ABSOLUTE"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"EXPORT_SYMBOL_FLAGS_KIND";

@@ -43,11 +43,11 @@ MKMakeSingletonInitializer(MKNodeFieldRebaseType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)REBASE_TYPE_POINTER): @"REBASE_TYPE_POINTER",
         _$((uint8_t)REBASE_TYPE_TEXT_ABSOLUTE32): @"REBASE_TYPE_TEXT_ABSOLUTE32",
         _$((uint8_t)REBASE_TYPE_TEXT_PCREL32): @"REBASE_TYPE_TEXT_PCREL32"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"REBASE_TYPE";

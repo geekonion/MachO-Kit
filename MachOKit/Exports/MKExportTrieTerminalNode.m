@@ -318,7 +318,6 @@
     
     MKNodeDescription *description = [MKNodeDescription nodeDescriptionWithParentDescription:nil fields:fields];
     
-    [fields release];
     return description;
 }
 

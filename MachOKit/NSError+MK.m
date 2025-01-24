@@ -42,7 +42,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)description, ap);
     va_end(ap);
     
-    NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:nil description:(NSString*)str reason:nil];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:nil description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
 	CFRelease(str);
 	return error;
@@ -56,7 +56,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)reason, ap);
     va_end(ap);
     
-    NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:nil description:description reason:(NSString*)str];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:nil description:description reason:(NSString*)CFBridgingRelease(str)];
 	
 	CFRelease(str);
 	return error;
@@ -70,7 +70,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)description, ap);
     va_end(ap);
     
-    NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:nil description:(NSString*)str reason:nil];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:nil description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
 	CFRelease(str);
 	return error;
@@ -84,7 +84,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)reason, ap);
 	va_end(ap);
 	
-	NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:nil description:description reason:(NSString*)str];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:nil description:description reason:(NSString*)CFBridgingRelease(str)];
 	
 	CFRelease(str);
 	return error;
@@ -100,7 +100,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)description, ap);
 	va_end(ap);
 	
-	NSError *error = [self _mk_errorWithDomain:domain code:underlyingError.code property:nil underlyingError:underlyingError description:(NSString*)str reason:nil];
+    NSError *error = [self _mk_errorWithDomain:domain code:underlyingError.code property:nil underlyingError:underlyingError description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
 	CFRelease(str);
 	return error;
@@ -114,7 +114,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)description, ap);
     va_end(ap);
     
-	NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:underlyingError description:(NSString*)str reason:nil];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:underlyingError description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
 	CFRelease(str);
 	return error;
@@ -128,7 +128,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)description, ap);
     va_end(ap);
     
-	NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:underlyingError description:(NSString*)str reason:nil];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:underlyingError description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
 	CFRelease(str);
 	return error;
@@ -142,7 +142,7 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, (CFStringRef)reason, ap);
 	va_end(ap);
 	
-	NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:underlyingError description:description reason:(NSString*)str];
+    NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:underlyingError description:description reason:(NSString*)CFBridgingRelease(str)];
 	
 	CFRelease(str);
 	return error;
@@ -182,8 +182,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:values forKeys:keys count:count];
 	
 	NSError *error = [NSError errorWithDomain:domain code:code userInfo:userInfo];
-	
-	[userInfo release];
 	
 	return error;
 }

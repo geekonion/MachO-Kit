@@ -49,7 +49,7 @@
         MKSplitSegmentInfoV1Opcode *opcodeNode = [[MKSplitSegmentInfoV1Opcode alloc] initWithOffset:offset fromParent:self error:&opcodeError];
         if (opcodeNode == nil) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:opcodeError description:@"Could not parse opcode at offset [%" MK_VM_PRIuOFFSET "].", offset];
-            [self release]; return nil;
+            return nil;
         }
         
         _opcode = opcodeNode;
@@ -85,7 +85,6 @@
                 }
                 
                 [offsets addObject:offsetNode];
-                [offsetNode release];
                 
                 // TODO -
                 offset += offsetNode.nodeSize;
@@ -110,23 +109,12 @@
             }
         }
         
-        _offsets = [offsets copy];
-        [offsets release];
+        _offsets = offsets;
     }
     
     _nodeSize = offset;
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_terminator release];
-    [_offsets release];
-    [_opcode release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

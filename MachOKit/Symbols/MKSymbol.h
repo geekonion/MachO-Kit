@@ -106,6 +106,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint16_t desc;
 @property (nonatomic, readonly) uint64_t value;
 
++ (MKNodeFieldBuilder*)_strxFieldBuilder;
++ (MKNodeFieldBuilder*)_typeFieldBuilder;
++ (MKNodeFieldBuilder*)_sectFieldBuilder;
++ (MKNodeFieldBuilder*)_descFieldBuilder;
+- (MKNodeFieldBuilder*)_valueFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

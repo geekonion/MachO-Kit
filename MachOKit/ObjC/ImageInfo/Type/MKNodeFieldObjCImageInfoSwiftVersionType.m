@@ -43,12 +43,12 @@ MKMakeSingletonInitializer(MKNodeFieldObjCImageInfoSwiftVersionType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$(MKObjCImageSwiftVersion1): @"1",
         _$(MKObjCImageSwiftVersion1_2): @"1.2",
         _$(MKObjCImageSwiftVersion2): @"2",
         _$(MKObjCImageSwiftVersion3): @"3"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"Swift Version";

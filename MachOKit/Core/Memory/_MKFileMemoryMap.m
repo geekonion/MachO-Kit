@@ -38,20 +38,11 @@
     if (self == nil) return nil;
     
     _fileData = [[NSData alloc] initWithContentsOfURL:fileURL options:NSDataReadingMappedIfSafe error:error];
-    if (_fileData == nil) { [self release]; return nil; }
+    if (_fileData == nil) { return nil; }
     
-    _fileURL = [fileURL retain];
+    _fileURL = fileURL;
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_fileData release];
-    [_fileURL release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

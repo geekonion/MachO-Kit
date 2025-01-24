@@ -36,17 +36,7 @@
     MKEnumerationFormatter *retValue = [self new];
     retValue.elements = elements;
     
-    return [retValue autorelease];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_fallbackFormatter release];
-    [_elements release];
-    [_name release];
-    
-    [super dealloc];
+    return retValue;
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -59,9 +49,9 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _name = [[aDecoder decodeObjectOfClass:NSString.class forKey:@"name"] retain];
-    _elements = [[aDecoder decodeObjectOfClass:NSDictionary.class forKey:@"elements"] retain];
-    _fallbackFormatter = [[aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"fallbackFormatter"] retain];
+    _name = [aDecoder decodeObjectOfClass:NSString.class forKey:@"name"];
+    _elements = [aDecoder decodeObjectOfClass:NSDictionary.class forKey:@"elements"];
+    _fallbackFormatter = [aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"fallbackFormatter"];
     
     return self;
 }

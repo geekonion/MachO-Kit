@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_BEGIN
 //! The export name.
 @property (nonatomic, readonly) NSString *name;
 
+- (NSString*)_optionsDescription;
+
 @end
 
 NS_ASSUME_NONNULL_END

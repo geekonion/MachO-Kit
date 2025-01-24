@@ -46,13 +46,14 @@
     // the ordinal is bits [0..15]
     uint16_t ordinal = bindContext->threadedBindValue.raw & 0xFFFF;
     
-    if (ordinal >= bindContext->ordinalTable.count) {
+    NSArray *ordinalTable = CFBridgingRelease(bindContext->ordinalTable);
+    if (ordinal >= ordinalTable.count) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"No entry in ordinalTable for index [% " PRIu16 "].", ordinal];
-        [self release]; return nil;
+        return nil;
     }
     
     struct MKBindThreadedData threadedBindData;
-    NSValue *threadedBindDataValue = bindContext->ordinalTable[ordinal];
+    NSValue *threadedBindDataValue = ordinalTable[ordinal];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability-new"
     if ([threadedBindDataValue respondsToSelector:@selector(getValue:size:)])
@@ -72,15 +73,12 @@
     uint8_t previousSymbolFlags = bindContext->symbolFlags;
     bindContext->symbolFlags = threadedBindData.symbolFlags;
     
-    NSString *previousSymbolName = bindContext->symbolName;
+    NSString *previousSymbolName = CFBridgingRelease(bindContext->symbolName);
     bindContext->symbolName = threadedBindData.symbolName;
     
     self = [super initWithContext:bindContext error:error];
-    if (self) {
-        
-    }
     
-    bindContext->symbolName = previousSymbolName;
+    bindContext->symbolName = CFBridgingRetain(previousSymbolName);
     bindContext->symbolFlags = previousSymbolFlags;
     bindContext->addend = previousAddend;
     bindContext->libraryOrdinal = previousLibraryOrdinal;

@@ -56,6 +56,9 @@ NS_ASSUME_NONNULL_BEGIN
 //! value and a \c nil error if the image has no lazy bindings information.
 @property (nonatomic, readonly) MKResult<MKLazyBindingsInfo*> *lazyBindingsInfo;
 
++ (MKNodeFieldBuilder*)_bindingsInfoFieldBuilder;
++ (MKNodeFieldBuilder*)_weakBindingsInfoFieldBuilder;
++ (MKNodeFieldBuilder*)_lazyBindingsInfoFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

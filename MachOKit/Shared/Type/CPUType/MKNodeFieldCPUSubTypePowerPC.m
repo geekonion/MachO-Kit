@@ -58,10 +58,6 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypePowerPC)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_BitfieldFormatter = formatter;
-    
-    [bits release];
-    [capabilitiesMask release];
-    [subtypeMask release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -95,7 +91,7 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypePowerPCSubType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
+    s_Types = @{
         _$(CPU_SUBTYPE_POWERPC_ALL): @"CPU_SUBTYPE_POWERPC_ALL",
         _$(CPU_SUBTYPE_POWERPC_601): @"CPU_SUBTYPE_POWERPC_601",
         _$(CPU_SUBTYPE_POWERPC_602): @"CPU_SUBTYPE_POWERPC_602",
@@ -111,7 +107,7 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypePowerPCSubType)
         // PowerPC 970 is the "G5" - unclear if this subtype could appear
         // alongside the CPU_TYPE_POWERPC in a valid Mach-O.  TODO.
         _$(CPU_SUBTYPE_POWERPC_970): @"CPU_SUBTYPE_POWERPC_970"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_SUBTYPE_POWERPC";

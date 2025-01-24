@@ -63,7 +63,7 @@
 		
 		if (!MKULEBRead(self, offset, &_count, &_countULEBSize, &ULEBError)) {
 			MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:ULEBError description:@"Could not read count."];
-			[self release]; return nil;
+			return nil;
 		}
 		
 		offset += _countULEBSize;
@@ -75,7 +75,7 @@
 		
 		if (!MKULEBRead(self, offset, &_skip, &_skipULEBSize, &ULEBError)) {
 			MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:ULEBError description:@"Could not read skip."];
-			[self release]; return nil;
+			return nil;
 		}
 		
 		//offset += _skipULEBSize;

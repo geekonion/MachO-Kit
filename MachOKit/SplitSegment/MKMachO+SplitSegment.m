@@ -51,8 +51,6 @@
             _splitSegment = [[MKResult alloc] initWithError:splitSegmentInfoError];
         else
             _splitSegment = [MKResult new];
-        
-        [splitSegmentInfo release];
     }
     
     return _splitSegment;

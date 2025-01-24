@@ -53,10 +53,7 @@
         builder.formatter = [type formatter];
     }
     
-    [valueRecipe release];
-    [dataRecipe release];
-    
-    return [builder autorelease];
+    return builder;
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -80,10 +77,7 @@
         builder.formatter = [type formatter];
     }
     
-    [valueRecipe release];
-    [dataRecipe release];
-    
-    return [builder autorelease];
+    return builder;
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -95,7 +89,7 @@
     id<MKNodeFieldDataRecipe> dataRecipe = nil;
     
     if ([type conformsToProtocol:@protocol(MKNodeFieldNodeType)] && [[(id<MKNodeFieldNodeType>)type nodeClass] isSubclassOfClass:MKBackedNode.class]) {
-        dataRecipe = [MKNodeFieldDataOperationExtractChildNodeData.sharedInstance retain];
+        dataRecipe = MKNodeFieldDataOperationExtractChildNodeData.sharedInstance;
     }
     
     builder.name = propertyName;
@@ -111,24 +105,7 @@
         builder.formatter = [type formatter];
     }
     
-    [valueRecipe release];
-    [dataRecipe release];
-    
-    return [builder autorelease];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    [_description release];
-    [_valueRecipe release];
-    [_dataRecipe release];
-    [_type release];
-    [_formatter release];
-    [_alternateFieldName release];
-    
-    [super dealloc];
+    return builder;
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -151,14 +128,14 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeField*)build
 {
-    return [[[MKNodeField alloc] initWithName:self.name
-                                  description:self.description
-                                         type:self.type
-                                        value:self.valueRecipe
-                                         data:self.dataRecipe
-                                    formatter:self.formatter
-                                      options:self.options
-                           alternateFieldName:self.alternateFieldName] autorelease];
+    return [[MKNodeField alloc] initWithName:self.name
+                                 description:self.description
+                                        type:self.type
+                                       value:self.valueRecipe
+                                        data:self.dataRecipe
+                                   formatter:self.formatter
+                                     options:self.options
+                          alternateFieldName:self.alternateFieldName];
 }
 
 @end

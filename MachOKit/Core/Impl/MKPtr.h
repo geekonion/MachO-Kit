@@ -53,10 +53,6 @@ _mk_internal_extern bool
 MKPtrInitialize(struct MKPtr *ptr, MKBackedNode *node, mk_vm_address_t addr, NSDictionary<NSString*, id> * __nullable ctx, NSError **error);
 
 //!
-_mk_internal_extern void
-MKPtrDestory(struct MKPtr *ptr);
-
-//!
 _mk_internal_extern __nullable Class
 MKPtrTargetClass(struct MKPtr *ptr);
 

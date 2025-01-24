@@ -56,7 +56,7 @@
     
     struct twolevel_hints_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _offset = MKSwapLValue32(lc.offset, self.macho.dataModel);
     _nhints = MKSwapLValue32(lc.nhints, self.macho.dataModel);

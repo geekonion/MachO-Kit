@@ -58,10 +58,6 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARM64)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_BitfieldFormatter = formatter;
-    
-    [bits release];
-    [capabilitiesMask release];
-    [subtypeMask release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -95,11 +91,11 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARM64SubType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
-         _$(CPU_SUBTYPE_ARM64_ALL): @"CPU_SUBTYPE_ARM64_ALL",
-         _$(CPU_SUBTYPE_ARM64_V8): @"CPU_SUBTYPE_ARM64_V8",
-         _$(CPU_SUBTYPE_ARM64E): @"CPU_SUBTYPE_ARM64E"
-    } retain];
+    s_Types = @{
+        _$(CPU_SUBTYPE_ARM64_ALL): @"CPU_SUBTYPE_ARM64_ALL",
+        _$(CPU_SUBTYPE_ARM64_V8): @"CPU_SUBTYPE_ARM64_V8",
+        _$(CPU_SUBTYPE_ARM64E): @"CPU_SUBTYPE_ARM64E"
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_SUBTYPE_ARM64";
@@ -146,9 +142,9 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARM64Features)
     if (s_Capability != nil && s_CapabilityFormatter != nil)
         return;
     
-    s_Capability = [@{
+    s_Capability = @{
         _$((uint32_t)CPU_SUBTYPE_PTRAUTH_ABI): @"CPU_SUBTYPE_PTRAUTH_ABI",
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_Capability;

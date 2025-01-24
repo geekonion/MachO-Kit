@@ -39,8 +39,8 @@
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (void **)_subclassesCache
+{ static void *subclasses = NULL; return &subclasses; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithSegmentLoadCommand:(id<MKLCSegment>)segmentLoadCommand
@@ -73,7 +73,7 @@
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
     }
     
-    return [[[segmentClass alloc] initWithLoadCommand:segmentLoadCommand error:error] autorelease];
+    return [[segmentClass alloc] initWithLoadCommand:segmentLoadCommand error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -93,8 +93,8 @@
     _fileOffset = [segmentLoadCommand mk_fileoff];
     _fileSize = [segmentLoadCommand mk_filesize];
     
-    _name = [[segmentLoadCommand segname] copy];
-    _loadCommand = [segmentLoadCommand retain];
+    _name = [segmentLoadCommand segname];
+    _loadCommand = segmentLoadCommand;
     _maximumProtection = [segmentLoadCommand maxprot];
     _initialProtection = [segmentLoadCommand initprot];
     _flags = [segmentLoadCommand flags];
@@ -114,7 +114,7 @@
             if ((err = mk_vm_address_apply_slide(_nodeContextAddress, slide, &_nodeContextAddress))) {
                 arithmeticError = MK_MAKE_VM_ADDRESS_APPLY_SLIDE_ARITHMETIC_ERROR(err, _nodeContextAddress, slide);
                 MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Could not determine the context address."];
-                [self release]; return nil;
+                return nil;
             }
         }
     }
@@ -127,7 +127,7 @@
         if ((err = mk_vm_address_add(image.nodeContextAddress, _fileOffset, &_nodeContextAddress))) {
             arithmeticError = MK_MAKE_VM_ADDRESS_ADD_ARITHMETIC_ERROR(err, image.nodeContextAddress, _fileOffset);
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Could not determine the context address."];
-            [self release]; return nil;
+            return nil;
         }
     }
     
@@ -138,14 +138,14 @@
     if (!image.isImageInSharedCache && (err = mk_vm_address_check_length(_fileOffset, _fileSize))) {
         arithmeticError = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _fileOffset, _fileSize);
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Invalid file offset or file size."];
-        [self release]; return nil;
+        return nil;
     }
     
     // Also check the vmAddress + vmSize for potential overflow.
     if (!image.isImageInSharedCache && (err = mk_vm_address_check_length(_vmAddress, _vmSize))) {
         arithmeticError = MK_MAKE_VM_LENGTH_CHECK_ERROR(err, _vmAddress, _vmSize);
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Invalid VM address or VM size."];
-        [self release]; return nil;
+        return nil;
     }
     
     // Due to a bug in update_dyld_shared_cache(1), the segment vmsize defined
@@ -161,11 +161,11 @@
             // in the next check.
             if (error) return;
             
-            if (length < _nodeContextSize) {
+            if (length < self->_nodeContextSize) {
                 // TODO - Warn about this
-                _nodeContextSize = length;
-                _vmSize = length;
-                _fileSize = length;
+                self->_nodeContextSize = length;
+                self->_vmSize = length;
+                self->_fileSize = length;
             }
         }];
     }
@@ -173,7 +173,7 @@
     // Make sure the data is actually available
     if (!image.isImageInSharedCache && [self.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_nodeContextSize] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Segment data does not exist in the memory map."];
-        [self release]; return nil;
+        return nil;
     }
     
     // Load the sections
@@ -194,21 +194,18 @@
                 MKResult *sectionOpt = [[MKResult alloc] initWithValue:section];
                 [segmentSections addObject:sectionOpt];
                 [segmentSectionsByLoadCommand setObject:sectionOpt forKey:sectionLoadCommand];
-                [sectionOpt release];
             } else {
                 NSError *error = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:sectionError description:@"Could not create section for load command: %@", [(MKNode*)sectionLoadCommand compactDescription]];
                 
                 MKResult *sectionOpt = [[MKResult alloc] initWithError:error];
                 [segmentSections addObject:sectionOpt];
                 [segmentSectionsByLoadCommand setObject:sectionOpt forKey:sectionLoadCommand];
-                [sectionOpt release];
             }
         }
         
-        _sortedSections = [[MKBackedNode sortNodeArray:(NSArray *)segmentSections] retain];
+        _sortedSections = [MKBackedNode sortNodeArray:(NSArray *)segmentSections];
         _sectionsByLoadCommand = segmentSectionsByLoadCommand;
-        _sections = [segmentSections copy];
-        [segmentSections release];
+        _sections = segmentSections;
     }
     
     // TODO - Handle protected binaries.  Create a proxy MKMemoryMap that
@@ -242,18 +239,6 @@
     }
     
     return [super memoryMap];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_sectionsByLoadCommand release];
-    [_sections release];
-    [_sortedSections release];
-    [_loadCommand release];
-    [_name release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

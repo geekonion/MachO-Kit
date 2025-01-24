@@ -48,11 +48,11 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read pointer value."];
-        [self release]; return nil;
+        return nil;
     }
     
     if (MKPtrInitialize(mk_ptr_struct(self), parent, address, context, error) == false) {
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -89,7 +89,7 @@
     mk_vm_address_t address = *ptr & mask;
     
     if (MKPtrInitialize(mk_ptr_struct(self), parent, address, context, error) == false) {
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -119,14 +119,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
 { return [self initWithOffset:offset fromParent:parent targetClass:nil error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    MKPtrDestory(mk_ptr_struct(self));
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Pointer Values

@@ -43,7 +43,7 @@ MKMakeSingletonInitializer(MKNodeFieldSectionType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
+    s_Types = @{
         _$((uint8_t)S_REGULAR): @"S_REGULAR",
         _$((uint8_t)S_ZEROFILL): @"S_ZEROFILL",
         _$((uint8_t)S_CSTRING_LITERALS): @"S_CSTRING_LITERALS",
@@ -66,7 +66,7 @@ MKMakeSingletonInitializer(MKNodeFieldSectionType)
         _$((uint8_t)S_THREAD_LOCAL_VARIABLES): @"S_THREAD_LOCAL_VARIABLES",
         _$((uint8_t)S_THREAD_LOCAL_VARIABLE_POINTERS): @"S_THREAD_LOCAL_VARIABLE_POINTERS",
         _$((uint8_t)S_THREAD_LOCAL_INIT_FUNCTION_POINTERS): @"S_THREAD_LOCAL_INIT_FUNCTION_POINTERS"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"SECTION_TYPE";

@@ -60,7 +60,7 @@
         mk_vm_range_t parentRange = mk_vm_range_make(parentAddress, parentSize);
         if ((err = mk_vm_range_contains_address(parentRange, offset, parentAddress))) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Provided offset [%" MK_VM_PRIuOFFSET "] is not within parent node: %@.", offset, parent.compactDescription];
-            [self release]; return nil;
+            return nil;
         }
         
         _nodeSize = parent.nodeSize - offset;
@@ -91,7 +91,7 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = memoryMapError;
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -102,18 +102,10 @@
         NSLog(@"not a string obj");
     }
     if (self = [super initWithOffset:offset fromParent:parent error:nil]) {
-        _string = [string retain];
+        _string = string;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_string release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

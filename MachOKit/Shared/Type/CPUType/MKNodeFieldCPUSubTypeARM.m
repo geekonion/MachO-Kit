@@ -58,10 +58,6 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARM)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_BitfieldFormatter = formatter;
-    
-    [bits release];
-    [capabilitiesMask release];
-    [subtypeMask release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -95,21 +91,21 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARMSubType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
-         _$(CPU_SUBTYPE_ARM_ALL): @"CPU_SUBTYPE_ARM_ALL",
-         _$(CPU_SUBTYPE_ARM_V4T): @"CPU_SUBTYPE_ARM_V4T",
-         _$(CPU_SUBTYPE_ARM_V6): @"CPU_SUBTYPE_ARM_V6",
-         _$(CPU_SUBTYPE_ARM_V5TEJ): @"CPU_SUBTYPE_ARM_V5TEJ",
-         _$(CPU_SUBTYPE_ARM_XSCALE): @"CPU_SUBTYPE_ARM_XSCALE",
-         _$(CPU_SUBTYPE_ARM_V7): @"CPU_SUBTYPE_ARM_V7",
-         _$(CPU_SUBTYPE_ARM_V7F): @"CPU_SUBTYPE_ARM_V7F",
-         _$(CPU_SUBTYPE_ARM_V7S): @"CPU_SUBTYPE_ARM_V7S",
-         _$(CPU_SUBTYPE_ARM_V7K): @"CPU_SUBTYPE_ARM_V7K",
-         _$(CPU_SUBTYPE_ARM_V6M): @"CPU_SUBTYPE_ARM_V6M",
-         _$(CPU_SUBTYPE_ARM_V7M): @"CPU_SUBTYPE_ARM_V7M",
-         _$(CPU_SUBTYPE_ARM_V7EM): @"CPU_SUBTYPE_ARM_V7EM",
-         _$(CPU_SUBTYPE_ARM_V8): @"CPU_SUBTYPE_ARM_V8"
-    } retain];
+    s_Types = @{
+        _$(CPU_SUBTYPE_ARM_ALL): @"CPU_SUBTYPE_ARM_ALL",
+        _$(CPU_SUBTYPE_ARM_V4T): @"CPU_SUBTYPE_ARM_V4T",
+        _$(CPU_SUBTYPE_ARM_V6): @"CPU_SUBTYPE_ARM_V6",
+        _$(CPU_SUBTYPE_ARM_V5TEJ): @"CPU_SUBTYPE_ARM_V5TEJ",
+        _$(CPU_SUBTYPE_ARM_XSCALE): @"CPU_SUBTYPE_ARM_XSCALE",
+        _$(CPU_SUBTYPE_ARM_V7): @"CPU_SUBTYPE_ARM_V7",
+        _$(CPU_SUBTYPE_ARM_V7F): @"CPU_SUBTYPE_ARM_V7F",
+        _$(CPU_SUBTYPE_ARM_V7S): @"CPU_SUBTYPE_ARM_V7S",
+        _$(CPU_SUBTYPE_ARM_V7K): @"CPU_SUBTYPE_ARM_V7K",
+        _$(CPU_SUBTYPE_ARM_V6M): @"CPU_SUBTYPE_ARM_V6M",
+        _$(CPU_SUBTYPE_ARM_V7M): @"CPU_SUBTYPE_ARM_V7M",
+        _$(CPU_SUBTYPE_ARM_V7EM): @"CPU_SUBTYPE_ARM_V7EM",
+        _$(CPU_SUBTYPE_ARM_V8): @"CPU_SUBTYPE_ARM_V8"
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_SUBTYPE_ARM";

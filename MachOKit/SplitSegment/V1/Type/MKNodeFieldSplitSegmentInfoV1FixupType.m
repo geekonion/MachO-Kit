@@ -43,13 +43,13 @@ MKMakeSingletonInitializer(MKNodeFieldSplitSegmentInfoV1FixupType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)DYLD_CACHE_ADJ_V1_POINTER_32): @"DYLD_CACHE_ADJ_V1_POINTER_32",
         _$((uint8_t)DYLD_CACHE_ADJ_V1_POINTER_64): @"DYLD_CACHE_ADJ_V1_POINTER_64",
         _$((uint8_t)DYLD_CACHE_ADJ_V1_ADRP): @"DYLD_CACHE_ADJ_V1_ADRP",
         _$((uint8_t)DYLD_CACHE_ADJ_V1_ARM_THUMB_MOVT): @"DYLD_CACHE_ADJ_V1_ARM_THUMB_MOVT",
         _$((uint8_t)DYLD_CACHE_ADJ_V1_ARM_MOVT): @"DYLD_CACHE_ADJ_V1_ARM_MOVT"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"DYLD_CACHE_ADJ_V1";

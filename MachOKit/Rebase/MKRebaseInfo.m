@@ -47,14 +47,14 @@
     // An offset of zero indicates that the image does not require rebasing.
     if (offset == 0) {
         // Not an error.
-        [self release]; return nil;
+        return nil;
     }
     
     // A size of 0 is strange but valid.
     if (self.nodeSize == 0) {
         // Still need to assign a value to the commands and fixups array.
-        _commands = [@[] retain];
-		_fixups = [@[] retain];
+        _commands = @[];
+		_fixups = @[];
         return self;
     }
     
@@ -86,8 +86,7 @@
             offset += command.nodeSize;
         }
         
-        _commands = [commands copy];
-        [commands release];
+        _commands = commands;
     }
     
     // Determine the Fixup addresses
@@ -98,7 +97,7 @@
         __block BOOL keepGoing = YES;
         __block NSError *rebaseError = nil;
 		// Initialize the rebase context to zero in order to match dyld's behavior.
-		__block struct MKRebaseContext context = { 0, .info = self };
+        __block struct MKRebaseContext context = { 0, .info = CFBridgingRetain(self) };
 		
         void (^doRebase)(void) = ^{
 			MKFixup *fixup = [[MKFixup alloc] initWithContext:&context error:&rebaseError];
@@ -108,7 +107,6 @@
             else
                 keepGoing = NO;
             
-            [fixup release];
         };
         
         for (MKRebaseCommand *command in _commands) {
@@ -117,20 +115,19 @@
 				context.actionSize = 0;
 			}
 			context.actionSize += command.nodeSize;
-			context.command = command;
+            context.command = CFBridgingRetain(command);
 			
 			keepGoing &= [command rebase:doRebase withContext:&context error:&rebaseError];
             
             if (keepGoing == NO) {
 				if (rebaseError) {
-					MK_PUSH_WARNING_WITH_ERROR(fixups, MK_EINTERNAL_ERROR, rebaseError, @"Fixup list generation failed at command: %@.", context.command.compactDescription);
+					MK_PUSH_WARNING_WITH_ERROR(fixups, MK_EINTERNAL_ERROR, rebaseError, @"Fixup list generation failed at command: %@.", command.compactDescription);
 				}
                 break;
             }
         }
         
-        _fixups = [fixups copy];
-        [fixups release];
+        _fixups = fixups;
     }
     
     return self;
@@ -157,12 +154,10 @@
         
         if (commands.count == 0) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_DYLD_INFO load command."];
-			[commands release];
-            [self release]; return nil;
+            return nil;
         }
         
-        dyldInfoLoadCommand = [[commands.firstObject retain] autorelease];
-        [commands release];
+        dyldInfoLoadCommand = commands.firstObject;
     }
     
     return [self initWithSize:dyldInfoLoadCommand.rebase_size offset:dyldInfoLoadCommand.rebase_off inImage:image error:error];
@@ -171,15 +166,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_fixups release];
-    [_commands release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNode

@@ -61,7 +61,7 @@
         
         if (!MKULEBRead(self, 1, &_count, &_countULEBSize, &ULEBError)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:ULEBError description:@"Could not read count."];
-            [self release]; return nil;
+            return nil;
         }
     }
     
@@ -79,8 +79,7 @@
 #pragma unused(error)
     bindContext->count = self.count;
     
-    [bindContext->ordinalTable release];
-    bindContext->ordinalTable = [[NSMutableArray alloc] initWithCapacity:(bindContext->count + 1)];
+    bindContext->ordinalTable = CFBridgingRetain([[NSMutableArray alloc] initWithCapacity:(bindContext->count + 1)]);
     
     bindContext->useThreadedRebaseBind = true;
     

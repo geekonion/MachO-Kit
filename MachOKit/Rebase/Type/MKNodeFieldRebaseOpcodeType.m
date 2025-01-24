@@ -44,7 +44,7 @@ MKMakeSingletonInitializer(MKNodeFieldRebaseOpcodeType)
         return;
     
     // TODO - Derive these from the MKRebaseCommand subclasses?
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)REBASE_OPCODE_DONE): @"REBASE_OPCODE_DONE",
         _$((uint8_t)REBASE_OPCODE_SET_TYPE_IMM): @"REBASE_OPCODE_SET_TYPE_IMM",
         _$((uint8_t)REBASE_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB): @"REBASE_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB",
@@ -54,7 +54,7 @@ MKMakeSingletonInitializer(MKNodeFieldRebaseOpcodeType)
         _$((uint8_t)REBASE_OPCODE_DO_REBASE_ULEB_TIMES): @"REBASE_OPCODE_DO_REBASE_ULEB_TIMES",
         _$((uint8_t)REBASE_OPCODE_DO_REBASE_ADD_ADDR_ULEB): @"REBASE_OPCODE_DO_REBASE_ADD_ADDR_ULEB",
         _$((uint8_t)REBASE_OPCODE_DO_REBASE_ULEB_TIMES_SKIPPING_ULEB): @"REBASE_OPCODE_DO_REBASE_ULEB_TIMES_SKIPPING_ULEB"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"REBASE_OPCODE";

@@ -38,8 +38,8 @@
 @implementation MKSymbol
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (void **)_subclassesCache
+{ static void *subclasses = NULL; return &subclasses; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithEntry:(struct nlist_64)nlist
@@ -118,7 +118,7 @@ bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNode *nod
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
     }
     
-    return [[[symbolClass alloc] initWithOffset:offset fromParent:parent error:error] autorelease];
+    return [[symbolClass alloc] initWithOffset:offset fromParent:parent error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -134,7 +134,7 @@ bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNode *nod
         
         if (!ReadNList(&entry, offset, parent, &nlistError)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:nlistError description:@"Could not read nlist."];
-            [self release]; return nil;
+            return nil;
         }
         
         // These have already been byte-swapped
@@ -191,15 +191,6 @@ bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNode *nod
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_section release];
-    [_name release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

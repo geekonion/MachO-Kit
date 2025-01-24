@@ -47,15 +47,6 @@
     return copy;
 }
 
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_mask release];
-    [_type release];
-    
-    [super dealloc];
-}
-
 @end
 
 
@@ -65,7 +56,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)bitfieldWithType:(id<MKNodeFieldNumericType>)underlyingType bits:(NSArray*)bits name:(NSString*)name
-{ return [[[self alloc] initWithType:underlyingType bits:bits name:name] autorelease]; }
+{ return [[self alloc] initWithType:underlyingType bits:bits name:name]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)bitfieldWithType:(id<MKNodeFieldNumericType>)underlyingType mask:(NSNumber*)mask name:(NSString*)name
@@ -77,9 +68,6 @@
     NSArray *bits = [[NSArray alloc] initWithObjects:m, nil];
     
     MKNodeFieldTypeBitfield *bitfield = [self bitfieldWithType:underlyingType bits:bits name:name];
-    
-    [bits release];
-    [m release];
     
     return bitfield;
 }
@@ -93,9 +81,9 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _underlyingType = [underlyingType retain];
-    _bits = [bits copy]; // TODO - This should be a deep copy
-    _name = [name copy];
+    _underlyingType = underlyingType;
+    _bits = bits; // TODO - This should be a deep copy
+    _name = name;
     
     return self;
 }
@@ -103,17 +91,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-init unavailable." userInfo:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_formatter release];
-    [_name release];
-    [_bits release];
-    [_underlyingType release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldBitfieldType
@@ -199,11 +176,9 @@
             formatterMask.shift = bits.shift;
             
             [formatterMasks addObject:formatterMask];
-            [formatterMask release];
         }
         
         bitfieldFormatter.bits = formatterMasks;
-        [formatterMasks release];
         
         _formatter = bitfieldFormatter;
     }

@@ -51,7 +51,7 @@
         _prefix = [[MKCString alloc] initWithOffset:offset fromParent:self error:&stringError];
         if (_prefix == nil) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:stringError description:@"Could not read prefix."];
-            [self release]; return nil;
+            return nil;
         }
         
         offset += _prefix.nodeSize;
@@ -63,21 +63,13 @@
         
         if (!MKULEBRead(self, offset, &_offset, &_offsetULEBSize, &ULEBError)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:ULEBError description:@"Could not read offset."];
-            [self release]; return nil;
+            return nil;
         }
         
         //offset += _offsetULEBSize;
     }
     
 	return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-	[_prefix release];
-	
-	[super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -50,14 +50,6 @@
     return 0;
 }
 
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_children release];
-    
-    [super dealloc];
-}
-
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKPointer
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -73,14 +65,14 @@
 
      [_children enumerateKeysAndObjectsUsingBlock:^(__unused NSNumber *key, MKOffsetNode *obj, BOOL *stop) {
          if ((child = [obj childNodeOccupyingVMAddress:address targetClass:targetClass]).value) {
-             child = [child retain];
+             child = child;
              *stop = YES;
          } else
              child = nil;
      }];
 
      if (child)
-         return [child autorelease];
+         return child;
      else
          return [super childNodeOccupyingVMAddress:address targetClass:targetClass];
 }
@@ -105,7 +97,7 @@
         // All children of MKDataSection are defined to have the section as their parent. See
         // https://github.com/DeVaukz/MachO-Kit/pull/13#discussion_r456934940 for the rationale
         // behind this
-        child = [[[targetClass alloc] initWithOffset:childOffset fromParent:self error:&error] autorelease];
+        child = [[targetClass alloc] initWithOffset:childOffset fromParent:self error:&error];
 
         if (child)
             _children[@(address)] = child;

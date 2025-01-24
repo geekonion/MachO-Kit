@@ -34,6 +34,14 @@
 #import "DyldSharedCache.h"
 #import "_MKFileMemoryMap.h"
 #include "core_internal.h"
+#import "MKMachO+Segments.h"
+#import "MKMachO+Functions.h"
+#import "MKMachO+Rebase.h"
+#import "MKMachO+SplitSegment.h"
+#import "MKMachO+Bindings.h"
+#import "MKMachO+Exports.h"
+#import "MKMachO+Symbols.h"
+#import "MKMachOImage+DataInCode.h"
 
 #include <objc/runtime.h>
 
@@ -53,10 +61,10 @@
     if (self == nil) return nil;
     
     // TODO - Remove this eventually
-    _context.user_data = (void*)self;
+    _context.user_data = (void*)CFBridgingRetain(self);
     _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
     
-    _memMap = [memMap retain];
+    _memMap = memMap;
     _contextAddress = contextAddress;
     _flags = flags;
     
@@ -67,7 +75,7 @@
     // Read the Magic
     uint32_t magic = [memMap readDoubleWordAtOffset:0 fromAddress:contextAddress withDataModel:nil error:error];
     if (magic == 0) {
-        [self release]; return nil;
+        return nil;
     }
     
     // Load the appropriate data model for the Mach-O
@@ -75,35 +83,33 @@
         case MH_CIGAM:
         case MH_MAGIC:
             // All 32-bit darwin ABIs use ILP32
-            _dataModel = [(magic == MH_MAGIC) ? [MKILP32DataModel dataModelWithHostEndianness] : [MKILP32DataModel dataModelWithByteSwappedEndianness] retain];
+            _dataModel = (magic == MH_MAGIC) ? [MKILP32DataModel dataModelWithHostEndianness] : [MKILP32DataModel dataModelWithByteSwappedEndianness];
             _header = [[MKMachHeader alloc] initWithOffset:0 fromParent:self error:&localError];
             break;
         case MH_CIGAM_64:
         case MH_MAGIC_64:
             // All 64-bit darwin ABIs use LP64
-            _dataModel = [(magic == MH_MAGIC_64) ? [MKLP64DataModel dataModelWithHostEndianness] : [MKLP64DataModel dataModelWithByteSwappedEndianness] retain];
+            _dataModel = (magic == MH_MAGIC_64) ? [MKLP64DataModel dataModelWithHostEndianness] : [MKLP64DataModel dataModelWithByteSwappedEndianness];
             _header = [[MKMachHeader64 alloc] initWithOffset:0 fromParent:self error:&localError];
             break;
         default:
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad Mach-O magic: 0x%" PRIx32 ".", magic];
-            [self release]; return nil;
+            return nil;
     }
     
     if (_header == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:localError.code underlyingError:localError description:@"Failed to load Mach header"];
-        [self release]; return nil;
+        return nil;
     }
     
     // Now that the header is loaded, further specialize the data model based
     // on the architecture, if needed.
     switch (self.header.cputype) {
         case CPU_TYPE_ARM64:
-            [_dataModel release];
-            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARM64DataModel sharedDataModel];
             break;
         case CPU_TYPE_X86_64:
-            [_dataModel release];
-            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinIntel64DataModel sharedDataModel];
             break;
         default:
             break;
@@ -119,7 +125,7 @@
             break;
         default:
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unsupported file type: %" PRIx32 ".", _header.filetype];
-            [self release]; return nil;
+            return nil;
     }
     
     // Parse load commands
@@ -175,8 +181,7 @@
                 MK_PUSH_WARNING(loadCommands, MK_EINVALID_DATA, @"Part of load command at index %" PRIi32 " is beyond sizeofcmds.  This is invalid.", _header.ncmds - loadCommandCount);
         }
         
-        _loadCommands = [loadCommands copy];
-        [loadCommands release];
+        _loadCommands = loadCommands;
     }
     
     // Determine the VM address and slide
@@ -199,7 +204,7 @@
             // address of the image from the address it was actually loaded at.
             if ((err = mk_vm_address_difference(contextAddress, _vmAddress, &_slide))) {
                 MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_DEFFERENCE_ARITHMETIC_ERROR(err, contextAddress, _vmAddress);
-                [self release]; return nil;
+                return nil;
             }
         }
     }
@@ -218,7 +223,7 @@
     _imageSize = size;
     _dsc = dsc;
     // TODO - Remove this eventually
-    _context.user_data = (void*)self;
+    _context.user_data = (void*)CFBridgingRetain(self);
     _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
     
     _flags = flags;
@@ -231,7 +236,7 @@
     // Read the Magic
     uint32_t magic = machHeader->magic;
     if (magic == 0) {
-        [self release]; return nil;
+        return nil;
     }
     
     // Load the appropriate data model for the Mach-O
@@ -239,30 +244,28 @@
         case MH_CIGAM:
         case MH_MAGIC:
             // All 32-bit darwin ABIs use ILP32
-            _dataModel = [(magic == MH_MAGIC) ? [MKILP32DataModel dataModelWithHostEndianness] : [MKILP32DataModel dataModelWithByteSwappedEndianness] retain];
+            _dataModel = (magic == MH_MAGIC) ? [MKILP32DataModel dataModelWithHostEndianness] : [MKILP32DataModel dataModelWithByteSwappedEndianness];
             _header = [[MKMachHeader alloc] initWithHeader:machHeader dataModel:_dataModel parent:self];
             break;
         case MH_CIGAM_64:
         case MH_MAGIC_64:
             // All 64-bit darwin ABIs use LP64
-            _dataModel = [(magic == MH_MAGIC_64) ? [MKLP64DataModel dataModelWithHostEndianness] : [MKLP64DataModel dataModelWithByteSwappedEndianness] retain];
+            _dataModel = (magic == MH_MAGIC_64) ? [MKLP64DataModel dataModelWithHostEndianness] : [MKLP64DataModel dataModelWithByteSwappedEndianness];
             _header = [[MKMachHeader64 alloc] initWithHeader:(struct mach_header_64 *)machHeader dataModel:_dataModel parent:self];
             break;
         default:
             localError = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad Mach-O magic: 0x%" PRIx32 ".", magic];
-            [self release]; return nil;
+            return nil;
     }
     
     // Now that the header is loaded, further specialize the data model based
     // on the architecture, if needed.
     switch (self.header.cputype) {
         case CPU_TYPE_ARM64:
-            [_dataModel release];
-            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARM64DataModel sharedDataModel];
             break;
         case CPU_TYPE_X86_64:
-            [_dataModel release];
-            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinIntel64DataModel sharedDataModel];
             break;
         default:
             break;
@@ -278,7 +281,7 @@
             break;
         default:
             localError = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unsupported file type: %" PRIx32 ".", _header.filetype];
-            [self release]; return nil;
+            return nil;
     }
     
     // Parse load commands
@@ -335,8 +338,7 @@
                     MK_PUSH_WARNING(loadCommands, MK_EINVALID_DATA, @"Part of load command at index %" PRIi32 " is beyond sizeofcmds.  This is invalid.", _header.ncmds - loadCommandCount);
             }
         
-        _loadCommands = [loadCommands copy];
-        [loadCommands release];
+        _loadCommands = loadCommands;
     }
     
     // Determine the VM address and slide
@@ -364,45 +366,9 @@
     self = [self initWithName:NULL flags:0 atAddress:0 inMapping:mapping error:error];
     if (!self) return nil;
     
-    objc_storeWeak(&_parent, parent);
+    _parent = parent;
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_indirectSymbolTable release];
-    [_symbolTable release];
-    [_stringTable release];
-    
-    [_exportsInfo release];
-    
-    [_lazyBindingsInfo release];
-    [_weakBindingsInfo release];
-    [_bindingsInfo release];
-    
-    [_functionStarts release];
-    
-    [_splitSegment release];
-    
-    [_dataInCode release];
-    
-    [_rebaseInfo release];
-    
-    [_segments release];
-    
-    [_dependentLibraries release];
-    
-    [_loadCommands release];
-    [_header release];
-    
-    [_name release];
-    [_dataModel release];
-
-    [_memMap release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -572,7 +538,7 @@
     
     char architecture[50] = {};
     size_t descriptionLen = mk_architecture_copy_description(self.architecture, architecture, sizeof(architecture));
-    NSString *arch = [[[NSString alloc] initWithBytes:(void*)architecture length:descriptionLen encoding:NSASCIIStringEncoding] autorelease];
+    NSString *arch = [[NSString alloc] initWithBytes:(void*)architecture length:descriptionLen encoding:NSASCIIStringEncoding];
     
     return [NSString stringWithFormat:@"%@ (%@)", kind, arch];
 }
@@ -596,7 +562,7 @@
     
     id<MKNodeDelegate> delegate = self.delegate;
     if (delegate && [delegate respondsToSelector:@selector(logMessageFromNode:atLevel:inFile:line:function:message:)])
-        [delegate logMessageFromNode:self atLevel:level inFile:file line:line function:function message:(NSString*)messageString];
+        [delegate logMessageFromNode:self atLevel:level inFile:file line:line function:function message:(NSString*)CFBridgingRelease(messageString)];
     else
         NSLog(@"MachOKit - [%s][%s:%d]: %@", mk_string_for_logging_level(level), file, line, messageString);
     

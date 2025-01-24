@@ -45,7 +45,7 @@
     // Compute the node size
     if ((err = mk_vm_size_multiply(entsize, count, &_nodeSize))) {
         MK_ERROR_OUT = MK_MAKE_VM_SIZE_MULTIPLY_ARITHMETIC_ERROR(err, entsize, count);
-        [self release]; return nil;
+        return nil;
     }
     
     // Check if the full length is mappable.  If it is not, shrink the size to
@@ -61,7 +61,7 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = memoryMapError;
-        [self release]; return nil;
+        return nil;
     }
     
     // In the interest of robustness, we won't care if all/part of the node falls
@@ -104,16 +104,13 @@
             // invalid data.
             if (offset > _nodeSize) {
                 MK_PUSH_WARNING(elements, MK_EOUT_OF_RANGE, @"Part of element at index [%" PRIu32 "] is beyond list size.", i);
-                [element release];
                 break;
             }
             
             [elements addObject:element];
-            [element release];
         }
         
-        _elements = [elements copy];
-        [elements release];
+        _elements = elements;
     }
     
     return self;
@@ -125,18 +122,10 @@
     NSNumber *methodCount = NSThread.currentThread.threadDictionary[@"ExtendedTypeInfoCount"];
     if ([methodCount isKindOfClass:NSNumber.class] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:0 description:@"Missing required context."];
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithOffset:offset methodCount:methodCount.unsignedIntValue fromParent:parent error:error];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_elements release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

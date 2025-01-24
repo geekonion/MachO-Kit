@@ -59,8 +59,7 @@
 
 - (instancetype)initWithFlags:(MKSharedCacheFlags)flags url:(NSURL *)url {
     NSError *tmp = nil;
-    NSError **error = &tmp;
-    self = [super initWithParent:nil error:error];
+    self = [super initWithParent:nil error:&tmp];
     if (self == nil) return nil;
     
     NSError *localError = nil;
@@ -78,85 +77,81 @@
         char *magic = header->magic;
         // First 4 bytes must == 'dyld'
         if (strncmp(&magic[0], "dyld", 4)) {
-            MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad Shared Cache magic: %s", magic];
-            [self release]; return nil;
+            return nil;
         }
         
         // TODO - Support parsing shared cache v0.
         if (strncmp(&magic[5], "v1", 2)) {
-            MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unknown Shared Cache version: %s", magic];
-            [self release]; return nil;
+            return nil;
         }
         
         _version = 1;
         
         // Architecture
         if (strcmp(magic, "dyld_v1    i386") == 0) {
-            _dataModel = [[MKDarwinIntel32DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinIntel32DataModel sharedDataModel];
             _cpuType = CPU_TYPE_I386;
             _cpuSubtype = CPU_SUBTYPE_I386_ALL;
             sharedRegionBase = SHARED_REGION_BASE_I386;
         } else if (strcmp(magic, "dyld_v1 x86_64h") == 0) {
-            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinIntel64DataModel sharedDataModel];
             _cpuType = CPU_TYPE_X86_64;
             _cpuSubtype = CPU_SUBTYPE_X86_64_H;
             sharedRegionBase = SHARED_REGION_BASE_X86_64;
         } else if (strcmp(magic, "dyld_v1  x86_64") == 0) {
-            _dataModel = [[MKDarwinIntel64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinIntel64DataModel sharedDataModel];
             _cpuType = CPU_TYPE_X86_64;
             _cpuSubtype = CPU_SUBTYPE_X86_64_ALL;
             sharedRegionBase = SHARED_REGION_BASE_X86_64;
         } else if (strcmp(magic, "dyld_v1  arm64e") == 0) {
-            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARM64DataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM64;
             _cpuSubtype = CPU_SUBTYPE_ARM64E;
             sharedRegionBase = SHARED_REGION_BASE_ARM64;
         } else if (strcmp(magic, "dyld_v1   arm64") == 0) {
-            _dataModel = [[MKDarwinARM64DataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARM64DataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM64;
             _cpuSubtype = CPU_SUBTYPE_ARM64_ALL;
             sharedRegionBase = SHARED_REGION_BASE_ARM64;
         } else if (strcmp(magic, "dyld_v1  armv7s") == 0) {
-            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARMDataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM;
             _cpuSubtype = CPU_SUBTYPE_ARM_V7S;
             sharedRegionBase = SHARED_REGION_BASE_ARM;
         } else if (strcmp(magic, "dyld_v1  armv7k") == 0) {
-            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARMDataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM;
             _cpuSubtype = CPU_SUBTYPE_ARM_V7K;
             sharedRegionBase = SHARED_REGION_BASE_ARM;
         } else if (strcmp(magic, "dyld_v1  armv7f") == 0) {
-            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARMDataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM;
             _cpuSubtype = CPU_SUBTYPE_ARM_V7F;
             sharedRegionBase = SHARED_REGION_BASE_ARM;
         } else if (strcmp(magic, "dyld_v1   armv7") == 0) {
-            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARMDataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM;
             _cpuSubtype = CPU_SUBTYPE_ARM_V7;
             sharedRegionBase = SHARED_REGION_BASE_ARM;
         } else if (strcmp(magic, "dyld_v1   armv6") == 0) {
-            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARMDataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM;
             _cpuSubtype = CPU_SUBTYPE_ARM_V6;
             sharedRegionBase = SHARED_REGION_BASE_ARM;
         } else if (strcmp(magic, "dyld_v1   armv5") == 0) {
-            _dataModel = [[MKDarwinARMDataModel sharedDataModel] retain];
+            _dataModel = [MKDarwinARMDataModel sharedDataModel];
             _cpuType = CPU_TYPE_ARM;
             _cpuSubtype = CPU_SUBTYPE_ARM_ALL; //TODO - Find a better value
             sharedRegionBase = SHARED_REGION_BASE_ARM;
         } else {
-            MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Unknown Shared Cache architecture: %s", magic];
-            [self release]; return nil;
+            return nil;
         }
     }
     
     // Can now parse the full header
     _header = [[MKDSCHeader alloc] initWithOffset:0 fromParent:self dsc:_dsc error:&localError];
     if (_header == nil) {
-        MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:localError.code underlyingError:localError description:@"Failed to load shared cache header."];
-        [self release]; return nil;
+        return nil;
     }
     
     // Handle flags
@@ -189,8 +184,7 @@
             [mappings addObject:mapping];
         }
         
-        _mappings = [mappings copy];
-        [mappings release];
+        _mappings = mappings;
     }
     
     // Load images
@@ -206,8 +200,7 @@
             [images addObject:image];
         }
         
-        _images = [images copy];
-        [images release];
+        _images = images;
     }
     
     return self;
@@ -219,7 +212,7 @@
     self = [self initWithParent:parent error:error];
     if (!self) return nil;
     
-    objc_storeWeak(&_parent, parent);
+    _parent = parent;
     
     return self;
 }
@@ -227,17 +220,7 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (void)dealloc
 {
-    [_localSymbols release];
-    [_slideInfo release];
-    [_imagesInfo release];
-    [_mappings release];
-    [_mappingInfos release];
-    [_header release];
-    [_dataModel release];
-    [_memoryMap release];
     dsc_free(_dsc);
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

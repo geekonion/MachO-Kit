@@ -46,14 +46,14 @@ extern void OBJC_CLASS_$_MKResult;
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)resultWithValue:(id)value
-{ return [[[self alloc] initWithValue:value] autorelease]; }
+{ return [[self alloc] initWithValue:value]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)resultWithError:(NSError*)error
-{ return [[[self alloc] initWithError:error] autorelease]; }
+{ return [[self alloc] initWithError:error]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (instancetype)newResultWith:(NS_NOESCAPE id (^)(NSError **error))builder
++ (instancetype)newResultWith:(id (^)(NSError **error))builder
 {
     NSError *error = nil;
     id object = builder(&error);
@@ -66,7 +66,7 @@ extern void OBJC_CLASS_$_MKResult;
         if (object)
             result->_value = object;
         else if (error /* Only fail if we have an error */)
-            result->_value = [error retain];
+            result->_value = error;
         
     } else {
         if (object)
@@ -75,8 +75,6 @@ extern void OBJC_CLASS_$_MKResult;
             result = [[self alloc] initWithError:error];
         else
             result = [self new];
-        
-        [object release];
     }
     
     return result;
@@ -95,7 +93,7 @@ extern void OBJC_CLASS_$_MKResult;
 {
     self = [super init];
     
-    self->_value = [value retain];
+    self->_value = value;
     
     return self;
 }
@@ -105,17 +103,9 @@ extern void OBJC_CLASS_$_MKResult;
 {
     self = [super init];
     
-    self->_value = [error retain];
+    self->_value = error;
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_value release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

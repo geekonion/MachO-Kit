@@ -50,7 +50,7 @@
         
         if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&entry length:sizeof(entry) requireFull:YES error:&memoryMapError] < sizeof(entry)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read data_in_code_entry."];
-            [self release]; return nil;
+            return nil;
         }
         
         _offset = MKSwapLValue32(entry.offset, self.dataModel);
@@ -68,7 +68,7 @@
         if ((err = mk_vm_address_apply_offset(machoHeaderAddress, _offset, &_address))) {
             arithmeticError = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, machoHeaderAddress, _offset);
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Could not determine the VM address."];
-            [self release]; return nil;
+            return nil;
         }
     }
     

@@ -55,7 +55,7 @@
     
     struct sub_framework_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     MKSwapLValue32(lc.umbrella.offset, self.macho.dataModel);
     _umbrella = [[MKCString alloc] initWithOffset:lc.umbrella.offset fromParent:self error:error];
@@ -76,14 +76,6 @@
     _umbrella = [[MKCString alloc] initWithOffset:offset parent:self string:str];
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_umbrella release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

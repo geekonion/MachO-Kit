@@ -43,13 +43,13 @@ MKMakeSingletonInitializer(MKNodeFieldDataInCodeEntryType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint16_t)DICE_KIND_DATA): @"DICE_KIND_DATA",
         _$((uint16_t)DICE_KIND_JUMP_TABLE8): @"DICE_KIND_JUMP_TABLE8",
         _$((uint16_t)DICE_KIND_JUMP_TABLE16): @"DICE_KIND_JUMP_TABLE16",
         _$((uint16_t)DICE_KIND_JUMP_TABLE32): @"DICE_KIND_JUMP_TABLE32",
         _$((uint16_t)DICE_KIND_ABS_JUMP_TABLE32): @"DICE_KIND_ABS_JUMP_TABLE32"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"DICE_KIND";

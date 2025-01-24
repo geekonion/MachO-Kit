@@ -47,7 +47,7 @@
     // occur in valid Mach-O images?
     if (self.nodeSize == 0) {
         // Still need to assign a value to the symbols array.
-        _indirectSymbols = [@[] retain];
+        _indirectSymbols = @[];
         return self;
     }
  
@@ -69,14 +69,12 @@
             }
             
             [indirectSymbols addObject:indirectSymbol];
-            [indirectSymbol release];
             
             // SAFE - All indirect symbol nodes must be within the size of this node.
             offset += indirectSymbol.nodeSize;
         }
         
-        _indirectSymbols = [indirectSymbols copy];
-        [indirectSymbols release];
+        _indirectSymbols = indirectSymbols;
     }
     
     return self;
@@ -97,10 +95,10 @@
         if (commands.count == 0) {
             // TODO - Is this really an error?
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_DYSYMTAB load command."];
-            [self release]; return nil;
+            return nil;
         }
         
-        dysymtabLoadCommand = [[commands.firstObject retain] autorelease];
+        dysymtabLoadCommand = commands.firstObject;
     }
     
     mk_vm_size_t size = sizeof(uint32_t) * dysymtabLoadCommand.nindirectsyms;
@@ -111,14 +109,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:(id)parent error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_indirectSymbols release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKPointer

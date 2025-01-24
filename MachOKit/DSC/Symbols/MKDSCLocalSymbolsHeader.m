@@ -43,7 +43,7 @@
     
     struct dyld_cache_local_symbols_info sclsi;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&sclsi length:sizeof(sclsi) requireFull:YES error:error] < sizeof(sclsi))
-    { [self release]; return nil; }
+    { return nil; }
     
     _nlistOffset = MKSwapLValue32(sclsi.nlistOffset, self.dataModel);
     _nlistCount = MKSwapLValue32(sclsi.nlistCount, self.dataModel);

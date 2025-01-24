@@ -38,11 +38,7 @@
     
     self = [super init];
     
-    if (dataSource == self) {
-        _dataSource = dataSource; // do not retain
-    } else {
-        _dataSource = [dataSource retain];
-    }
+    _dataSource = dataSource;
     
     return self;
 }
@@ -52,15 +48,6 @@
 {
     [self doesNotRecognizeSelector:_cmd];
     return nil;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    if (_dataSource != self)
-        [_dataSource release];
-    
-    [super dealloc];
 }
 
 #define MAKE_GETTER_FORWARDER(return_type, name) \

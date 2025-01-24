@@ -42,7 +42,7 @@
     self = [super initWithParent:loadCommand.macho error:error];
     if (self == nil) return nil;
     
-    _loadCommand = [loadCommand retain];
+    _loadCommand = loadCommand;
     
     return self;
 }
@@ -50,14 +50,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithLoadCommand:[parent nearestAncestorOfType:MKDylibLoadCommand.class] error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_loadCommand release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Values

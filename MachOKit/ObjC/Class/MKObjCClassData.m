@@ -80,7 +80,7 @@ struct objc_class_data_32 {
         struct objc_class_data_64 var;
         if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&var length:sizeof(var) requireFull:YES error:&memoryMapError] < sizeof(var)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read objc class data."];
-            [self release]; return nil;
+            return nil;
         }
         
         _name = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), name) fromParent:self targetClass:MKCString.class error:error];
@@ -102,7 +102,7 @@ struct objc_class_data_32 {
         struct objc_class_data_32 var;
         if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&var length:sizeof(var) requireFull:YES error:&memoryMapError] < sizeof(var)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read objc class data."];
-            [self release]; return nil;
+            return nil;
         }
         
         _name = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), name) fromParent:self targetClass:MKCString.class error:error];
@@ -123,20 +123,6 @@ struct objc_class_data_32 {
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_weakIVarLayout release];
-    [_ivarLayout release];
-    [_ivars release];
-    [_properties release];
-    [_protocols release];
-    [_methods release];
-    [_name release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

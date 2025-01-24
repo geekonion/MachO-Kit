@@ -68,7 +68,6 @@
                 }
                 
                 [entries addObject:entry];
-                [entry release];
                 
                 // TODO
                 offset += entry.nodeSize;
@@ -105,8 +104,7 @@
             }
         }
         
-        _entries = [entries copy];
-        [entries release];
+        _entries = entries;
     }
     
     // Determine the fixup addresses
@@ -119,12 +117,12 @@
         struct MKSplitSegmentInfoV1Context context = { 0 };
         
         for (MKSplitSegmentInfoV1Entry *entry in _entries) {
-            context.info = entry;
+            context.info = CFBridgingRetain(entry);
             context.type = entry.opcode.kind;
             context.address = 0;
             
             for (MKSplitSegmentInfoV1Offset *offset in entry.offsets) {
-                context.offset = offset;
+                context.offset = CFBridgingRetain(offset);
                 
                 mk_vm_offset_t nextOffset = offset.offset;
                 // A zero offset should have been picked up as a terminator.
@@ -132,23 +130,21 @@
                 
                 if ((err = mk_vm_address_apply_offset(context.address, nextOffset, &context.address))) {
                     fixupError = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, context.address, nextOffset);
-                    MK_PUSH_WARNING_WITH_ERROR(fixups, MK_EINTERNAL_ERROR, fixupError, @"Fixup list generation failed at offset: %@.", context.offset.compactDescription);
+                    MK_PUSH_WARNING_WITH_ERROR(fixups, MK_EINTERNAL_ERROR, fixupError, @"Fixup list generation failed at offset: %@.", offset.compactDescription);
                     break;
                 }
                 
                 MKSplitSegmentInfoV1Fixup *fixup = [[MKSplitSegmentInfoV1Fixup alloc] initWithContext:&context error:&fixupError];
                 if (fixup == nil) {
-                    MK_PUSH_WARNING_WITH_ERROR(fixups, MK_EINTERNAL_ERROR, fixupError, @"Fixup list generation failed at offset: %@.", context.offset.compactDescription);
+                    MK_PUSH_WARNING_WITH_ERROR(fixups, MK_EINTERNAL_ERROR, fixupError, @"Fixup list generation failed at offset: %@.", offset.compactDescription);
                     break;
                 }
                 
                 [fixups addObject:fixup];
-                [fixup release];
             }
         }
         
-        _fixups = [fixups copy];
-        [fixups release];
+        _fixups = fixups;
     }
     
     return self;
@@ -169,10 +165,10 @@
         
         if (commands.count == 0) {
             // Not an error - Image has no split segment information.
-            [self release]; return nil;
+            return nil;
         }
         
-        segmentSplitInfoLoadCommand = [[commands.firstObject retain] autorelease];
+        segmentSplitInfoLoadCommand = commands.firstObject;
     }
     
     return [self initWithSize:segmentSplitInfoLoadCommand.datasize offset:segmentSplitInfoLoadCommand.dataoff inImage:image error:error];
@@ -181,16 +177,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_fixups release];
-    [_terminator release];
-    [_entries release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNode

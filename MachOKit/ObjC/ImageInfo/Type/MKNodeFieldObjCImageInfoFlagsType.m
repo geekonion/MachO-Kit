@@ -67,10 +67,6 @@ MKMakeSingletonInitializer(MKNodeFieldObjCImageInfoFlagsType)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_Formatter = formatter;
-    
-    [bits release];
-    [swiftVersion release];
-    [flags release];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

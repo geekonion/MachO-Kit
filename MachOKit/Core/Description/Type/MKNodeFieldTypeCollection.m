@@ -34,7 +34,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)typeWithCollectionType:(id<MKNodeFieldType>)collectionType
-{ return [[[self alloc] initWithCollectionType:collectionType] autorelease]; }
+{ return [[self alloc] initWithCollectionType:collectionType]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithCollectionType:(id<MKNodeFieldType>)collectionType
@@ -42,7 +42,7 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _elementType = [collectionType retain];
+    _elementType = collectionType;
     
     return self;
 }
@@ -50,14 +50,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { return [self initWithCollectionType:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_elementType release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldCollectionType

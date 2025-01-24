@@ -55,12 +55,9 @@
                 [libraries addObject:[MKResult resultWithValue:library]];
             else
                 [libraries addObject:[MKResult resultWithError:libraryError]];
-            
-            [library release];
         }
         
-        _dependentLibraries = [libraries copy];
-        [libraries release];
+        _dependentLibraries = libraries;
     }
     
     return _dependentLibraries;

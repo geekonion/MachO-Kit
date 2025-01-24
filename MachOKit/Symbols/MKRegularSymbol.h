@@ -54,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 //! \c True if this is an external symbol.
 @property (nonatomic, readonly, getter=isExternal) BOOL external;
 
++ (MKNodeFieldBuilder*)_nameFieldBuilder;
++ (MKNodeFieldBuilder*)_sectionFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

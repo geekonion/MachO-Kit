@@ -35,7 +35,7 @@
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)objectFormatterWithDescriptionSelector:(SEL)descriptionSelector
 {
-    MKObjectFormatter *retValue = [[[self alloc] init] autorelease];
+    MKObjectFormatter *retValue = [[self alloc] init];
     retValue.descriptionSelector = descriptionSelector;
     
     return retValue;

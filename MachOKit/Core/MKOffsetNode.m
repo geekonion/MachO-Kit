@@ -39,7 +39,7 @@
     // Verify that calculating our context address will not overflow.
     if (parent && (err = mk_vm_address_apply_offset(parent.nodeContextAddress, offset, NULL))) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Arithmetic error [%s] applying offset [%" MK_VM_PRIuOFFSET "] to address [0x%" MK_VM_PRIxADDR "] of parent node %@.", mk_error_string(err), offset, parent.nodeContextAddress, parent.compactDescription];
-        [self release]; return nil;
+        return nil;
     }
     
     // TODO: Verify that calculating the VM address will not overflow?

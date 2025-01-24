@@ -43,11 +43,11 @@ MKMakeSingletonInitializer(MKNodeFieldSymbolLibraryOrdinalType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)SELF_LIBRARY_ORDINAL): @"SELF_LIBRARY_ORDINAL",
         _$((uint8_t)DYNAMIC_LOOKUP_ORDINAL): @"DYNAMIC_LOOKUP_ORDINAL",
         _$((uint8_t)EXECUTABLE_ORDINAL): @"EXECUTABLE_ORDINAL"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"Source Library Ordinal";

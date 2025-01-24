@@ -52,12 +52,12 @@
     
     if ((err = mk_vm_address_apply_offset(sharedCacheAddress, imagesInfoOffset, &_contextAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, sharedCacheAddress, imagesInfoOffset);
-        [self release]; return nil;
+        return nil;
     }
     
     if ((err = mk_vm_address_apply_offset(sharedCacheVMAddress, imagesInfoOffset, &_vmAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, sharedCacheVMAddress, imagesInfoOffset);
-        [self release]; return nil;
+        return nil;
     }
     
     _size = imagesCount * sizeof(struct dyld_cache_image_info);
@@ -89,7 +89,6 @@
             offset += image.nodeSize;
                 
             [images addObject:image];
-            [image release];
             
             if (oldOffset > offset) {
                 MK_PUSH_WARNING(images, MK_EOVERFLOW, @"Encountered an overflow while advancing the parser to the image descriptor following index %" PRIu32 ".", imagesCount - imageDescriptorCount);
@@ -97,8 +96,7 @@
             }
         }
         
-        _images = [images copy];
-        [images release];
+        _images = images;
     }
 
     return self;
@@ -107,14 +105,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithSharedCache:parent.sharedCache error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_images release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Images

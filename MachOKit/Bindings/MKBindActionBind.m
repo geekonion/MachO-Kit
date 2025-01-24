@@ -59,7 +59,7 @@
             library = libraries[(NSUInteger)(_sourceLibraryOrdinal - 1)];
         
         if (library.value)
-            _sourceLibrary = [library.value retain];
+            _sourceLibrary = library.value;
         else
             MK_PUSH_WARNING_WITH_ERROR(sourceLibrary, MK_ENOT_FOUND, library.error, @"Could not locate library for ordinal [%" PRIi64 "].", _sourceLibraryOrdinal);
         
@@ -70,20 +70,11 @@
         MK_PUSH_WARNING(sourceLibrary, MK_EOUT_OF_RANGE, @"Unknown special library ordinal [%" PRIi64 "].", _sourceLibraryOrdinal);
     }
     
-    _symbolName = [bindContext->symbolName retain];
+    _symbolName = CFBridgingRelease(bindContext->symbolName);
     _addend = bindContext->addend;
     _symbolOptions = bindContext->symbolFlags;
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_symbolName release];
-    [_sourceLibrary release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

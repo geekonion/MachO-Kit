@@ -44,7 +44,7 @@
     // Check that the data is available
     if ([self.memoryMap hasMappingAtOffset:offset fromAddress:parent.nodeContextAddress length:size error:&localError] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND underlyingError:localError description:@"Bitmap does not exist at offset 0x%" MK_VM_PRIxOFFSET " from %@.", offset, parent];
-        [self release]; return nil;
+        return nil;
     }
     
     _size = size;
@@ -69,7 +69,7 @@
     // Can not overflow - entriesOffset and entrySize were uint32
     if (offset < entriesOffset || offset > entriesOffset + entrySize*entryCount) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"Offset (%" MK_VM_PRIiOFFSET ") not in range of entry list.", offset];
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithOffset:offset size:entrySize fromParent:slideInfo error:error];

@@ -51,8 +51,6 @@
 			_exportsInfo = [[MKResult alloc] initWithError:exportsInfoError];
 		else
 			_exportsInfo = [MKResult new];
-		
-		[exportsInfo release];
     }
     
     return _exportsInfo;

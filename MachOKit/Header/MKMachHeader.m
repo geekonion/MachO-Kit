@@ -48,7 +48,7 @@
     
     if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&header length:sizeof(header) requireFull:YES error:error] < sizeof(header)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read header."];
-        [self release]; return nil;
+        return nil;
     }
     
     _magic = MKSwapLValue32(header.magic, self.dataModel);

@@ -62,7 +62,7 @@
         
         if (!MKSLEBRead(self, 1, &_addend, &_addendSLEBSize, &SLEBError)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:SLEBError description:@"Could not read addend."];
-            [self release]; return nil;
+            return nil;
         }
     }
     

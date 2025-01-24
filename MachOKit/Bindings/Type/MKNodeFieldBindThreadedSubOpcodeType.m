@@ -43,10 +43,10 @@ MKMakeSingletonInitializer(MKNodeFieldBindThreadedSubOpcodeType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)BIND_SUBOPCODE_THREADED_SET_BIND_ORDINAL_TABLE_SIZE_ULEB): @"BIND_SUBOPCODE_THREADED_SET_BIND_ORDINAL_TABLE_SIZE_ULEB",
         _$((uint8_t)BIND_SUBOPCODE_THREADED_APPLY): @"BIND_SUBOPCODE_THREADED_APPLY"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"BIND_SUBOPCODE_THREADED";

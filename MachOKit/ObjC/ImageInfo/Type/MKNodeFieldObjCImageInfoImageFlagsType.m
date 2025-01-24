@@ -43,7 +43,7 @@ MKMakeSingletonInitializer(MKNodeFieldObjCImageInfoImageFlagsType)
     if (s_SystemAttributes != nil && s_SystemFormatter != nil)
         return;
     
-    s_SystemAttributes = [@{
+    s_SystemAttributes = @{
         _$(MKObjCImageIsReplacement): @"IsReplacement",
         _$(MKObjCImageSupportsGC): @"SupportsGC",
         _$(MKObjCImageRequiresGC): @"RequiresGC",
@@ -51,7 +51,7 @@ MKMakeSingletonInitializer(MKNodeFieldObjCImageInfoImageFlagsType)
         _$(MKObjCImageCorrectedSynthesize): @"CorrectedSynthesize",
         _$(MKObjCImageIsSimulated): @"IsSimulated",
         _$(MKObjCImageHasCategoryClassProperties): @"HasCategoryClassProperties",
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_SystemAttributes;

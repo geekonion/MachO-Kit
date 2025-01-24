@@ -34,7 +34,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)enumerationWithUnderlyingType:(id<MKNodeFieldNumericType>)underlyingType name:(NSString*)name elements:(MKNodeFieldEnumerationElements*)elements
-{ return [[[self alloc] initWithUnderlyingType:underlyingType name:name elements:elements] autorelease]; }
+{ return [[self alloc] initWithUnderlyingType:underlyingType name:name elements:elements]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithUnderlyingType:(id<MKNodeFieldNumericType>)underlyingType name:(NSString*)name elements:(MKNodeFieldEnumerationElements*)elements
@@ -44,9 +44,9 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _underlyingType = [underlyingType retain];
-    _elements = [elements copy];
-    _name = [name copy];
+    _underlyingType = underlyingType;
+    _elements = elements;
+    _name = name;
     
     return self;
 }
@@ -54,17 +54,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-init unavailable." userInfo:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_formatter release];
-    [_name release];
-    [_elements release];
-    [_underlyingType release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldEnumerationType
@@ -118,9 +107,6 @@
         formatterChain.formatters = formatters;
         
         _formatter = formatterChain;
-        
-        [formatters release];
-        [enumerationFormatter release];
     }
     
     return _formatter;

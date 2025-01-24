@@ -36,7 +36,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)nodeDescriptionWithParentDescription:(MKNodeDescription*)parent fields:(NSArray*)fields
-{ return [[[self alloc] initWithParentDescription:parent fields:fields] autorelease]; }
+{ return [[self alloc] initWithParentDescription:parent fields:fields]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParentDescription:(MKNodeDescription*)parent fields:(NSArray*)fields
@@ -44,8 +44,8 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _parent = [parent retain];
-    _fields = [fields copy];
+    _parent = parent;
+    _fields = fields;
     
     return self;
 }
@@ -53,15 +53,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { return [self initWithParentDescription:nil fields:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_parent release];
-    [_fields release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Working with Fields

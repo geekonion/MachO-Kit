@@ -43,7 +43,7 @@
 
     struct dyld_cache_slide_info scli;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&scli length:sizeof(scli) requireFull:YES error:error] < sizeof(scli))
-    { [self release]; return nil; }
+    { return nil; }
     
     _version = MKSwapLValue32(scli.version, self.dataModel);
     _tocOffset = MKSwapLValue32(scli.toc_offset, self.dataModel);
@@ -55,7 +55,7 @@
     // Current version is 1.
     if (_version != 1) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Unknown Shared Cache slide info version: %" PRIu32 ".", _version];
-        [self release]; return nil;
+        return nil;
     }
     
     return self;

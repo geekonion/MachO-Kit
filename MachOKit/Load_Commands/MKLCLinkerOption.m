@@ -44,7 +44,7 @@
     
     struct linker_option_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _nstrings = MKSwapLValue32(lc.count, self.macho.dataModel);
     
@@ -72,12 +72,10 @@
                 offset += string.nodeSize;
                 
                 [strings addObject:string];
-                [string release];
             }
         }
         
-        _strings = [strings copy];
-        [strings release];
+        _strings = strings;
     }
     
     return self;
@@ -116,12 +114,10 @@
                 offset += string.nodeSize;
                 
                 [strings addObject:string];
-                [string release];
             }
         }
         
-        _strings = [strings copy];
-        [strings release];
+        _strings = strings;
     }
     
     return self;

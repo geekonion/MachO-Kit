@@ -42,7 +42,7 @@
     
     struct dylinker_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     MKSwapLValue32(lc.name.offset, self.macho.dataModel);
     _name = [[MKCString alloc] initWithOffset:lc.name.offset fromParent:self error:error];
@@ -60,14 +60,6 @@
     _name = [[MKCString alloc] initWithOffset:lc->name.offset fromParent:self error:nil];
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -55,7 +55,7 @@
     
     struct source_version_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     MKSwapLValue64(lc.version, self.macho.dataModel);
     _version = [[MKSourceVersion alloc] initWithMachVersion:lc.version];
@@ -73,14 +73,6 @@
     _version = [[MKSourceVersion alloc] initWithMachVersion:lc->version];
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_version release];
-    
-    [super dealloc];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

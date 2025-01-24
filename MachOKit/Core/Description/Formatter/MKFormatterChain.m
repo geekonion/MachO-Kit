@@ -33,7 +33,7 @@
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)formatterChainWithFormatters:(NSArray<NSFormatter*> *)formatters
 {
-    MKFormatterChain *retValue = [[[self alloc] init] autorelease];
+    MKFormatterChain *retValue = [[self alloc] init];
     retValue.formatters = formatters;
     
     return retValue;
@@ -54,7 +54,6 @@
     
     MKFormatterChain *retValue = [self formatterChainWithFormatters:formatters];
     
-    [formatters release];
     return retValue;
 }
 
@@ -73,16 +72,7 @@
     
     MKFormatterChain *retValue = [self formatterChainWithFormatters:formatters];
     
-    [formatters release];
     return retValue;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_formatters release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -95,7 +85,7 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _formatters = [[aDecoder decodeObjectOfClass:NSArray.class forKey:@"formatters"] retain];
+    _formatters = [aDecoder decodeObjectOfClass:NSArray.class forKey:@"formatters"];
     
     return self;
 }

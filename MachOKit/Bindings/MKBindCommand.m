@@ -33,8 +33,8 @@
 @implementation MKBindCommand
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (void **)_subclassesCache
+{ static void *subclasses = NULL; return &subclasses; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithOpcode:(uint8_t)opcode immediate:(uint8_t)immediate
@@ -89,7 +89,7 @@
 #endif
     }
     
-    return [[[commandClass alloc] initWithOffset:offset fromParent:parent error:error] autorelease];
+    return [[commandClass alloc] initWithOffset:offset fromParent:parent error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -102,7 +102,7 @@
     
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&_data length:sizeof(uint8_t) requireFull:YES error:&memoryMapError] < sizeof(uint8_t)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read bind command immediate data."];
-        [self release]; return nil;
+        return nil;
     }
     
     uint8_t opcode = _data & BIND_OPCODE_MASK;

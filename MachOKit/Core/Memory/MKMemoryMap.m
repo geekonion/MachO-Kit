@@ -36,14 +36,14 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)memoryMapWithContentsOfFile:(NSURL*)fileURL error:(NSError**)error
-{ return [[[_MKFileMemoryMap alloc] initWithURL:fileURL error:error] autorelease]; }
+{ return [[_MKFileMemoryMap alloc] initWithURL:fileURL error:error]; }
 + (nullable instancetype)memoryMapWithAddress:(uint64_t)addr fileoff:(uint64_t)fileoff size:(uint64_t)size {
     // FIXME: 内存管理
     return [[_MKMemoryMemoryMap alloc] initWithAddress:addr fileoff:fileoff size:size];
 }
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)memoryMapWithTask:(mach_port_t)task error:(NSError**)error
-{ return [[[_MKTaskMemoryMap alloc] initWithTask:task error:error] autorelease]; }
+{ return [[_MKTaskMemoryMap alloc] initWithTask:task error:error]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (id)init
@@ -65,14 +65,14 @@
     __block NSError *localError = nil;
 
     [self remapBytesAtOffset:offset fromAddress:contextAddress length:length requireFull:NO withHandler:^(vm_address_t __unused address, vm_size_t l, NSError *error) {
-        localError = [error retain];
+        localError = error;
         if (error)
             return;
 
         retValue = l;
     }];
 
-    MK_ERROR_OUT = [localError autorelease];
+    MK_ERROR_OUT = localError;
     return retValue;
 }
 
@@ -87,14 +87,14 @@
     __block NSError *localError = nil;
     
     [self remapBytesAtOffset:offset fromAddress:contextAddress length:length requireFull:NO withHandler:^(vm_address_t __unused address, vm_size_t l, NSError *error) {
-        localError = [error retain];
+        localError = error;
         if (error)
             return;
 
         retValue = (l >= length);
     }];
 
-    MK_ERROR_OUT = [localError autorelease];
+    MK_ERROR_OUT = localError;
     return retValue;
 }
 
@@ -124,15 +124,15 @@
     __block NSError *localError = nil;
     
     [self remapBytesAtOffset:offset fromAddress:contextAddress length:length requireFull:requireFull withHandler:^(vm_address_t address, vm_size_t length, NSError *error) {
-        localError = [error retain];
+        localError = error;
         if (error)
             return;
         
         retValue = [[NSData alloc] initWithBytes:(void*)address length:length];
     }];
     
-    MK_ERROR_OUT = [localError autorelease];
-    return [retValue autorelease];
+    MK_ERROR_OUT = localError;
+    return retValue;
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -142,7 +142,7 @@
     __block NSError *localError = nil;
     
     [self remapBytesAtOffset:offset fromAddress:contextAddress length:length requireFull:requireFull withHandler:^(vm_address_t address, vm_size_t mappingLength, NSError *error) {
-        localError = [error retain];
+        localError = error;
         if (error)
             return;
         
@@ -150,7 +150,7 @@
         retValue = (vm_size_t)length;
     }];
     
-    MK_ERROR_OUT = [localError autorelease];
+    MK_ERROR_OUT = localError;
     return retValue;
 }
 

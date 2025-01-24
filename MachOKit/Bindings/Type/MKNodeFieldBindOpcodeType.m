@@ -44,7 +44,7 @@ MKMakeSingletonInitializer(MKNodeFieldBindOpcodeType)
         return;
     
     // TODO - Derive these from the MKBindCommand subclasses?
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)BIND_OPCODE_DONE): @"BIND_OPCODE_DONE",
         _$((uint8_t)BIND_OPCODE_SET_DYLIB_ORDINAL_IMM): @"BIND_OPCODE_SET_DYLIB_ORDINAL_IMM",
         _$((uint8_t)BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB): @"BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB",
@@ -59,7 +59,7 @@ MKMakeSingletonInitializer(MKNodeFieldBindOpcodeType)
         _$((uint8_t)BIND_OPCODE_DO_BIND_ADD_ADDR_IMM_SCALED): @"BIND_OPCODE_DO_BIND_ADD_ADDR_IMM_SCALED",
         _$((uint8_t)BIND_OPCODE_DO_BIND_ULEB_TIMES_SKIPPING_ULEB): @"BIND_OPCODE_DO_BIND_ULEB_TIMES_SKIPPING_ULEB",
         _$((uint8_t)BIND_OPCODE_THREADED): @"BIND_OPCODE_THREADED"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"BIND_OPCODE";

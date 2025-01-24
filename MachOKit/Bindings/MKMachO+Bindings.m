@@ -53,8 +53,6 @@
             _bindingsInfo = [[MKResult alloc] initWithError:bindingsInfoError];
         else
             _bindingsInfo = [MKResult new];
-        
-        [bindingsInfo release];
     }
     
     return _bindingsInfo;
@@ -74,8 +72,6 @@
             _weakBindingsInfo = [[MKResult alloc] initWithError:bindingsInfoError];
         else
             _weakBindingsInfo = [MKResult new];
-        
-        [bindingsInfo release];
     }
     
     return _weakBindingsInfo;
@@ -95,8 +91,6 @@
             _lazyBindingsInfo = [[MKResult alloc] initWithError:bindingsInfoError];
         else
             _lazyBindingsInfo = [MKResult new];
-        
-        [bindingsInfo release];
     }
     
     return _lazyBindingsInfo;

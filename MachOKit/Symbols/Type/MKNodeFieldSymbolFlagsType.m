@@ -43,10 +43,10 @@ MKMakeSingletonInitializer(MKNodeFieldUndefinedSymbolFlagsType)
     if (s_UndefinedOptions != nil && s_UndefinedFormatter != nil)
         return;
     
-    s_UndefinedOptions = [@{
+    s_UndefinedOptions = @{
         _$((uint16_t)N_WEAK_REF): @"N_WEAK_REF",
         _$((uint16_t)N_REF_TO_WEAK): @"N_REF_TO_WEAK"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_UndefinedOptions;
@@ -95,7 +95,7 @@ MKMakeSingletonInitializer(MKNodeFieldDefinedSymbolFlagsType)
     if (s_DefinedOptions != nil && s_DefinedFormatter != nil)
         return;
     
-    s_DefinedOptions = [@{
+    s_DefinedOptions = @{
         _$((uint16_t)REFERENCED_DYNAMICALLY): @"REFERENCED_DYNAMICALLY",
         _$((uint16_t)N_NO_DEAD_STRIP): @"N_NO_DEAD_STRIP",
         _$((uint16_t)N_WEAK_REF): @"N_WEAK_REF",
@@ -103,7 +103,7 @@ MKMakeSingletonInitializer(MKNodeFieldDefinedSymbolFlagsType)
         _$((uint16_t)N_ARM_THUMB_DEF): @"N_ARM_THUMB_DEF",
         _$((uint16_t)N_SYMBOL_RESOLVER): @"N_SYMBOL_RESOLVER",
         _$((uint16_t)N_ALT_ENTRY): @"N_ALT_ENTRY"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_DefinedOptions;

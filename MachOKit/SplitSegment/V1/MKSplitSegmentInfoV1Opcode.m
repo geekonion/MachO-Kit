@@ -42,12 +42,12 @@
     
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&_kind length:sizeof(uint8_t) requireFull:YES error:&memoryMapError] < sizeof(uint8_t)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read opcode kind."];
-        [self release]; return nil;
+        return nil;
     }
     
     if (_kind == 0) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"Invalid opcode kind [%" PRIu64 "].", _kind];
-        [self release]; return nil;
+        return nil;
     }
     
     return self;

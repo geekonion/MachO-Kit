@@ -34,7 +34,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)pointerWithType:(id<MKNodeFieldNumericType>)underlyingType
-{ return [[[self alloc] initWithType:underlyingType] autorelease]; }
+{ return [[self alloc] initWithType:underlyingType]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithType:(id<MKNodeFieldNumericType>)underlyingType
@@ -44,7 +44,7 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _underlyingType = [underlyingType retain];
+    _underlyingType = underlyingType;
     
     return self;
 }
@@ -52,14 +52,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-init unavailable." userInfo:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_underlyingType release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldNumericType

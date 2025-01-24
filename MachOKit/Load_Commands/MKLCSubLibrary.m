@@ -55,7 +55,7 @@
     
     struct sub_library_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     MKSwapLValue32(lc.sub_library.offset, self.macho.dataModel);
     _sub_library = [[MKCString alloc] initWithOffset:lc.sub_library.offset fromParent:self error:error];
@@ -73,14 +73,6 @@
     _sub_library = [[MKCString alloc] initWithOffset:lc->sub_library.offset fromParent:self error:nil];
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_sub_library release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

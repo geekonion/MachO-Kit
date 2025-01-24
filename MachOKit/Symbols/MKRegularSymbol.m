@@ -130,10 +130,6 @@
     
     type.type = [MKNodeFieldTypeBitfield bitfieldWithType:(id)type.type bits:@[externalTypeMask, privateExternalTypeMask, typeMask] name:nil];
     
-    [typeMask release];
-    [privateExternalTypeMask release];
-    [externalTypeMask release];
-    
     return type;
 }
 

@@ -39,7 +39,7 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _recipe = [recipe retain];
+    _recipe = recipe;
     _comparisonSelector = comparisonSelector;
     
     return self;
@@ -48,14 +48,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-init unavailable." userInfo:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_recipe release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldValueRecipe
@@ -80,7 +72,6 @@
     }
     
     value = [MKResult resultWithValue:result];
-    [result release];
     
     return value;
 }

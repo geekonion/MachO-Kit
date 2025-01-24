@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 //!
 //! @important
 //! This method expects \a builder to return an object at a +1 retain count.
-+ (instancetype)newResultWith:(NS_NOESCAPE NS_RETURNS_RETAINED ObjectType __nullable (^)(NSError **error))builder NS_RETURNS_RETAINED;
++ (instancetype)newResultWith:(ObjectType __nullable (^)(NSError **error))builder;
 
 //! Initializes the receiver with no value.
 - (instancetype)init;
