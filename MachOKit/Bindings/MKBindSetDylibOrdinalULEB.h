@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Library ordinal
-@property (nonatomic, readonly) int64_t ordinal;
+@property (nonatomic, assign, readonly) int64_t ordinal;
 
 @end
 

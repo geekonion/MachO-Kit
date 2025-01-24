@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The checksum or zero.
-@property (nonatomic, readonly) uint32_t cksum;
+@property (nonatomic, assign, readonly) uint32_t cksum;
 
 @end
 

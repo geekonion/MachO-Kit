@@ -60,13 +60,13 @@ typedef NS_ENUM(NSUInteger, MKComboFormatterStyle) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //!
-@property (nonatomic, copy) NSFormatter *rawValueFormatter;
+@property (nonatomic, strong) NSFormatter *rawValueFormatter;
 
 //!
-@property (nonatomic, copy) NSFormatter *refinedValueFormatter;
+@property (nonatomic, strong) NSFormatter *refinedValueFormatter;
 
 //!
-@property (nonatomic, readwrite) MKComboFormatterStyle style;
+@property (nonatomic, assign, readwrite) MKComboFormatterStyle style;
 
 @end
 

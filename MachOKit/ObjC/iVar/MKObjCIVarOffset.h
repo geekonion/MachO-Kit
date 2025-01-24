@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
     uint64_t _offset;
 }
 
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
 @end
 

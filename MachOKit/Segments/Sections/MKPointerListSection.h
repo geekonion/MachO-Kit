@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<MKPointerNode*> *_pointerList;
 }
 
-@property (nonatomic, readonly) NSArray<MKPointerNode<Element>*> *elements;
+@property (nonatomic, strong, readonly) NSArray<MKPointerNode<Element>*> *elements;
 
 @end
 

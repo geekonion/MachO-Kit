@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<MKCFString*> *_strings;
 }
 
-@property (nonatomic, readonly) NSArray<MKCFString*> *strings;
+@property (nonatomic, strong, readonly) NSArray<MKCFString*> *strings;
 
 @end
 

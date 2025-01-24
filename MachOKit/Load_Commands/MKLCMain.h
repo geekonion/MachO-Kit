@@ -47,9 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! File offset to the entry point.
-@property (nonatomic, readonly) uint64_t entryoff;
+@property (nonatomic, assign, readonly) uint64_t entryoff;
 //! The initial stack size.
-@property (nonatomic, readonly) uint64_t stacksize;
+@property (nonatomic, assign, readonly) uint64_t stacksize;
 
 @end
 

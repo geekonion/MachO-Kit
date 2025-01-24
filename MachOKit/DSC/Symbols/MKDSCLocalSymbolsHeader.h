@@ -52,12 +52,12 @@ NS_ASSUME_NONNULL_BEGIN
 //!             info structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint32_t nlistOffset;
-@property (nonatomic, readonly) uint32_t nlistCount;
-@property (nonatomic, readonly) uint32_t stringsOffset;
-@property (nonatomic, readonly) uint32_t stringsSize;
-@property (nonatomic, readonly) uint32_t entriesOffset;
-@property (nonatomic, readonly) uint32_t entriesCount;
+@property (nonatomic, assign, readonly) uint32_t nlistOffset;
+@property (nonatomic, assign, readonly) uint32_t nlistCount;
+@property (nonatomic, assign, readonly) uint32_t stringsOffset;
+@property (nonatomic, assign, readonly) uint32_t stringsSize;
+@property (nonatomic, assign, readonly) uint32_t entriesOffset;
+@property (nonatomic, assign, readonly) uint32_t entriesCount;
 
 - (instancetype)initWithDSC:(DyldSharedCache *)dsc offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 @end

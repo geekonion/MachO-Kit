@@ -44,16 +44,16 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _size;
 }
 
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *name;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *type;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *type;
 
 //! The alignment, in bytes.
-@property (nonatomic, readonly) uint32_t alignment;
+@property (nonatomic, assign, readonly) uint32_t alignment;
 
-@property (nonatomic, readonly) uint32_t size;
+@property (nonatomic, assign, readonly) uint32_t size;
 
 @end
 

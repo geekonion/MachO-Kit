@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithCount:(uint32_t)count atOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
 //!
-@property (nonatomic, readonly) NSArray<MKDSCSymbol*> *symbols;
+@property (nonatomic, strong, readonly) NSArray<MKDSCSymbol*> *symbols;
 
 @end
 

@@ -44,23 +44,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! Indicates if the  undefined reference is a lazy reference or non-lazy
 //! reference.
-@property (nonatomic, readonly) MKSymbolReferenceType referenceType;
+@property (nonatomic, assign, readonly) MKSymbolReferenceType referenceType;
 
 //! For images with two-level namespaces, the index of the library the
 //! undefined symbol is bound to.
-@property (nonatomic, readonly) MKSymbolLibraryOrdinal sourceLibraryOrdinal;
+@property (nonatomic, assign, readonly) MKSymbolLibraryOrdinal sourceLibraryOrdinal;
 
 //! For images with two-level namespaces, the library the undefined symbol is
 //! bound to.
-@property (nonatomic, readonly, nullable) MKDependentLibrary *sourceLibrary;
+@property (nonatomic, strong, readonly, nullable) MKDependentLibrary *sourceLibrary;
 
 //! \c True if the undefined symbol is allowed to be missing and is to have
 //! the address of zero when missing.
-@property (nonatomic, readonly, getter=isWeakReference) BOOL weakReference;
+@property (nonatomic, assign, readonly, getter=isWeakReference) BOOL weakReference;
 
 //! \c True if the undefined symbol should be resolved using flat namespace
 //! searching.
-@property (nonatomic, readonly, getter=isReferenceToWeak) BOOL referenceToWeak;
+@property (nonatomic, assign, readonly, getter=isReferenceToWeak) BOOL referenceToWeak;
 
 @end
 

@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! An \c NSDictionary mapping offsets from the start of the string table to
 //! string entries, represented by instances of \c MKCString.
-@property (nonatomic, readonly) NSDictionary<NSNumber*, MKCString*> *strings;
+@property (nonatomic, strong, readonly) NSDictionary<NSNumber*, MKCString*> *strings;
 
 @end
 

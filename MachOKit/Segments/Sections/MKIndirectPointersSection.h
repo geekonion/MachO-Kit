@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _indirectSymbolTableIndex;
 }
 
-@property (nonatomic, readonly) uint32_t indirectSymbolTableIndex;
+@property (nonatomic, assign, readonly) uint32_t indirectSymbolTableIndex;
 
 @end
 

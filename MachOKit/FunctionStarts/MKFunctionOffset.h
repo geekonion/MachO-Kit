@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //!
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
 @end
 

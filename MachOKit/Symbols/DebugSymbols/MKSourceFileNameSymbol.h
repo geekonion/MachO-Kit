@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 //!
 //! If the symbol has a missing or empty string, then the address is the
 //! end address of the text section for the file.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 @end
 

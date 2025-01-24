@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The VM address of the exported symbol.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 @end
 

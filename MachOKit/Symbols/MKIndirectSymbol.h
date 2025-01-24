@@ -47,16 +47,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The symbol referenced by this entry.
-@property (nonatomic, readonly) MKResult<MKSymbol*> *symbol;
+@property (nonatomic, strong, readonly) MKResult<MKSymbol*> *symbol;
 
 //!
-@property (nonatomic, readonly) MKResult<MKSection*> *section;
+@property (nonatomic, strong, readonly) MKResult<MKSection*> *section;
 
 //!
-@property (nonatomic, readonly, getter=isLocal) BOOL local;
+@property (nonatomic, assign, readonly, getter=isLocal) BOOL local;
 
 //!
-@property (nonatomic, readonly, getter=isAbsolute) BOOL absolute;
+@property (nonatomic, assign, readonly, getter=isAbsolute) BOOL absolute;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Entry Values
@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! An index into the symbol table.
-@property (nonatomic, readonly) uint32_t index;
+@property (nonatomic, assign, readonly) uint32_t index;
 
 @end
 

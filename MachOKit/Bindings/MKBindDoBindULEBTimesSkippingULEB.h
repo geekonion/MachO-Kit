@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) uint64_t count;
+@property (nonatomic, assign, readonly) uint64_t count;
 
 //!
-@property (nonatomic, readonly) uint64_t skip;
+@property (nonatomic, assign, readonly) uint64_t skip;
 
 @end
 

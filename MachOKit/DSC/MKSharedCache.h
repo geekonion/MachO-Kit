@@ -94,16 +94,16 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
 
 //! Returns \c YES if the Shared Cache was initialized with a
 //! \c dyld_shared_cache_[arch] file from disk.
-@property (nonatomic, readonly) BOOL isSourceFile;
+@property (nonatomic, assign, readonly) BOOL isSourceFile;
 //! The dervided slide value for the shared cache.
-@property (nonatomic, readonly) mk_vm_slide_t slide;
+@property (nonatomic, assign, readonly) mk_vm_slide_t slide;
 
 //!
-@property (nonatomic, readonly) NSUInteger version;
+@property (nonatomic, assign, readonly) NSUInteger version;
 //!
-@property (nonatomic, readonly) cpu_type_t cpuType;
+@property (nonatomic, assign, readonly) cpu_type_t cpuType;
 //!
-@property (nonatomic, readonly) cpu_subtype_t cpuSubtype;
+@property (nonatomic, assign, readonly) cpu_subtype_t cpuSubtype;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Header and Mappings
@@ -111,17 +111,17 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //!
-@property (nonatomic, readonly) MKDSCHeader *header;
+@property (nonatomic, strong, readonly) MKDSCHeader *header;
 
 //!
-@property (nonatomic, readonly) NSArray<MKDSCMappingInfo*> *mappingInfos;
+@property (nonatomic, strong, readonly) NSArray<MKDSCMappingInfo*> *mappingInfos;
 
 //!
-@property (nonatomic, readonly) NSArray<MKDSCMapping*> *mappings;
+@property (nonatomic, strong, readonly) NSArray<MKDSCMapping*> *mappings;
 
-@property (nonatomic, readonly) NSArray<MKDSCImage*> *images;
+@property (nonatomic, strong, readonly) NSArray<MKDSCImage*> *images;
 
-@property (nonatomic, readonly) DyldSharedCache *dsc;
+@property (nonatomic, assign, readonly) DyldSharedCache *dsc;
 
 - (MKDSCMapping *)findMapping:(uint64_t)vmaddr;
 @end

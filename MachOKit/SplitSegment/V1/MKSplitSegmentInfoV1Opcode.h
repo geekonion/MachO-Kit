@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The opcode kind.
-@property (nonatomic, readonly) uint8_t kind;
+@property (nonatomic, assign, readonly) uint8_t kind;
 
 @end
 

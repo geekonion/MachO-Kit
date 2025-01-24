@@ -53,13 +53,13 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The index of this stmbol in the symbol table.
-@property (nonatomic, readonly) uint32_t index;
+@property (nonatomic, assign, readonly) uint32_t index;
 
 //!
-@property (nonatomic, readonly, nullable) MKDSCDylibSymbolInfo *dylib;
+@property (nonatomic, strong, readonly, nullable) MKDSCDylibSymbolInfo *dylib;
 
 //! The entry in the string table referenced by this symbol.  May be \c nil.
-@property (nonatomic, readonly, nullable) MKCString *name;
+@property (nonatomic, strong, readonly, nullable) MKCString *name;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  nlist Values
@@ -72,13 +72,13 @@ NS_ASSUME_NONNULL_BEGIN
 //! An offset into the string table, or zero if the symbol has a null or ""
 //! name.  The string at this offset, if any, is assigned to the
 //! \ref name property of this symbol.
-@property (nonatomic, readonly) uint32_t strx;
+@property (nonatomic, assign, readonly) uint32_t strx;
 //! Type information for the symbol.  This is actually a bitfield the format
 //! of which is discussed in <mach-o/nlist.h>.
-@property (nonatomic, readonly) uint8_t type;
-@property (nonatomic, readonly) uint8_t sect;
-@property (nonatomic, readonly) uint16_t desc;
-@property (nonatomic, readonly) uint64_t value;
+@property (nonatomic, assign, readonly) uint8_t type;
+@property (nonatomic, assign, readonly) uint8_t sect;
+@property (nonatomic, assign, readonly) uint16_t desc;
+@property (nonatomic, assign, readonly) uint64_t value;
 
 - (instancetype)initWithIndex:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 @end

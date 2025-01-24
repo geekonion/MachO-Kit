@@ -52,24 +52,24 @@ NS_ASSUME_NONNULL_BEGIN
     MKPointer *_classProperties;
 }
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *name;
 
-@property (nonatomic, readonly) MKPointerNode<MKObjCClass*> *cls;
+@property (nonatomic, strong, readonly) MKPointerNode<MKObjCClass*> *cls;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *instanceMethods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *instanceMethods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *classMethods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *classMethods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCProtocolList*> *protocols;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCProtocolList*> *protocols;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassPropertyList*> *instanceProperties;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassPropertyList*> *instanceProperties;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Extended Category Fields
 //! @name       Extended Category Fields
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly, nullable) MKPointer<MKObjCClassPropertyList*> *classProperties;
+@property (nonatomic, strong, readonly, nullable) MKPointer<MKObjCClassPropertyList*> *classProperties;
 
 @end
 

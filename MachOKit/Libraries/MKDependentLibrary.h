@@ -45,28 +45,28 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithLoadCommand:(MKDylibLoadCommand*)loadCommand error:(NSError**)error;
 
 //! The pathname of the library.
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSString *name;
 
 //! The build time stamp of the library.
-@property (nonatomic, readonly) NSDate *timestamp;
+@property (nonatomic, strong, readonly) NSDate *timestamp;
 
 //! The current version of the library.
-@property (nonatomic, readonly) MKDylibVersion *currentVersion;
+@property (nonatomic, strong, readonly) MKDylibVersion *currentVersion;
 
 //! The compatibility version of the library.
-@property (nonatomic, readonly) MKDylibVersion *compatibilityVersion;
+@property (nonatomic, strong, readonly) MKDylibVersion *compatibilityVersion;
 
 //! \c YES if the library must be present at dynamic-link time.
-@property (nonatomic, readonly) BOOL required;
+@property (nonatomic, assign, readonly) BOOL required;
 
 //!
-@property (nonatomic, readonly) BOOL weak;
+@property (nonatomic, assign, readonly) BOOL weak;
 
 //!
-@property (nonatomic, readonly) BOOL upward;
+@property (nonatomic, assign, readonly) BOOL upward;
 
 //!
-@property (nonatomic, readonly) BOOL rexported;
+@property (nonatomic, assign, readonly) BOOL rexported;
 
 @end
 

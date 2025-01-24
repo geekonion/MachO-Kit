@@ -34,9 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 //----------------------------------------------------------------------------//
 @protocol MKNodeFieldType <NSObject>
 
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSString *name;
 
-@property (nonatomic, readonly, nullable) NSFormatter *formatter;
+@property (nonatomic, strong, readonly, nullable) NSFormatter *formatter;
 
 @end
 

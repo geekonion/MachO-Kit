@@ -53,19 +53,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithContext:(struct MKRebaseContext*)rebaseContext error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 
 //! The segment where the fixup location resides.
-@property (nonatomic, readonly) MKSegment *segment;
+@property (nonatomic, strong, readonly) MKSegment *segment;
 
 //! The offset from the start of the segment to the fixup location.
-@property (nonatomic, readonly) mk_vm_offset_t offset;
+@property (nonatomic, assign, readonly) mk_vm_offset_t offset;
 
 //! The VM address of the fixup location.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! The section where the fixup location resides.
-@property (nonatomic, readonly) MKResult<MKSection*> *section;
+@property (nonatomic, strong, readonly) MKResult<MKSection*> *section;
 
 //!	The fixup type.
-@property (nonatomic, readonly) MKRebaseType type;
+@property (nonatomic, assign, readonly) MKRebaseType type;
 
 @end
 

@@ -46,16 +46,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) MKPointer<MKObjCClass*> *isa;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClass*> *isa;
 
 //!
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t flags;
 
 //!
-@property (nonatomic, readonly) MKPointer<id<MKString>> *string;
+@property (nonatomic, strong, readonly) MKPointer<id<MKString>> *string;
 
 //!
-@property (nonatomic, readonly) uint64_t length;
+@property (nonatomic, assign, readonly) uint64_t length;
 
 @end
 

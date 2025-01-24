@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The dynamic linker's path name
-@property (nonatomic, readonly) MKCString *name;
+@property (nonatomic, strong, readonly) MKCString *name;
 
 @end
 

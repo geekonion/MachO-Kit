@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 //----------------------------------------------------------------------------//
 @interface MKAbsoluteSymbol : MKDefinedSymbol
 
-@property (nonatomic, readonly) uint64_t value;
+@property (nonatomic, assign, readonly) uint64_t value;
 
 @end
 

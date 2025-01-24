@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKNode (SharedCache)
 
 //! The nearest \ref MKSharedCache ancestor node.
-@property (nonatomic, readonly, nullable) MKSharedCache *sharedCache;
+@property (nonatomic, strong, readonly, nullable) MKSharedCache *sharedCache;
 
 @end
 

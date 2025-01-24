@@ -38,10 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The natural size of an Objective-C ivar offset (non-fragile ABI), in bytes.
-@property (readonly) size_t objcIVarOffsetSize;
+@property (readonly, assign) size_t objcIVarOffsetSize;
 //! The natural alignment of an Objective-C ivar offset (non-fragile ABI), in
 //! bytes.
-@property (readonly) size_t objcIVarOffsetAlignment;
+@property (readonly, assign) size_t objcIVarOffsetAlignment;
 
 @end
 

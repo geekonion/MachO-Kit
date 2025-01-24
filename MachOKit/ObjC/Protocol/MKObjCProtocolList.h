@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
     uint64_t _count;
 }
 
-@property (nonatomic, readonly) NSArray<MKPointerNode<MKObjCProtocol*>*> *elements;
+@property (nonatomic, strong, readonly) NSArray<MKPointerNode<MKObjCProtocol*>*> *elements;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  protocol_list_t Values
@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The number of entries in the list.
-@property (nonatomic, readonly) uint64_t count;
+@property (nonatomic, assign, readonly) uint64_t count;
 
 @end
 

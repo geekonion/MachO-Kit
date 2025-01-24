@@ -56,20 +56,20 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _export_size;
 }
 
-@property (nonatomic, readonly) uint32_t rebase_off;
-@property (nonatomic, readonly) uint32_t rebase_size;
+@property (nonatomic, assign, readonly) uint32_t rebase_off;
+@property (nonatomic, assign, readonly) uint32_t rebase_size;
 
-@property (nonatomic, readonly) uint32_t bind_off;
-@property (nonatomic, readonly) uint32_t bind_size;
+@property (nonatomic, assign, readonly) uint32_t bind_off;
+@property (nonatomic, assign, readonly) uint32_t bind_size;
 
-@property (nonatomic, readonly) uint32_t weak_bind_off;
-@property (nonatomic, readonly) uint32_t weak_bind_size;
+@property (nonatomic, assign, readonly) uint32_t weak_bind_off;
+@property (nonatomic, assign, readonly) uint32_t weak_bind_size;
 
-@property (nonatomic, readonly) uint32_t lazy_bind_off;
-@property (nonatomic, readonly) uint32_t lazy_bind_size;
+@property (nonatomic, assign, readonly) uint32_t lazy_bind_off;
+@property (nonatomic, assign, readonly) uint32_t lazy_bind_size;
 
-@property (nonatomic, readonly) uint32_t export_off;
-@property (nonatomic, readonly) uint32_t export_size;
+@property (nonatomic, assign, readonly) uint32_t export_off;
+@property (nonatomic, assign, readonly) uint32_t export_size;
 
 @end
 

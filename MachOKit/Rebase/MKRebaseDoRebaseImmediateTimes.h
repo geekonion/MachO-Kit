@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKRebaseDoRebaseImmediateTimes : MKRebaseCommand <MKRebaseCommandOffsetAdjusting>
 
 //! 
-@property (nonatomic, readonly) uint8_t count;
+@property (nonatomic, assign, readonly) uint8_t count;
 
 @end
 

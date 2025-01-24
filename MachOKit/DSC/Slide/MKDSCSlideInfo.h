@@ -65,16 +65,16 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //!
-@property (nonatomic, readonly) MKDSCSlideInfoHeader *header;
+@property (nonatomic, strong, readonly) MKDSCSlideInfoHeader *header;
 
 //!
-@property (nonatomic, readonly) NSArray<MKDSCSlideInfoBitmap*> *entries;
+@property (nonatomic, strong, readonly) NSArray<MKDSCSlideInfoBitmap*> *entries;
 
 //!
-@property (nonatomic, readonly) NSArray<MKDSCSlideInfoPage*> *toc;
+@property (nonatomic, strong, readonly) NSArray<MKDSCSlideInfoPage*> *toc;
 
 //!
-@property (nonatomic, readonly) NSArray<MKDSCSlidPointer*> *slidPointers;
+@property (nonatomic, strong, readonly) NSArray<MKDSCSlidPointer*> *slidPointers;
 
 @end
 

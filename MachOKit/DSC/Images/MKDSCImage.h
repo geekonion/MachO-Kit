@@ -52,14 +52,14 @@ NS_ASSUME_NONNULL_BEGIN
 //!             descriptor structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint64_t address;
-@property (nonatomic, readonly) uint64_t modTime;
-@property (nonatomic, readonly) uint64_t inode;
-@property (nonatomic, readonly) uint32_t pathFileOffset;
+@property (nonatomic, assign, readonly) uint64_t address;
+@property (nonatomic, assign, readonly) uint64_t modTime;
+@property (nonatomic, assign, readonly) uint64_t inode;
+@property (nonatomic, assign, readonly) uint32_t pathFileOffset;
 
 //! The pathname of the library.
-@property (nonatomic, readonly) MKCString *name;
-@property (nonatomic, readonly) MKMachOImage *macho;
+@property (nonatomic, strong, readonly) MKCString *name;
+@property (nonatomic, strong, readonly) MKMachOImage *macho;
 
 - (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKBackedNode *)parent error:(NSError**)error;
 

@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! The selector of the method to call on the input object to retrieve the
 //! object's description.
-@property (nonatomic, readwrite, nullable) SEL descriptionSelector;
+@property (nonatomic, assign, readwrite, nullable) SEL descriptionSelector;
 
 @end
 

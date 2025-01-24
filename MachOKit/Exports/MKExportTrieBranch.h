@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The prefix of all nodes that follow from the branch.
-@property (nonatomic, readonly) MKCString *prefix;
+@property (nonatomic, strong, readonly) MKCString *prefix;
 
 //! The offset from the start of the export info to the next node.
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
 @end
 

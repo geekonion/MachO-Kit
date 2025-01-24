@@ -56,27 +56,27 @@ NS_ASSUME_NONNULL_BEGIN
     MKPointer *_weakIVarLayout;
 }
 
-@property (nonatomic, readonly) MKObjCClassFlags flags;
+@property (nonatomic, assign, readonly) MKObjCClassFlags flags;
 
-@property (nonatomic, readonly) uint32_t instanceStart;
+@property (nonatomic, assign, readonly) uint32_t instanceStart;
 
-@property (nonatomic, readonly) uint32_t instanceSize;
+@property (nonatomic, assign, readonly) uint32_t instanceSize;
 
-@property (nonatomic, readonly) uint32_t reserved;
+@property (nonatomic, assign, readonly) uint32_t reserved;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *name;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *name;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassMethodList*> *methods;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassMethodList*> *methods;
 
-@property (nonatomic, readonly) MKPointer<MKObjCProtocolList*> *protocols;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCProtocolList*> *protocols;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassPropertyList*> *properties;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassPropertyList*> *properties;
 
-@property (nonatomic, readonly) MKPointer<MKObjCClassIVarList*> *ivars;
+@property (nonatomic, strong, readonly) MKPointer<MKObjCClassIVarList*> *ivars;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *ivarLayout;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *ivarLayout;
 
-@property (nonatomic, readonly) MKPointer<MKCString*> *weakIVarLayout;
+@property (nonatomic, strong, readonly) MKPointer<MKCString*> *weakIVarLayout;
 
 @end
 

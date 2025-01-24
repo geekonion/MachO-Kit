@@ -48,13 +48,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) MKSplitSegmentInfoV1Opcode *opcode;
+@property (nonatomic, strong, readonly) MKSplitSegmentInfoV1Opcode *opcode;
 
 //!
-@property (nonatomic, readonly) NSArray<MKSplitSegmentInfoV1Offset*> *offsets;
+@property (nonatomic, strong, readonly) NSArray<MKSplitSegmentInfoV1Offset*> *offsets;
 
 //!
-@property (nonatomic, readonly, nullable) MKSplitSegmentInfoV1Terminator *terminator;
+@property (nonatomic, strong, readonly, nullable) MKSplitSegmentInfoV1Terminator *terminator;
 
 @end
 

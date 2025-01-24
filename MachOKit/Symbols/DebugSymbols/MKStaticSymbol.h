@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKStaticSymbol : MKDebugSymbol
 
 //! The address of the static variable.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 @end
 

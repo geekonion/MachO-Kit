@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 //----------------------------------------------------------------------------//
 @protocol MKString
 
-@property (nonatomic, readonly, nullable) NSString *string;
+@property (nonatomic, strong, readonly, nullable) NSString *string;
 
 @end
 

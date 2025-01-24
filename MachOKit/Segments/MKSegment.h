@@ -98,19 +98,19 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The name of the segment, as specified in the load command.
-@property (nonatomic, readonly, nullable) NSString *name;
+@property (nonatomic, strong, readonly, nullable) NSString *name;
 //! The load command identifying the segment.
-@property (nonatomic, readonly) id<MKLCSegment> loadCommand;
+@property (nonatomic, strong, readonly) id<MKLCSegment> loadCommand;
 
-@property (nonatomic, readonly) mk_vm_address_t vmAddress;
-@property (nonatomic, readonly) mk_vm_size_t vmSize;
-@property (nonatomic, readonly) mk_vm_address_t fileOffset;
-@property (nonatomic, readonly) mk_vm_size_t fileSize;
+@property (nonatomic, assign, readonly) mk_vm_address_t vmAddress;
+@property (nonatomic, assign, readonly) mk_vm_size_t vmSize;
+@property (nonatomic, assign, readonly) mk_vm_address_t fileOffset;
+@property (nonatomic, assign, readonly) mk_vm_size_t fileSize;
 
-@property (nonatomic, readonly) vm_prot_t maximumProtection;
-@property (nonatomic, readonly) vm_prot_t initialProtection;
+@property (nonatomic, assign, readonly) vm_prot_t maximumProtection;
+@property (nonatomic, assign, readonly) vm_prot_t initialProtection;
 
-@property (nonatomic, readonly) MKSegmentFlags flags;
+@property (nonatomic, assign, readonly) MKSegmentFlags flags;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Sections
@@ -119,7 +119,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! A list of \ref MKSection instances, each representing a section within
 //! the segment.
-@property (nonatomic, readonly) NSArray<MKResult<__kindof MKSection*>*> *sections;
+@property (nonatomic, strong, readonly) NSArray<MKResult<__kindof MKSection*>*> *sections;
 
 //! Returns the \ref MKSection from the \ref sections array at the given
 //! \a index.

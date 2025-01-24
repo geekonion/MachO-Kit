@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 //
 @protocol MKRebaseCommandOffsetAdjusting
 
-@property (nonatomic, readonly) uint64_t derivedOffset;
+@property (nonatomic, assign, readonly) uint64_t derivedOffset;
 
 @end
 

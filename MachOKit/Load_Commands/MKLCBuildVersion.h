@@ -51,16 +51,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) NSArray<MKLCBuildToolVersion*> *tools;
+@property (nonatomic, strong, readonly) NSArray<MKLCBuildToolVersion*> *tools;
 
 //! The platform.
-@property (nonatomic, readonly) uint32_t platform;
+@property (nonatomic, assign, readonly) uint32_t platform;
 //! The minimum version of the OS the binary was built to run on.
-@property (nonatomic, readonly) MKVersion *minos;
+@property (nonatomic, strong, readonly) MKVersion *minos;
 //! The SDK version that the binary was linked with.
-@property (nonatomic, readonly) MKVersion *sdk;
+@property (nonatomic, strong, readonly) MKVersion *sdk;
 //! Number of build tools
-@property (nonatomic, readonly) uint32_t ntools;
+@property (nonatomic, assign, readonly) uint32_t ntools;
 
 @end
 
@@ -77,9 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The build tool.
-@property (nonatomic, readonly) uint32_t tool;
+@property (nonatomic, assign, readonly) uint32_t tool;
 //! The build tool version number.
-@property (nonatomic, readonly) uint32_t version;
+@property (nonatomic, assign, readonly) uint32_t version;
 
 - (instancetype)initWithBTV:(struct build_tool_version *)btv_ptr fromParent:(MKBackedNode*)parent;
 @end

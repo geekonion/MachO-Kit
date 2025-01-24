@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The architecture of the slice.
-@property (nonatomic, readonly) mk_architecture_t architecture;
+@property (nonatomic, assign, readonly) mk_architecture_t architecture;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  fat_arch Values
@@ -57,15 +57,15 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! CPU specifier.
-@property (nonatomic, readonly) cpu_type_t cputype;
+@property (nonatomic, assign, readonly) cpu_type_t cputype;
 //! Machine specifier.
-@property (nonatomic, readonly) cpu_subtype_t cpusubtype;
+@property (nonatomic, assign, readonly) cpu_subtype_t cpusubtype;
 //! Offset to the Mach-O identified by the slice.
-@property (nonatomic, readonly) uint32_t offset;
+@property (nonatomic, assign, readonly) uint32_t offset;
 //! The size of the slice.
-@property (nonatomic, readonly) uint32_t size;
+@property (nonatomic, assign, readonly) uint32_t size;
 //! The alignment of the slice.
-@property (nonatomic, readonly) uint32_t align;
+@property (nonatomic, assign, readonly) uint32_t align;
 
 @end
 

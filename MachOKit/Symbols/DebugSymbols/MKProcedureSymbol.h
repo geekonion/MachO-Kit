@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 //!    the end of the current function."
 //!
 //! https://www.sourceware.org/gdb/onlinedocs/stabs.html#Procedures
-@property (nonatomic, readonly) uint64_t address;
+@property (nonatomic, assign, readonly) uint64_t address;
 
 @end
 

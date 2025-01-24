@@ -47,13 +47,13 @@ typedef NSDictionary<id<NSCopying>, NSString*> MKEnumerationFormatterElements;
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //!
-@property (nonatomic, copy, nullable) NSString *name;
+@property (nonatomic, strong, nullable) NSString *name;
 
 //! 
-@property (nonatomic, copy, nullable) MKEnumerationFormatterElements *elements;
+@property (nonatomic, strong, nullable) MKEnumerationFormatterElements *elements;
 
 //!
-@property (nonatomic, copy, nullable) NSFormatter *fallbackFormatter;
+@property (nonatomic, strong, nullable) NSFormatter *fallbackFormatter;
 
 @end
 

@@ -41,14 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _count;
 }
 
-@property (nonatomic, readonly) NSArray<Element> *elements;
+@property (nonatomic, strong, readonly) NSArray<Element> *elements;
 
 //! Flags
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t flags;
 //! The size of each entry in the list.
-@property (nonatomic, readonly) uint32_t entsize;
+@property (nonatomic, assign, readonly) uint32_t entsize;
 //! The number of entries in the list.
-@property (nonatomic, readonly) uint32_t count;
+@property (nonatomic, assign, readonly) uint32_t count;
 
 @end
 

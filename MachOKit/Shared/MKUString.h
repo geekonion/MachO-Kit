@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *_string;
 }
 
-@property (nonatomic, readonly, nullable) NSString *string;
+@property (nonatomic, strong, readonly, nullable) NSString *string;
 
 @end
 

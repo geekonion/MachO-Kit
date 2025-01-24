@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray<MKUString*> *_strings;
 }
 
-@property (nonatomic, readonly) NSArray<MKUString*> *strings;
+@property (nonatomic, strong, readonly) NSArray<MKUString*> *strings;
 
 @end
 

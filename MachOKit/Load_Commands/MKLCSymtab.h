@@ -47,13 +47,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Symbol table offset.
-@property (nonatomic, readonly) uint32_t symoff;
+@property (nonatomic, assign, readonly) uint32_t symoff;
 //! Number of symbol table entries.
-@property (nonatomic, readonly) uint32_t nsyms;
+@property (nonatomic, assign, readonly) uint32_t nsyms;
 //! String table offset.
-@property (nonatomic, readonly) uint32_t stroff;
+@property (nonatomic, assign, readonly) uint32_t stroff;
 //! String table size in bytes.
-@property (nonatomic, readonly) uint32_t strsize;
+@property (nonatomic, assign, readonly) uint32_t strsize;
 
 @end
 

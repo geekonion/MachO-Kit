@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! @note
 //! A value of \c 0 indicates the node size is unknown.  This value should only
 //! be returned by top-level nodes such as \ref MKMachO.
-@property (nonatomic, readonly) mk_vm_size_t nodeSize;
+@property (nonatomic, assign, readonly) mk_vm_size_t nodeSize;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Accessing the Underlying Data
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! An \c NSData instance containing the contents of memory represented by
 //! the node.
-@property (nonatomic, readonly, nullable) NSData *data;
+@property (nonatomic, strong, readonly, nullable) NSData *data;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Looking Up Ancestor Nodes By Address

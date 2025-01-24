@@ -99,9 +99,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! Returns the Mach load command identifier.  This may include the
 //! LC_REQ_DYLD bit.
-@property (nonatomic, readonly) uint32_t cmd;
+@property (nonatomic, assign, readonly) uint32_t cmd;
 //! Returns the size in bytes of this load command.
-@property (nonatomic, readonly) uint32_t cmdSize;
+@property (nonatomic, assign, readonly) uint32_t cmdSize;
 
 @end
 

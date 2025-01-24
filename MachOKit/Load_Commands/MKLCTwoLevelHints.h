@@ -45,9 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Offset to the hint table.
-@property (nonatomic, readonly) uint32_t offset;
+@property (nonatomic, assign, readonly) uint32_t offset;
 //! Number of hints in the hint table.
-@property (nonatomic, readonly) uint32_t nhints;
+@property (nonatomic, assign, readonly) uint32_t nhints;
 
 @end
 

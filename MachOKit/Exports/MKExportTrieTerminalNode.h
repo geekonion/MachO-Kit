@@ -47,21 +47,21 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //!
-@property (nonatomic, readonly) uint64_t flags;
+@property (nonatomic, assign, readonly) uint64_t flags;
 
 //!
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
 //!
-@property (nonatomic, readonly) uint64_t resolver;
+@property (nonatomic, assign, readonly) uint64_t resolver;
 
 //! If the terminal node includes the \c EXPORT_SYMBOL_FLAGS_REEXPORT flag,
 //!	the \c ordinal property contains the ordinal of the library where the
 //! symbol is originally defined.  Zero otherwise.
-@property (nonatomic, readonly) int64_t ordinal;
+@property (nonatomic, assign, readonly) int64_t ordinal;
 
 //!
-@property (nonatomic, readonly, nullable) MKCString *importedName;
+@property (nonatomic, strong, readonly, nullable) MKCString *importedName;
 
 @end
 

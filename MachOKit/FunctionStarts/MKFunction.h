@@ -44,10 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithParent:(null_unspecified MKNode*)parent error:(NSError**)error NS_UNAVAILABLE;
 
 //! The VM address of the function.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! \c YES if the function is thumb
-@property (nonatomic, readonly, getter=isThumb) BOOL thumb;
+@property (nonatomic, assign, readonly, getter=isThumb) BOOL thumb;
 
 @end
 

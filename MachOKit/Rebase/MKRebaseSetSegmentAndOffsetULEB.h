@@ -41,10 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The index of the segment where subsequent fixups will occur.
-@property (nonatomic, readonly) unsigned segmentIndex;
+@property (nonatomic, assign, readonly) unsigned segmentIndex;
 
 //! The offset applied to the segment base address.
-@property (nonatomic, readonly) uint64_t offset;
+@property (nonatomic, assign, readonly) uint64_t offset;
 
 @end
 

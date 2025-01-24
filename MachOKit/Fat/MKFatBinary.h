@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! An array of \ref MKFatArch instances, each represeting an architecture
 //! present in the fat binary.
-@property (nonatomic, readonly) NSArray<MKFatArch*> *architectures;
+@property (nonatomic, strong, readonly) NSArray<MKFatArch*> *architectures;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  fat_header Values
@@ -63,9 +63,9 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! FAT_MAGIC
-@property (nonatomic, readonly) uint32_t magic;
+@property (nonatomic, assign, readonly) uint32_t magic;
 //! The number of architectures in the fat binary.
-@property (nonatomic, readonly) uint32_t nfat_arch;
+@property (nonatomic, assign, readonly) uint32_t nfat_arch;
 
 @end
 

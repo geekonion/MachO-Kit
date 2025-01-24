@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Symbol flags.
-@property (nonatomic, readonly) MKDefinedSymbolFlagsType symbolFlags;
+@property (nonatomic, assign, readonly) MKDefinedSymbolFlagsType symbolFlags;
 
 //! The other symbol's name.
-@property (nonatomic, readonly, nullable) MKResult<MKCString*> *targetName;
+@property (nonatomic, strong, readonly, nullable) MKResult<MKCString*> *targetName;
 
 @end
 

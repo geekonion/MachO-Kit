@@ -43,16 +43,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The VM address of the data range.
-@property (nonatomic, readonly) mk_vm_address_t address;
+@property (nonatomic, assign, readonly) mk_vm_address_t address;
 
 //! The offset from the mach_header to start of data range.
-@property (nonatomic, readonly) uint32_t offset;
+@property (nonatomic, assign, readonly) uint32_t offset;
 
 //! The number of bytes in the data range.
-@property (nonatomic, readonly) uint16_t length;
+@property (nonatomic, assign, readonly) uint16_t length;
 
 //!
-@property (nonatomic, readonly) MKDataInCodeEntryType kind;
+@property (nonatomic, assign, readonly) MKDataInCodeEntryType kind;
 
 @end
 

@@ -98,13 +98,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! An offset into the \c __LINKEDIT string table, or zero if the symbol has
 //! a null, "", name.
-@property (nonatomic, readonly) uint32_t strx;
+@property (nonatomic, assign, readonly) uint32_t strx;
 //! Type information for the symbol.  This is actually a bitfield, the format
 //! of which is discussed in <mach-o/nlist.h>.
-@property (nonatomic, readonly) uint8_t type;
-@property (nonatomic, readonly) uint8_t sect;
-@property (nonatomic, readonly) uint16_t desc;
-@property (nonatomic, readonly) uint64_t value;
+@property (nonatomic, assign, readonly) uint8_t type;
+@property (nonatomic, assign, readonly) uint8_t sect;
+@property (nonatomic, assign, readonly) uint16_t desc;
+@property (nonatomic, assign, readonly) uint64_t value;
 
 @end
 

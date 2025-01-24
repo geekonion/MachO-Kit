@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! 
-@property (nonatomic, readonly) NSArray<MKDataInCodeEntry*> *entries;
+@property (nonatomic, strong, readonly) NSArray<MKDataInCodeEntry*> *entries;
 
 @end
 

@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! Returns the threaded bind command sub-opcode that this class parses.
 //!
 //! Subclasses must implement the getter for this property.
-@property (class, nonatomic, readonly) uint8_t subopcode;
+@property (class, nonatomic, assign, readonly) uint8_t subopcode;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Threaded Bind Command Values
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The threaded bind command sub-opcode.
-@property (nonatomic, readonly) uint8_t subopcode;
+@property (nonatomic, assign, readonly) uint8_t subopcode;
 
 @end
 

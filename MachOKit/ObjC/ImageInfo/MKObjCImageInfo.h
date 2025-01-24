@@ -40,9 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
     uint32_t _flags;
 }
 
-@property (nonatomic, readonly) MKObjCImageFlags imageFlags;
+@property (nonatomic, assign, readonly) MKObjCImageFlags imageFlags;
 
-@property (nonatomic, readonly) MKObjCImageSwiftVersion swiftVersion;
+@property (nonatomic, assign, readonly) MKObjCImageSwiftVersion swiftVersion;
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  objc_image_info Values
@@ -52,9 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 //!             structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint32_t version;
+@property (nonatomic, assign, readonly) uint32_t version;
 
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t flags;
 
 @end
 

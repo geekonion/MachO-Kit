@@ -41,10 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
   NSArray<MKCString *> *_strings;
 }
 
-@property (nonatomic, readonly) NSArray<MKCString*> *strings;
+@property (nonatomic, strong, readonly) NSArray<MKCString*> *strings;
 
 //! Number of strings
-@property (nonatomic, readonly) uint32_t nstrings;
+@property (nonatomic, assign, readonly) uint32_t nstrings;
 
 @end
 

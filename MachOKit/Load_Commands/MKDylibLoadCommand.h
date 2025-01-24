@@ -57,16 +57,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The pathname of the library.
-@property (nonatomic, readonly) MKCString *name;
+@property (nonatomic, strong, readonly) MKCString *name;
 
 //! The build time stamp of the library.
-@property (nonatomic, readonly) NSDate *timestamp;
+@property (nonatomic, strong, readonly) NSDate *timestamp;
 
 //! The current version number of the library.
-@property (nonatomic, readonly) MKDylibVersion *current_version;
+@property (nonatomic, strong, readonly) MKDylibVersion *current_version;
 
 //! The compatibility version number of the library.
-@property (nonatomic, readonly) MKDylibVersion *compatibility_version;
+@property (nonatomic, strong, readonly) MKDylibVersion *compatibility_version;
 
 @end
 

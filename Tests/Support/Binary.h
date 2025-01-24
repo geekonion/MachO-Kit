@@ -32,27 +32,27 @@
 
 - (instancetype)initWithURL:(NSURL*)url offset:(uint32_t)offset name:(NSString*)name;
 
-@property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) uint32_t offset;
+@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, assign, readonly) uint32_t offset;
 
-@property (nonatomic, readonly) NSDictionary *machHeader;
-@property (nonatomic, readonly) NSArray *loadCommands;
-@property (nonatomic, readonly) NSArray *dependentLibraries;
-@property (nonatomic, readonly) NSArray *rebaseCommands;
-@property (nonatomic, readonly) NSArray *bindCommands;
-@property (nonatomic, readonly) NSArray *weakBindCommands;
-@property (nonatomic, readonly) NSArray *lazybindCommands;
-@property (nonatomic, readonly) NSArray *fixupAddresses;
-@property (nonatomic, readonly) NSArray *bindings;
-@property (nonatomic, readonly) NSArray *weakBindings;
-@property (nonatomic, readonly) NSArray *lazyBindings;
-@property (nonatomic, readonly) NSArray *exports;
-@property (nonatomic, readonly) NSArray *functionStarts;
-@property (nonatomic, readonly) NSArray *dataInCodeEntries;
-@property (nonatomic, readonly) NSArray *bsdSymbols;
-@property (nonatomic, readonly) NSArray *darwinSymbols;
-@property (nonatomic, readonly) NSArray *indirectSymbols;
-@property (nonatomic, readonly) NSDictionary *objcInfo;
+@property (nonatomic, strong, readonly) NSDictionary *machHeader;
+@property (nonatomic, strong, readonly) NSArray *loadCommands;
+@property (nonatomic, strong, readonly) NSArray *dependentLibraries;
+@property (nonatomic, strong, readonly) NSArray *rebaseCommands;
+@property (nonatomic, strong, readonly) NSArray *bindCommands;
+@property (nonatomic, strong, readonly) NSArray *weakBindCommands;
+@property (nonatomic, strong, readonly) NSArray *lazybindCommands;
+@property (nonatomic, strong, readonly) NSArray *fixupAddresses;
+@property (nonatomic, strong, readonly) NSArray *bindings;
+@property (nonatomic, strong, readonly) NSArray *weakBindings;
+@property (nonatomic, strong, readonly) NSArray *lazyBindings;
+@property (nonatomic, strong, readonly) NSArray *exports;
+@property (nonatomic, strong, readonly) NSArray *functionStarts;
+@property (nonatomic, strong, readonly) NSArray *dataInCodeEntries;
+@property (nonatomic, strong, readonly) NSArray *bsdSymbols;
+@property (nonatomic, strong, readonly) NSArray *darwinSymbols;
+@property (nonatomic, strong, readonly) NSArray *indirectSymbols;
+@property (nonatomic, strong, readonly) NSDictionary *objcInfo;
 
 @end
 
@@ -65,10 +65,10 @@
 
 - (instancetype)initWithURL:(NSURL*)url;
 
-@property (nonatomic, readonly) NSURL *url;
+@property (nonatomic, strong, readonly) NSURL *url;
 
-@property (nonatomic, readonly) NSDictionary<NSString*, id> *fatHeader;
-@property (nonatomic, readonly) NSDictionary *fatHeader_verbose;
-@property (nonatomic, readonly) NSArray /*Architecture*/ *architectures;
+@property (nonatomic, strong, readonly) NSDictionary<NSString*, id> *fatHeader;
+@property (nonatomic, strong, readonly) NSDictionary *fatHeader_verbose;
+@property (nonatomic, strong, readonly) NSArray /*Architecture*/ *architectures;
 
 @end

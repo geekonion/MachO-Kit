@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! The sub_library name.
-@property (nonatomic, readonly) MKCString *sub_library;
+@property (nonatomic, strong, readonly) MKCString *sub_library;
 
 @end
 

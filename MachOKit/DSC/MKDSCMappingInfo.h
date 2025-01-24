@@ -50,11 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 //!             info structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint64_t address;
-@property (nonatomic, readonly) uint64_t size;
-@property (nonatomic, readonly) uint64_t fileOffset;
-@property (nonatomic, readonly) vm_prot_t maxProt;
-@property (nonatomic, readonly) vm_prot_t initProt;
+@property (nonatomic, assign, readonly) uint64_t address;
+@property (nonatomic, assign, readonly) uint64_t size;
+@property (nonatomic, assign, readonly) uint64_t fileOffset;
+@property (nonatomic, assign, readonly) vm_prot_t maxProt;
+@property (nonatomic, assign, readonly) vm_prot_t initProt;
 
 @end
 

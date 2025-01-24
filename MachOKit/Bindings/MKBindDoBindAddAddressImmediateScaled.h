@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKBindDoBindAddAddressImmediateScaled : MKBindCommand <MKBindCommandOffsetAdjusting>
 
 //!
-@property (nonatomic, readonly) uint8_t scale;
+@property (nonatomic, assign, readonly) uint8_t scale;
 
 @end
 

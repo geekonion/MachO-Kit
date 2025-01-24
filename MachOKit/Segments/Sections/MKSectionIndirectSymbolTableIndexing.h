@@ -33,9 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 //----------------------------------------------------------------------------//
 @protocol MKSectionIndirectSymbolTableIndexing <NSObject>
 
-@property (nonatomic, readonly) NSRange indirectSymbolTableRange;
+@property (nonatomic, assign, readonly) NSRange indirectSymbolTableRange;
 
-@property (nonatomic, readonly) mk_vm_size_t indirectSymbolTableEntrySize;
+@property (nonatomic, assign, readonly) mk_vm_size_t indirectSymbolTableEntrySize;
 
 @end
 

@@ -48,9 +48,9 @@ typedef NS_OPTIONS(NSUInteger, MKNodeFieldOptionSetTraits) {
 //----------------------------------------------------------------------------//
 @protocol MKNodeFieldOptionSetType <MKNodeFieldNumericType>
 
-@property (nonatomic, readonly) MKNodeFieldOptionSetOptions *options;
+@property (nonatomic, strong, readonly) MKNodeFieldOptionSetOptions *options;
 
-@property (nonatomic, readonly) MKNodeFieldOptionSetTraits optionSetTraits;
+@property (nonatomic, assign, readonly) MKNodeFieldOptionSetTraits optionSetTraits;
 
 @end
 

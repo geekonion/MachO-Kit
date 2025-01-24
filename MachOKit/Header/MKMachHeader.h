@@ -54,15 +54,15 @@ NS_ASSUME_NONNULL_BEGIN
 //!             without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint32_t magic;
-@property (nonatomic, readonly) cpu_type_t cputype;
-@property (nonatomic, readonly) cpu_subtype_t cpusubtype;
-@property (nonatomic, readonly) uint32_t filetype;
-@property (nonatomic, readonly) uint32_t ncmds;
-@property (nonatomic, readonly) uint32_t sizeofcmds;
-@property (nonatomic, readonly) uint32_t flags;
+@property (nonatomic, assign, readonly) uint32_t magic;
+@property (nonatomic, assign, readonly) cpu_type_t cputype;
+@property (nonatomic, assign, readonly) cpu_subtype_t cpusubtype;
+@property (nonatomic, assign, readonly) uint32_t filetype;
+@property (nonatomic, assign, readonly) uint32_t ncmds;
+@property (nonatomic, assign, readonly) uint32_t sizeofcmds;
+@property (nonatomic, assign, readonly) uint32_t flags;
 
-@property (nonatomic, readonly) const struct mach_header *header;
+@property (nonatomic, assign, readonly) const struct mach_header *header;
 
 - (instancetype)initWithHeader:(struct mach_header *)header dataModel:(MKDataModel *)dataModel parent:(MKBackedNode *)parent;
 

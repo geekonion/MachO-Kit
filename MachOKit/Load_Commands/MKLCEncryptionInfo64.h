@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 //! Padding
-@property (nonatomic, readonly) uint32_t pad;
+@property (nonatomic, assign, readonly) uint32_t pad;
 
 @end
 
