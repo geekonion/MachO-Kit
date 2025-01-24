@@ -99,7 +99,12 @@
 - (NSString *)description {
     const char *path = _mapping->file->filepath;
     
-    return [NSString stringWithUTF8String:path].lastPathComponent;
+    NSString *name = [NSString stringWithUTF8String:path].lastPathComponent;
+    if (_fileOffset == 0) {
+        return name;
+    } else {
+        return [NSString stringWithFormat:@"%@ + %p", name, _fileOffset];
+    }
 }
 
 @end
