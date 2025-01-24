@@ -60,19 +60,20 @@
         MKDSCLocalSymbols *symbols = (id)self.parent;
         DyldSharedCache *dsc = symbols.dsc;
         const char *str_ptr = dsc->symbolFile.strings;
-        while (offset < _nodeSize)
-        {
-            
-            const char *ptr = str_ptr + offset;
-            NSString *str = [NSString stringWithUTF8String:ptr];
-            MKCString *string = [[MKCString alloc] initWithOffset:offset parent:self string:str];
-            
-            [strings setObject:string forKey:@(offset)];
-            [string release];
-            if (str.length == 0) {
-                offset += 1;
-            } else {
-                offset += str.length;
+        if (str_ptr) {
+            while (offset < _nodeSize)
+            {
+                const char *ptr = str_ptr + offset;
+                NSString *str = [NSString stringWithUTF8String:ptr];
+                MKCString *string = [[MKCString alloc] initWithOffset:offset parent:self string:str];
+                
+                [strings setObject:string forKey:@(offset)];
+                [string release];
+                if (str.length == 0) {
+                    offset += 1;
+                } else {
+                    offset += str.length;
+                }
             }
         }
         

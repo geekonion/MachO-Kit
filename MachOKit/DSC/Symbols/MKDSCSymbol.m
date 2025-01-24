@@ -77,6 +77,9 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
     MKDSCLocalSymbols *symbols = (id)self.parent.parent;
     DyldSharedCache *dsc = symbols.dsc;
     struct nlist_64 *entries = dsc->symbolFile.nlist;
+    if (!entries) {
+        return nil;
+    }
     struct nlist_64 entry = entries[offset];
     
     _strx = entry.n_un.n_strx;
