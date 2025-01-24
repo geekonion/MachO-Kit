@@ -29,6 +29,7 @@
 #import <Foundation/Foundation.h>
 
 #import <MachOKit/MKBackedNode.h>
+#import <MachOKit/DyldSharedCache.h>
 
 @class MKSharedCache;
 @class MKDSCLocalSymbolsHeader;
@@ -72,6 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //!
 @property (nonatomic, readonly, nullable) MKDSCDylibInfos *entriesTable;
+
+@property (nonatomic, readonly, nullable) DyldSharedCache *dsc;
 
 @end
 

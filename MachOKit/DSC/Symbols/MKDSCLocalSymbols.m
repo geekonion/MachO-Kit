@@ -36,7 +36,9 @@
 #import "MKDSCDylibInfos.h"
 
 //----------------------------------------------------------------------------//
-@implementation MKDSCLocalSymbols
+@implementation MKDSCLocalSymbols {
+    DyldSharedCache *_dsc;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithSharedCache:(MKSharedCache*)sharedCache error:(NSError**)error
@@ -76,6 +78,21 @@
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:localError.code underlyingError:localError description:@"Failed to load symbols info header."];
         [self release]; return nil;
     }
+    
+    return self;
+}
+
+- (instancetype)initWithSharedCache:(MKSharedCache*)sharedCache {
+    NSParameterAssert(sharedCache);
+    NSError *localError = nil;
+    
+    self = [super initWithParent:sharedCache error:&localError];
+    if (self == nil) return nil;
+    
+    _size = sharedCache.header.localSymbolsSize;
+    _dsc = sharedCache.dsc;
+    // ...but it will be if we can't map the symbols info header.
+    _header = [[MKDSCLocalSymbolsHeader alloc] initWithDSC:_dsc offset:0 fromParent:self error:&localError];
     
     return self;
 }
@@ -138,8 +155,8 @@
     if (_entriesTable == nil)
     @autoreleasepool {
         NSError *e = nil;
-        
-        _entriesTable = [[MKDSCDylibInfos alloc] initWithParent:self error:&e];
+        // 耗性能非常严重，暂不解析
+        //_entriesTable = [[MKDSCDylibInfos alloc] initWithParent:self error:&e];
         if (_entriesTable == nil)
             MK_PUSH_UNDERLYING_WARNING(stringTable, e, @"Could not load entries table.");
     }

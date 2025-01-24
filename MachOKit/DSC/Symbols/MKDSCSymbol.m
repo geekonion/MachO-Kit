@@ -69,14 +69,15 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
+- (instancetype)initWithIndex:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
 {
     self = [super initWithOffset:offset fromParent:parent error:error];
     if (self == nil) return nil;
     
-    struct nlist_64 entry;
-    if (!ReadNList(&entry, offset, parent, error))
-    { [self release]; return nil; }
+    MKDSCLocalSymbols *symbols = (id)self.parent.parent;
+    DyldSharedCache *dsc = symbols.dsc;
+    struct nlist_64 *entries = dsc->symbolFile.nlist;
+    struct nlist_64 entry = entries[offset];
     
     _strx = entry.n_un.n_strx;
     _type = entry.n_type;
@@ -84,7 +85,7 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
     _desc = entry.n_desc;
     _value = entry.n_value;
     
-    MKDSCLocalSymbols *localSymbolsRegion = [self nearestAncestorOfType:MKDSCLocalSymbols.class];
+    MKDSCLocalSymbols *localSymbols = [self nearestAncestorOfType:MKDSCLocalSymbols.class];
     
     // Lookup the symbol name in the string table.  Symbols with a index into
     // the string table of zero (n_un.n_strx == 0) are defined to have a
@@ -92,9 +93,9 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
     // have a zero string index.
     while (_strx != 0)
     {
-        MKDSCStringTable *stringTable = localSymbolsRegion.stringTable;
+        MKDSCStringTable *stringTable = localSymbols.stringTable;
         if (stringTable == nil) {
-            MK_PUSH_WARNING(name, MK_ENOT_FOUND, @"Local Symbols region %@ does not have a string table.", localSymbolsRegion);
+            MK_PUSH_WARNING(name, MK_ENOT_FOUND, @"Local Symbols region %@ does not have a string table.", localSymbols);
             break;
         }
         
@@ -110,10 +111,10 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
     
     // Lookup the dylib that this symbol belongs to.
     {
-        MKDSCDylibInfos *entries = localSymbolsRegion.entriesTable;
+        MKDSCDylibInfos *entries = localSymbols.entriesTable;
         
         if (entries == nil) {
-            MK_PUSH_WARNING(dylib, MK_ENOT_FOUND, @"Local Symbols region %@ does not have a dylib infos table.", localSymbolsRegion);
+            MK_PUSH_WARNING(dylib, MK_ENOT_FOUND, @"Local Symbols region %@ does not have a dylib infos table.", localSymbols);
             return nil;
         }
         

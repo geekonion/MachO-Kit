@@ -80,6 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint16_t desc;
 @property (nonatomic, readonly) uint64_t value;
 
+- (instancetype)initWithIndex:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 @end
 
 NS_ASSUME_NONNULL_END

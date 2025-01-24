@@ -37,11 +37,9 @@
 - (MKDSCLocalSymbols*)localSymbols
 {
     if (_localSymbols == nil) {
-        NSError *e = nil;
-        
-        _localSymbols = [[MKDSCLocalSymbols alloc] initWithSharedCache:self error:&e];
+        _localSymbols = [[MKDSCLocalSymbols alloc] initWithSharedCache:self];
         if (_localSymbols == nil)
-            MK_PUSH_UNDERLYING_WARNING(localSymbols, e, @"Could not load local symbols.");
+            MK_PUSH_UNDERLYING_WARNING(localSymbols, nil, @"Could not load local symbols.");
     }
     
     return _localSymbols;

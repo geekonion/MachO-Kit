@@ -57,32 +57,26 @@
     @autoreleasepool
     {
         NSMutableArray<MKDSCDylibSymbolInfo*> *entries = [[NSMutableArray alloc] initWithCapacity:count];
-        mk_vm_offset_t offset = 0;
+        mk_vm_offset_t dsi_offset = 0;
         
         for (uint32_t i = 0; i < count; i++)
         {
-            mk_error_t err;
             NSError *e = nil;
             
-            MKDSCDylibSymbolInfo *entry = [[MKDSCDylibSymbolInfo alloc] initWithOffset:offset fromParent:self error:&e];
+            MKDSCDylibSymbolInfo *entry = [[MKDSCDylibSymbolInfo alloc] initWithIndex:i fromParent:self error:&e];
             if (entry == nil) {
-                MK_PUSH_UNDERLYING_WARNING(entries, e, @"Could not load entry at offset %" MK_VM_PRIiOFFSET ".", offset);
+                MK_PUSH_UNDERLYING_WARNING(entries, e, @"Could not load entry at offset %" MK_VM_PRIiOFFSET ".", dsi_offset);
                 break;
             }
             
             [entries addObject:entry];
             [entry release];
-            
-            if ((err = mk_vm_offset_add(offset, entry.nodeSize, &offset))) {
-                MK_PUSH_UNDERLYING_WARNING(entries, MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, entry.nodeSize), @"Aborted entry parsing after index " PRIi32 ".", i);
-                break;
-            }
         }
         
         _entries = [entries copy];
         [entries release];
         
-        _nodeSize = offset;
+        _nodeSize = count * sizeof(dc_local_symbols_entry_t);
     }
     
     return self;
@@ -97,7 +91,7 @@
     MKDSCLocalSymbolsHeader *symbolsInfo = symbols.header;
     NSParameterAssert(symbolsInfo);
     
-    mk_vm_offset_t entiresOffset = symbolsInfo.stringsOffset;
+    mk_vm_offset_t entiresOffset = symbolsInfo.entriesOffset;
     uint32_t entriesCount = symbolsInfo.entriesCount;
     
     // Verify that offset is in range of the entries table.

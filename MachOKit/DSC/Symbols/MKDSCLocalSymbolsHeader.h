@@ -29,6 +29,7 @@
 #import <Foundation/Foundation.h>
 
 #import <MachOKit/MKOffsetNode.h>
+#import <MachOKit/DyldSharedCache.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -58,6 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) uint32_t entriesOffset;
 @property (nonatomic, readonly) uint32_t entriesCount;
 
+- (instancetype)initWithDSC:(DyldSharedCache *)dsc offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 @end
 
 NS_ASSUME_NONNULL_END

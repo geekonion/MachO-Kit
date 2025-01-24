@@ -27,6 +27,9 @@
 
 #import "MKDSCDylibSymbolInfo.h"
 #import "NSError+MK.h"
+#import "DyldSharedCache.h"
+#import "MKDSCLocalSymbols.h"
+#import "MKDSCDylibInfos.h"
 
 #include "dyld_cache_format.h"
 
@@ -34,18 +37,26 @@
 @implementation MKDSCDylibSymbolInfo
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
+- (instancetype)initWithIndex:(uint32_t)index fromParent:(MKBackedNode*)parent error:(NSError**)error
 {
     NSParameterAssert(parent.dataModel);
     
-    self = [super initWithOffset:offset fromParent:parent error:error];
+    mk_vm_offset_t offset = index * sizeof(dc_local_symbols_entry_t);
+    self = [super initWithOffset:index fromParent:parent error:error];
     if (self == nil) return nil;
     
-    struct dyld_cache_local_symbols_entry sclse;
-    if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&sclse length:sizeof(sclse) requireFull:YES error:error] < sizeof(sclse))
-    { [self release]; return nil; }
+    MKDSCDylibInfos *infos = (id)self.parent;
+    MKDSCLocalSymbols *symbols = (id)infos.parent;
+    DyldSharedCache *dsc = symbols.dsc;
+    DyldSharedCacheFile *symDsc = dsc->files[dsc->symbolFile.index];
+    struct dyld_cache_header *symHeader = &symDsc->header;
+    uint64_t sym_off = symHeader->localSymbolsOffset;
+    dc_local_symbols_entry_t sclse = {};
+    if (sym_off) {
+        dsc_file_read_at_offset(symDsc, sym_off + infos.nodeOffset + offset, sizeof(sclse), &sclse);
+    }
     
-    _dylibOffset = MKSwapLValue32(sclse.dylibOffset, self.dataModel);
+    _dylibOffset = MKSwapLValue64(sclse.dylibOffset, self.dataModel);
     _nlistStartIndex = MKSwapLValue32(sclse.nlistStartIndex, self.dataModel);
     _nlistCount = MKSwapLValue32(sclse.nlistCount, self.dataModel);
     

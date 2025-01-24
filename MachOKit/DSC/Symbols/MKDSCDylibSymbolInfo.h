@@ -30,12 +30,18 @@
 
 #import <MachOKit/MKOffsetNode.h>
 
+#ifdef __LP64__
+typedef struct dyld_cache_local_symbols_entry_64 dc_local_symbols_entry_t;
+#else
+typedef struct dyld_cache_local_symbols_entry dc_local_symbols_entry_t;
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
 //----------------------------------------------------------------------------//
 @interface MKDSCDylibSymbolInfo : MKOffsetNode {
 @package
-    uint32_t _dylibOffset;
+    uint64_t _dylibOffset;
     uint32_t _nlistStartIndex;
     uint32_t _nlistCount;
 }
@@ -48,10 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
 //!             entry structure without modification or cleanup.
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
-@property (nonatomic, readonly) uint32_t dylibOffset;
+@property (nonatomic, readonly) uint64_t dylibOffset;
 @property (nonatomic, readonly) uint32_t nlistStartIndex;
 @property (nonatomic, readonly) uint32_t nlistCount;
 
+- (instancetype)initWithIndex:(uint32_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error;
 @end
 
 NS_ASSUME_NONNULL_END

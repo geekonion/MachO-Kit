@@ -62,7 +62,7 @@
             mk_error_t err;
             NSError *e = nil;
             
-            MKDSCSymbol *symbol = [[MKDSCSymbol alloc] initWithOffset:offset fromParent:self error:&e];
+            MKDSCSymbol *symbol = [[MKDSCSymbol alloc] initWithIndex:i fromParent:self error:&e];
             if (symbol == nil) {
                 MK_PUSH_UNDERLYING_WARNING(symbols, e, @"Could not load symbol at offset %" MK_VM_PRIiOFFSET ".", offset);
                 break;
@@ -96,7 +96,7 @@
     NSParameterAssert(symbolsInfo);
     
     mk_vm_offset_t symbolsOffset = symbolsInfo.nlistOffset;
-    uint32_t symbolsCount = symbolsInfo.nlistOffset;
+    uint32_t symbolsCount = symbolsInfo.nlistCount;
     unsigned int symbolSize = symbols.dataModel.pointerSize == 8 ? sizeof(struct nlist_64) : sizeof(struct nlist);
     
     // Verify that offset is in range of the symbols table.
@@ -127,6 +127,16 @@
     [_symbols release];
     
     [super dealloc];
+}
+
+- (NSData *)data {
+    MKDSCLocalSymbols *symbols = (id)self.parent;
+    DyldSharedCache *dsc = symbols.dsc;
+    struct nlist_64 *entries = dsc->symbolFile.nlist;
+    uint64_t length = dsc->symbolFile.nlistCount * sizeof(struct nlist_64);
+    NSData *data = [NSData dataWithBytes:entries length:length];
+    
+    return data;
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

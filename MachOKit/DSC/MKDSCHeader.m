@@ -46,8 +46,14 @@
     
     _mappingCount = dsc->mappingCount;
     _imagesCount = dsc->containedImageCount;
-    _localSymbolsSize = dsc->symbolFile.nlistCount;
     _dyldBaseAddress = dsc->baseAddress;
+    
+    DyldSharedCacheFile *symDsc = dsc->files[dsc->symbolFile.index];
+    if (symDsc) {
+        struct dyld_cache_header *symbolCacheHeader = &symDsc->header;
+        _localSymbolsSize = symbolCacheHeader->localSymbolsSize;
+        _localSymbolsOffset = symbolCacheHeader->localSymbolsOffset;
+    }
     
     return self;
 }

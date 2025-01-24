@@ -30,6 +30,7 @@
 #import "MKCString.h"
 #import "MKDSCLocalSymbols.h"
 #import "MKDSCLocalSymbolsHeader.h"
+#import "DyldSharedCache.h"
 
 //----------------------------------------------------------------------------//
 @implementation MKDSCStringTable
@@ -50,36 +51,28 @@
         
         return self;
     }
-    
-    _nodeSize = [self.memoryMap mappingSizeAtOffset:0 fromAddress:self.nodeContextAddress length:size error:error];
-    // This is not an error - we may still be able to read some strings.
-    if (_nodeSize < size) {
-        MK_PUSH_WARNING(nodeSize, MK_EINVALID_DATA, @"Mappable memory at address 0x%" MK_VM_PRIxADDR " for %@ is less than the expected size %" MK_VM_PRIiSIZE ".", self.nodeContextAddress, NSStringFromClass(self.class), size);
-    }
-    
+    _nodeSize = size;
     // Read strings
     @autoreleasepool
     {
         NSMutableDictionary<NSNumber*, MKCString*> *strings = [[NSMutableDictionary alloc] init];
         mk_vm_offset_t offset = 0;
-        
+        MKDSCLocalSymbols *symbols = (id)self.parent;
+        DyldSharedCache *dsc = symbols.dsc;
+        const char *str_ptr = dsc->symbolFile.strings;
         while (offset < _nodeSize)
         {
-            mk_error_t err;
-            NSError *e = nil;
             
-            MKCString *string = [[MKCString alloc] initWithOffset:offset fromParent:self error:&e];
-            if (string == nil) {
-                MK_PUSH_UNDERLYING_WARNING(strings, e, @"Could not load CString at offset %" MK_VM_PRIiOFFSET ".", offset);
-                break;
-            }
+            const char *ptr = str_ptr + offset;
+            NSString *str = [NSString stringWithUTF8String:ptr];
+            MKCString *string = [[MKCString alloc] initWithOffset:offset parent:self string:str];
             
             [strings setObject:string forKey:@(offset)];
             [string release];
-            
-            if ((err = mk_vm_offset_add(offset, string.nodeSize, &offset))) {
-                MK_PUSH_UNDERLYING_WARNING(strings, MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, string.nodeSize), @"Aborted string parsing after offset %" MK_VM_PRIiOFFSET ".", offset);
-                break;
+            if (str.length == 0) {
+                offset += 1;
+            } else {
+                offset += str.length;
             }
         }
         
@@ -88,6 +81,14 @@
     }
     
     return self;
+}
+
+- (NSData *)data {
+    MKDSCLocalSymbols *symbols = (id)self.parent;
+    DyldSharedCache *dsc = symbols.dsc;
+    const char *str_ptr = dsc->symbolFile.strings;
+    
+    return [NSData dataWithBytes:str_ptr length:dsc->symbolFile.stringsSize];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -147,7 +148,6 @@
     strings.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeWithParent;
     
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        strings.build
     ]];
 }
 

@@ -55,6 +55,31 @@
     return self;
 }
 
+- (instancetype)initWithDSC:(DyldSharedCache *)dsc offset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
+{
+    NSParameterAssert(parent.dataModel);
+    
+    self = [super initWithOffset:offset fromParent:parent error:error];
+    if (self == nil) return nil;
+    
+    DyldSharedCacheFile *symDsc = dsc->files[dsc->symbolFile.index];
+    struct dyld_cache_header *symHeader = &symDsc->header;
+    uint64_t sym_off = symHeader->localSymbolsOffset;
+    struct dyld_cache_local_symbols_info sclsi;
+    if (sym_off) {
+        dsc_file_read_at_offset(symDsc, sym_off, sizeof(sclsi), &sclsi);
+    }
+    
+    _nlistOffset = MKSwapLValue32(sclsi.nlistOffset, self.dataModel);
+    _nlistCount = MKSwapLValue32(sclsi.nlistCount, self.dataModel);
+    _stringsOffset = MKSwapLValue32(sclsi.stringsOffset, self.dataModel);
+    _stringsSize = MKSwapLValue32(sclsi.stringsSize, self.dataModel);
+    _entriesOffset = MKSwapLValue32(sclsi.entriesOffset, self.dataModel);
+    _entriesCount = MKSwapLValue32(sclsi.entriesCount, self.dataModel);
+    
+    return self;
+}
+
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Local Symbols Info Struct Values
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

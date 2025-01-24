@@ -337,7 +337,7 @@
         mappings.build,
         images.build,
 //        slideInfo.build,
-        //symbols.build
+        symbols.build
     ]];
 }
 

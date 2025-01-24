@@ -88,6 +88,7 @@ DyldSharedCacheMapping *dsc_lookup_mapping(DyldSharedCache *sharedCache, uint64_
 void *dsc_find_buffer(DyldSharedCache *sharedCache, uint64_t vmaddr, uint64_t size, bool *needFree);
 
 int dsc_read_from_vmaddr(DyldSharedCache *sharedCache, uint64_t vmaddr, size_t size, void *outBuf);
+int dsc_file_read_at_offset(DyldSharedCacheFile *dscFile, uint64_t offset, size_t size, void *outBuf);
 
 //void dsc_enumerate_images(DyldSharedCache *sharedCache, void (^enumeratorBlock)(const char *path, DyldSharedCacheImage *imageHandle, MachO *imageMachO, bool *stop));
 //DyldSharedCacheImage *dsc_find_image_for_section_address(DyldSharedCache *sharedCache, uint64_t address);
