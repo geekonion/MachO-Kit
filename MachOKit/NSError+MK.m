@@ -44,7 +44,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     
     NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:nil description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -58,7 +57,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     
     NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:nil description:description reason:(NSString*)CFBridgingRelease(str)];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -72,7 +70,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     
     NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:nil description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -86,7 +83,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	
     NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:nil description:description reason:(NSString*)CFBridgingRelease(str)];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -102,7 +98,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	
     NSError *error = [self _mk_errorWithDomain:domain code:underlyingError.code property:nil underlyingError:underlyingError description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -116,7 +111,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     
     NSError *error = [self _mk_errorWithDomain:domain code:code property:nil underlyingError:underlyingError description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -130,7 +124,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
     
     NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:underlyingError description:(NSString*)CFBridgingRelease(str) reason:nil];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -144,7 +137,6 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 	
     NSError *error = [self _mk_errorWithDomain:domain code:code property:property underlyingError:underlyingError description:description reason:(NSString*)CFBridgingRelease(str)];
 	
-	CFRelease(str);
 	return error;
 }
 
@@ -152,8 +144,8 @@ NSString * const MKPropertyKey = @"MKPropertyKey";
 + (instancetype)_mk_errorWithDomain:(NSString*)domain code:(NSInteger)code property:(NSString*)property underlyingError:(NSError*)underlyingError description:(NSString*)description reason:(NSString*)reason
 {
 	NSUInteger count = 0;
-	NSString *keys[4];
-	id values[4];
+    NSString *keys[4] = {};
+    id values[4] = {};
 	
 	if (property != nil) {
 		keys[count] = MKPropertyKey;
