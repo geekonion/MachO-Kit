@@ -35,7 +35,7 @@
 	#define OPAQUE_FLAGS_MASK   		(uintptr_t)(1U)
 	#define OPAQUE_DISCRIMINATOR_MASK   (uintptr_t)(6U)
 
-#define OPAQUE_GET_VALUE(o)            	(id)CFBridgingRelease((void *)(o & ~OPAQUE_RESERVED_MASK))
+#define OPAQUE_GET_VALUE(o)            	(id)(o & ~OPAQUE_RESERVED_MASK)
 #define OPAQUE_GET_FLAGS(o)				(unsigned)(o & OPAQUE_FLAGS_MASK)
 #define OPAQUE_GET_DISCRIMINATOR(o)		(unsigned)((o & OPAQUE_DISCRIMINATOR_MASK) >> OPAQUE_FLAGS_MASK)
 
@@ -82,9 +82,18 @@ MKPtrInitialize(struct MKPtr *ptr, MKBackedNode *node, mk_vm_address_t addr, NSD
     ptr->parent = node;
     ptr->address = addr;
     if (ctx)
-		ptr->__opaque = OPAQUE_WITH_VALUE(0, ctx, DISCRIMINATOR_CONTEXT);
+		ptr->__opaque = OPAQUE_WITH_VALUE(0, [ctx retain], DISCRIMINATOR_CONTEXT);
     
     return true;
+}
+
+//|++++++++++++++++++++++++++++++++++++|//
+void
+MKPtrDestory(struct MKPtr *ptr)
+{
+    if (OPAQUE_GET_DISCRIMINATOR(ptr->__opaque) == DISCRIMINATOR_CONTEXT ||
+		OPAQUE_GET_DISCRIMINATOR(ptr->__opaque) == DISCRIMINATOR_POINTEE)
+        [OPAQUE_GET_VALUE(ptr->__opaque) release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -130,82 +139,90 @@ MKPtrPointee(struct MKPtr *ptr)
 		
 		// Retrieve the deferred context.
 		MKDeferredContextProvider deferredContextProvider = context[MKInitializationContextDeferredProvider];
-        do {
-            if (deferredContextProvider) {
-                MKResult<NSDictionary*> *deferredContext = deferredContextProvider();
-                if (deferredContext.value) {
-                    NSMutableDictionary *newContext = [context mutableCopy];
-                    [newContext addEntriesFromDictionary:deferredContext.value];
-                    
-                    context = newContext;
-                } else if (deferredContext.error) {
-                    NSString *description = @"Deferred context provider returned an error.";
-                    NSError *underlyingError = deferredContext.error;
-                    
-                    NSString *keys[3]; id values[3]; NSUInteger count = 0;
-                    if (description) keys[count] = NSLocalizedDescriptionKey; values[count] = description; count++;
-                    if (underlyingError) keys[count] = NSUnderlyingErrorKey; values[count] = underlyingError; count++;
-                    if (context) keys[count] = MKInitializationContextErrorKey; values[count] = context; count++;
-                    NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:values forKeys:keys count:count];
-                    
-                    NSError *error = [[NSError alloc] initWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR userInfo:userInfo];
-                    
-                    pointee = [MKResult resultWithError:error];
-                    
-                    break;
-                    //goto done;
-                } else {
-                    // Use the original context
-                }
-            }
-            
-            // Walk up the parent chain until we find a node containing the address.
-            boundingNode = [ptr->parent ancestorNodeOccupyingAddress:ptr->address type:MKNodeVMAddress targetClass:NULL includeReceiver:YES];
-            // Failing to find a bounding node is *NOT* an error.  Only raise an error if
-            // an error was encountered during the search.
-            if (boundingNode.error) {
-                NSString *description = [[NSString alloc] initWithFormat:@"Error locating an ancestor of %@ that contains the target address [%" MK_VM_PRIxADDR "].", ptr->parent, ptr->address];
-                NSError *underlyingError = boundingNode.error;
-                
-                NSString *keys[3]; id values[3]; NSUInteger count = 0;
-                if (description) keys[count] = NSLocalizedDescriptionKey; values[count] = description; count++;
-                if (underlyingError) keys[count] = NSUnderlyingErrorKey; values[count] = underlyingError; count++;
-                if (context) keys[count] = MKInitializationContextErrorKey; values[count] = context; count++;
-                NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:values forKeys:keys count:count];
-                
-                NSError *error = [[NSError alloc] initWithDomain:MKErrorDomain code:MK_ENOT_FOUND userInfo:userInfo];
-                
-                pointee = [MKResult resultWithError:error];
-                
-                break;
-                //goto done;
-            }
-            
-            NSMutableDictionary *previousContext = [[NSMutableDictionary alloc] init];
-            [context enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, __unused BOOL *stop) {
-                NSMutableDictionary *threadDict = NSThread.currentThread.threadDictionary;
-                [previousContext setValue:threadDict[key] forKey:key];
-                threadDict[key] = obj;
-            }];
-            
-            Class targetClass = context[MKInitializationContextTargetClass];
-            NSCAssert(targetClass == nil || [targetClass isSubclassOfClass:MKNode.class], @"The target class of a pointer must be an MKNode, not %@.", NSStringFromClass(targetClass));
-            pointee = [boundingNode.value childNodeAtVMAddress:ptr->address targetClass:targetClass];
-            
-            [context enumerateKeysAndObjectsUsingBlock:^(NSString *key, __unused id obj, __unused BOOL *stop) {
-                NSMutableDictionary *threadDict = NSThread.currentThread.threadDictionary;
-                threadDict[key] = previousContext[key];
-            }];
-        } while(false);
+		if (deferredContextProvider) {
+			MKResult<NSDictionary*> *deferredContext = deferredContextProvider();
+			if (deferredContext.value) {
+				NSMutableDictionary *newContext = [context mutableCopy];
+				[newContext addEntriesFromDictionary:deferredContext.value];
+				[context release];
+				context = newContext;
+			} else if (deferredContext.error) {
+				NSString *description = @"Deferred context provider returned an error.";
+				NSError *underlyingError = deferredContext.error;
+				
+				NSString *keys[3]; id values[3]; NSUInteger count = 0;
+				if (description) keys[count] = NSLocalizedDescriptionKey; values[count] = description; count++;
+				if (underlyingError) keys[count] = NSUnderlyingErrorKey; values[count] = underlyingError; count++;
+				if (context) keys[count] = MKInitializationContextErrorKey; values[count] = context; count++;
+				NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:values forKeys:keys count:count];
+				
+				NSError *error = [[NSError alloc] initWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR userInfo:userInfo];
+				
+				pointee = [[MKResult resultWithError:error] retain];
+				
+				[error release];
+				[userInfo release];
+				
+				goto done;
+			} else {
+				// Use the original context
+			}
+		}
 		
+		// Walk up the parent chain until we find a node containing the address.
+		boundingNode = [ptr->parent ancestorNodeOccupyingAddress:ptr->address type:MKNodeVMAddress targetClass:NULL includeReceiver:YES];
+		// Failing to find a bounding node is *NOT* an error.  Only raise an error if
+		// an error was encountered during the search.
+		if (boundingNode.error) {
+			NSString *description = [[NSString alloc] initWithFormat:@"Error locating an ancestor of %@ that contains the target address [%" MK_VM_PRIxADDR "].", ptr->parent, ptr->address];
+			NSError *underlyingError = boundingNode.error;
+			
+			NSString *keys[3]; id values[3]; NSUInteger count = 0;
+			if (description) keys[count] = NSLocalizedDescriptionKey; values[count] = description; count++;
+			if (underlyingError) keys[count] = NSUnderlyingErrorKey; values[count] = underlyingError; count++;
+			if (context) keys[count] = MKInitializationContextErrorKey; values[count] = context; count++;
+			NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:values forKeys:keys count:count];
+			
+			NSError *error = [[NSError alloc] initWithDomain:MKErrorDomain code:MK_ENOT_FOUND userInfo:userInfo];
+			
+			pointee = [[MKResult resultWithError:error] retain];
+			
+			[error release];
+			[userInfo release];
+			[description release];
+			
+			goto done;
+		}
+        
+        NSMutableDictionary *previousContext = [[NSMutableDictionary alloc] init];
+        [context enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, __unused BOOL *stop) {
+            NSMutableDictionary *threadDict = NSThread.currentThread.threadDictionary;
+            [previousContext setValue:threadDict[key] forKey:key];
+            threadDict[key] = obj;
+        }];
+        
+        Class targetClass = context[MKInitializationContextTargetClass];
+        NSCAssert(targetClass == nil || [targetClass isSubclassOfClass:MKNode.class], @"The target class of a pointer must be an MKNode, not %@.", NSStringFromClass(targetClass));
+        pointee = [[boundingNode.value childNodeAtVMAddress:ptr->address targetClass:targetClass] retain];
+        
+        [context enumerateKeysAndObjectsUsingBlock:^(NSString *key, __unused id obj, __unused BOOL *stop) {
+            NSMutableDictionary *threadDict = NSThread.currentThread.threadDictionary;
+            threadDict[key] = previousContext[key];
+        }];
+        [previousContext release];
+		
+    done:
 		if (pointee == nil || pointee.none) {
 			// If we did not find a pointee or encounter an error, save away the target
 			// class (if there is one) for any further calls to MKPtrTargetClass().
 			ptr->__opaque = OPAQUE_WITH_VALUE(HAS_ATTEMPTED_RESOLUTION, context[MKInitializationContextTargetClass], DISCRIMINATOR_CLASS);
+			// Need to release 'pointee' because it may be an empty MKResult.
+			[pointee release];
         } else {
 			ptr->__opaque = OPAQUE_WITH_VALUE(HAS_ATTEMPTED_RESOLUTION, pointee, DISCRIMINATOR_POINTEE);
         }
 		
+		[context release];
     }
 #endif // silence analyzer
 	
