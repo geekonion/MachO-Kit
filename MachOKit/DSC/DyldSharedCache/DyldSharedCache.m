@@ -629,6 +629,9 @@ uint64_t dsc_get_base_address(DyldSharedCache *sharedCache)
 
 void dsc_free(DyldSharedCache *sharedCache)
 {
+    if (!sharedCache) {
+        return;
+    }
     if (sharedCache->fileCount > 0) {
         for (unsigned i = 0; i < sharedCache->fileCount; i++) {
             DyldSharedCacheFile *file = sharedCache->files[i];
