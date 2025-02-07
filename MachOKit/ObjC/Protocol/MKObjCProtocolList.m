@@ -94,9 +94,9 @@ struct objc_protocollist_64 {
     [self.memoryMap remapBytesAtOffset:0 fromAddress:self.nodeContextAddress length:_nodeSize requireFull:NO withHandler:^(__unused vm_address_t address, vm_size_t length, NSError *e) {
         if (address == 0x0) { memoryMapError = e; return; }
         
-        if (length < _nodeSize) {
-            MK_PUSH_WARNING(elements, MK_ESIZE, @"Expected protocol list size is [%" MK_VM_PRIuSIZE "] bytes but only [%" MK_VM_PRIuSIZE "] bytes could be read.  Truncating.", _nodeSize, length);
-            _nodeSize = length;
+        if (length < self->_nodeSize) {
+            MK_PUSH_WARNING(elements, MK_ESIZE, @"Expected protocol list size is [%" MK_VM_PRIuSIZE "] bytes but only [%" MK_VM_PRIuSIZE "] bytes could be read.  Truncating.", self->_nodeSize, length);
+            self->_nodeSize = length;
         }
     }];
     

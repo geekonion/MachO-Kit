@@ -82,7 +82,10 @@ MKLEBRead(bool isSLEB, MKBackedNode *node, mk_vm_offset_t offset, void *LEBValue
     __block boolean_t success = false;
     
     [node.memoryMap remapBytesAtOffset:0 fromAddress:address length:maxLength requireFull:NO withHandler:^(vm_address_t address, vm_size_t length, NSError *e) {
-        if (length == 0x0) { MK_ERROR_OUT = e; return; }
+        if (e) {
+            NSLog(@"%@", e);
+        }
+        if (length == 0x0) { return; }
         
         mk_error_t err;
         uint8_t *start = (uint8_t*)address;
@@ -90,12 +93,14 @@ MKLEBRead(bool isSLEB, MKBackedNode *node, mk_vm_offset_t offset, void *LEBValue
 		
 		if (isSLEB) {
 			if ((err = _mk_mach_trie_copy_sleb128(start, end, LEBValue, ULEBSize))) {
-				MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Invalid sleb128 (err = %s).", mk_error_string(err)];
+				NSError *error = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Invalid sleb128 (err = %s).", mk_error_string(err)];
+                NSLog(@"%@", error);
 				return;
 			}
 		} else {
 			if ((err = _mk_mach_trie_copy_uleb128(start, end, LEBValue, ULEBSize))) {
-				MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Invalid uleb128 (err = %s).", mk_error_string(err)];
+                NSError *error = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Invalid uleb128 (err = %s).", mk_error_string(err)];
+                NSLog(@"%@", error);
 				return;
 			}
 		}

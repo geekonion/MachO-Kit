@@ -155,7 +155,7 @@
         
         __block BOOL keepGoing = YES;
         __block NSError *bindingError = nil;
-        __block struct MKBindContext context = { 0, .info = CFBridgingRetain(self) };
+        __block struct MKBindContext context = { 0, .info = (void *)CFBridgingRetain(self) };
         
         void (^doBind)(void) = ^{
             MKBindAction *action = [MKBindAction actionWithContext:&context error:&bindingError];
@@ -172,7 +172,7 @@
                 context.actionSize = 0;
             }
             context.actionSize += command.nodeSize;
-            context.command = CFBridgingRetain(command);
+            context.command = (void *)CFBridgingRetain(command);
             
             keepGoing &= [command bind:doBind withContext:&context error:&bindingError];
             

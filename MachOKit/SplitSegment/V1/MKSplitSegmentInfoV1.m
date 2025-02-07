@@ -117,12 +117,12 @@
         struct MKSplitSegmentInfoV1Context context = { 0 };
         
         for (MKSplitSegmentInfoV1Entry *entry in _entries) {
-            context.info = CFBridgingRetain(entry);
+            context.info = (void *)CFBridgingRetain(entry);
             context.type = entry.opcode.kind;
             context.address = 0;
             
             for (MKSplitSegmentInfoV1Offset *offset in entry.offsets) {
-                context.offset = CFBridgingRetain(offset);
+                context.offset = (void *)CFBridgingRetain(offset);
                 
                 mk_vm_offset_t nextOffset = offset.offset;
                 // A zero offset should have been picked up as a terminator.

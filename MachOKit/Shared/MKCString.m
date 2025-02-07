@@ -75,15 +75,15 @@
     [parent.memoryMap remapBytesAtOffset:offset fromAddress:parent.nodeContextAddress length:_nodeSize requireFull:NO withHandler:^(vm_address_t address, vm_size_t length, NSError *e) {
         if (address == 0x0) { memoryMapError = e; return; }
         
-        _nodeSize = strnlen((const char*)address, length);
-        _string = [[NSString alloc] initWithBytes:(const void*)address length:(NSUInteger)_nodeSize encoding:NSUTF8StringEncoding];
+        self->_nodeSize = strnlen((const char*)address, length);
+        self->_string = [[NSString alloc] initWithBytes:(const void*)address length:(NSUInteger)self->_nodeSize encoding:NSUTF8StringEncoding];
         
-        if (_string == nil)
+        if (self->_string == nil)
             MK_PUSH_WARNING(string, MK_EINVALID_DATA, @"Could not initialize NSString with bytes.");
         
-        if (_nodeSize < length) {
+        if (self->_nodeSize < length) {
             // Account for the NULL byte.
-            _nodeSize = _nodeSize + 1;
+            self->_nodeSize = self->_nodeSize + 1;
         } else {
             MK_PUSH_WARNING(sring, MK_EINVALID_DATA, @"String may not be properly terminated.");
         }

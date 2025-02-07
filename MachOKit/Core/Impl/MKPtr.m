@@ -198,7 +198,6 @@ MKPtrPointee(struct MKPtr *ptr)
             }];
         } while(false);
 		
-    done:
 		if (pointee == nil || pointee.none) {
 			// If we did not find a pointee or encounter an error, save away the target
 			// class (if there is one) for any further calls to MKPtrTargetClass().

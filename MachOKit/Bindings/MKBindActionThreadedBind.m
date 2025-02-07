@@ -78,7 +78,7 @@
     
     self = [super initWithContext:bindContext error:error];
     
-    bindContext->symbolName = CFBridgingRetain(previousSymbolName);
+    bindContext->symbolName = (void *)CFBridgingRetain(previousSymbolName);
     bindContext->symbolFlags = previousSymbolFlags;
     bindContext->addend = previousAddend;
     bindContext->libraryOrdinal = previousLibraryOrdinal;

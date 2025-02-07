@@ -309,7 +309,7 @@ DyldSharedCache *dsc_init_from_path_premapped(const char *path, uint32_t premapS
 
     uint64_t n_imageText = mainHeader->imagesTextCount;
     if (n_imageText) {
-        struct dyld_cache_image_text_info imageTexts[n_imageText] = {};
+        struct dyld_cache_image_text_info imageTexts[n_imageText];
         dsc_file_read_at_offset(mainFile, mainHeader->imagesTextOffset, sizeof(imageTexts), imageTexts);
         
         sharedCache->containedImageCount = n_imageText;

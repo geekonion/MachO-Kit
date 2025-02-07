@@ -58,6 +58,8 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
 {
     self.delegate = nil;
     _parent = nil;
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
@@ -195,7 +197,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
             }
         }
         
-        retValue = CFBridgingRetain(subclasses);
+        retValue = (void *)CFBridgingRetain(subclasses);
         
         free(classes);
         

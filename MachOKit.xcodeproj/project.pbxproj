@@ -4922,6 +4922,7 @@
 			baseConfigurationReference = D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = NO;
 				FRAMEWORK_VERSION = A;
 				GCC_PREFIX_HEADER = "Resources/MachOKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4933,7 +4934,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 			};
 			name = Debug;
 		};
@@ -4942,6 +4943,7 @@
 			baseConfigurationReference = D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = NO;
 				FRAMEWORK_VERSION = A;
 				GCC_PREFIX_HEADER = "Resources/MachOKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4954,7 +4956,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 			};
 			name = Release;
 		};

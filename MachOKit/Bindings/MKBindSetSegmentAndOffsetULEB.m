@@ -93,7 +93,7 @@
         }
         return NO;
     }
-    bindContext->segment = CFBridgingRetain(segment.value); // No retain
+    bindContext->segment = (void *)CFBridgingRetain(segment.value); // No retain
     
     return YES;
 }
