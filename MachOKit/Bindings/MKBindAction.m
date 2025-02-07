@@ -33,12 +33,17 @@
 #import "MKSegment.h"
 #import "MKSection.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKBindAction
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
-{ static void *subclasses = NULL; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithContext:(struct MKBindContext*)bindContext

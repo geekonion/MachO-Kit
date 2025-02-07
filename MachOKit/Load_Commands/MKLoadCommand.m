@@ -33,13 +33,18 @@
 
 extern const struct _mk_load_command_vtable* _mk_load_command_classes[];
 extern const uint32_t _mk_load_command_classes_count;
+static NSSet *_subclasses = NULL;
 
 //----------------------------------------------------------------------------//
 @implementation MKLoadCommand
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
-{ static void *subclasses = NULL; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithLoadCommandID:(uint32_t)commandID

@@ -34,12 +34,17 @@
 #import "MKMachHeader.h"
 #import "DyldSharedCache.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKSection
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
-{ static void *subclasses = NULL; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithSectionLoadCommand:(id<MKLCSection>)sectionLoadCommand inSegment:(MKSegment*)segment

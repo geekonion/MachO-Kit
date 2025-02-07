@@ -31,12 +31,17 @@
 #import "MKExportsInfo.h"
 #import "MKExportTrieBranch.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKExportTrieNode
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
-{ static void *subclasses = NULL; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithTerimalSize:(uint64_t)terminalSize contents:(uint8_t*)contents

@@ -32,6 +32,7 @@
 #import "MKLCSegment64.h"
 
 #import <objc/runtime.h>
+static NSSet *_subclasses = NULL;
 
 //----------------------------------------------------------------------------//
 @implementation MKSegment {
@@ -39,8 +40,12 @@
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
-{ static void *subclasses = NULL; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithSegmentLoadCommand:(id<MKLCSegment>)segmentLoadCommand

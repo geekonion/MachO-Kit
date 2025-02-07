@@ -34,12 +34,17 @@
 #import "MKStringTable.h"
 #import "MKSymbolTable.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKSymbol
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
-{ static void *subclasses = NULL; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithEntry:(struct nlist_64)nlist

@@ -99,8 +99,8 @@ MKLEBRead(bool isSLEB, MKBackedNode *node, mk_vm_offset_t offset, void *LEBValue
 			}
 		} else {
 			if ((err = _mk_mach_trie_copy_uleb128(start, end, LEBValue, ULEBSize))) {
-                NSError *error = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Invalid uleb128 (err = %s).", mk_error_string(err)];
-                NSLog(@"%@", error);
+//                NSError *error = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Invalid uleb128 (err = %s).", mk_error_string(err)];
+//                NSLog(@"%@", error);
 				return;
 			}
 		}

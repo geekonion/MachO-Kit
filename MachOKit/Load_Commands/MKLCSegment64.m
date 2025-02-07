@@ -465,7 +465,7 @@
         
         if (_sectname == nil)
             MK_PUSH_WARNING(sectname, MK_EINVALID_DATA, @"Could not form a string with data.");
-        else if (length >= sizeof(sect->sectname))
+        else if (length > sizeof(sect->sectname))
             MK_PUSH_WARNING(sectname, MK_EINVALID_DATA, @"String is not properly terminated.");
     }
     

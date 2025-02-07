@@ -59,7 +59,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
     self.delegate = nil;
     _parent = nil;
     
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, self.className);
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
@@ -154,29 +154,23 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (void **)_subclassesCache
++ (NSSet *)_subclassesCache
 { return NULL; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSSet*)subclasses
 {
-    void **cache = [self _subclassesCache];
-    if (!cache) {
-        return nil;
-    }
-    
-    // Check if we have cached data and return it.
-    void *retValue = *cache;
-    if (retValue)
-        return CFBridgingRelease(retValue);
-    
+    NSMutableSet <Class>*subclasses = NULL;
     @synchronized(self) {
-        // Make sure another thread did not beat us.
-        retValue = *cache;
-        if (retValue)
-            return CFBridgingRelease(retValue);
+        NSSet *cache = [self _subclassesCache];
+        if (cache) {
+            return cache;
+        }
         
-        NSMutableSet <Class>*subclasses = [NSMutableSet set];
+        subclasses = [NSMutableSet set];
         
         unsigned classCount;
         Class *classes = objc_copyClassList(&classCount);
@@ -197,16 +191,13 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
             }
         }
         
-        retValue = (void *)CFBridgingRetain(subclasses);
-        
         free(classes);
         
-        if (cache)
-            *cache = retValue;
+        [self _setSubclassesCache:subclasses];
     }
     
-    NSAssert(retValue != nil, @"Expected to have a list of subclasses before returning.");
-    return CFBridgingRelease(retValue);
+
+    return subclasses;
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
