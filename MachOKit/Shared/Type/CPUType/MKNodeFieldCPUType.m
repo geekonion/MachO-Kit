@@ -44,7 +44,7 @@ MKMakeSingletonInitializer(MKNodeFieldCPUType)
     if (s_CPUTypes != nil && s_Formatter != nil)
         return;
     
-    s_CPUTypes = [@{
+    s_CPUTypes = @{
         _$(CPU_TYPE_ANY): @"CPU_TYPE_ANY",
         _$(CPU_TYPE_VAX): @"CPU_TYPE_VAX",
         /* skip                ((cpu_type_t) 2)    */
@@ -72,7 +72,7 @@ MKMakeSingletonInitializer(MKNodeFieldCPUType)
         /* skip                ((cpu_type_t) 20)    */
         /* skip                ((cpu_type_t) 21)    */
         /* skip                ((cpu_type_t) 22)    */
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_TYPE";

@@ -37,15 +37,7 @@
     MKOptionSetFormatter *retValue = [self new];
     retValue.options = options;
     
-    return [retValue autorelease];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_options release];
-    
-    [super dealloc];
+    return retValue;
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -58,7 +50,7 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _options = [[aDecoder decodeObjectOfClass:NSDictionary.class forKey:@"options"] retain];
+    _options = [aDecoder decodeObjectOfClass:NSDictionary.class forKey:@"options"];
     _zeroBehavior = (NSUInteger)[aDecoder decodeIntegerForKey:@"zeroBehavior"];
     
     return self;

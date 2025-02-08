@@ -261,7 +261,7 @@
 		D03EF60220411E9700B8022C /* MKNodeFieldObjCImageInfoFlagsType.m in Sources */ = {isa = PBXBuildFile; fileRef = D03EF60020411E9700B8022C /* MKNodeFieldObjCImageInfoFlagsType.m */; };
 		D03EFF3A203E93B400040928 /* MKFormatterSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D03EFF2A203E939400040928 /* MKFormatterSpec.m */; };
 		D04269E51DD931E40091AB2A /* MKPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = D04269E31DD931E40091AB2A /* MKPtr.h */; };
-		D04269E61DD931E40091AB2A /* MKPtr.m in Sources */ = {isa = PBXBuildFile; fileRef = D04269E41DD931E40091AB2A /* MKPtr.m */; };
+		D04269E61DD931E40091AB2A /* MKPtr.m in Sources */ = {isa = PBXBuildFile; fileRef = D04269E41DD931E40091AB2A /* MKPtr.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D04269F71DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.h in Headers */ = {isa = PBXBuildFile; fileRef = D04269F51DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D04269F81DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.m in Sources */ = {isa = PBXBuildFile; fileRef = D04269F61DD96EF30091AB2A /* MKOffsetNode+AddressBasedInitialization.m */; };
 		D044640D1C645F1200CF15C2 /* dyld_cache_format.h in Headers */ = {isa = PBXBuildFile; fileRef = D044640C1C645F1200CF15C2 /* dyld_cache_format.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -4921,7 +4921,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = NO;
 				FRAMEWORK_VERSION = A;
 				GCC_PREFIX_HEADER = "Resources/MachOKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4933,7 +4934,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 			};
 			name = Debug;
 		};
@@ -4941,7 +4942,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D000F4001AF4B3E90004DAF6 /* Framework.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = NO;
 				FRAMEWORK_VERSION = A;
 				GCC_PREFIX_HEADER = "Resources/MachOKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4954,7 +4956,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "Resources/MachOKit-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 			};
 			name = Release;
 		};

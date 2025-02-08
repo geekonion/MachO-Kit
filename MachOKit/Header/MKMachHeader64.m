@@ -30,6 +30,7 @@
 #import "DyldSharedCache.h"
 #import "MKMachO.h"
 #import "MKSegment.h"
+#import "MKMachO+Segments.h"
 
 void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint32_t *offset2_ptr, DyldSharedCache *dsc);
 
@@ -47,7 +48,7 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
     
     if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:&memoryMapError] < sizeof(lc)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read header."];
-        [self release]; return nil;
+        return nil;
     }
     
     _reserved = MKSwapLValue32(lc.reserved, self.dataModel);

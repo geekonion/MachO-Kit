@@ -53,7 +53,7 @@
     if (self == nil) return nil;
     
     _offset = offset;
-    _type = [type retain];
+    _type = type;
     
     return self;
 }
@@ -61,14 +61,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { return [self initWithOffset:0 size:0]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_type release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldDataRecipe

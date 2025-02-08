@@ -65,7 +65,7 @@ static TYPE *s_ ## TYPE = nil; \
             s_ ## TYPE = [TYPE new]; \
         return s_ ## TYPE; \
     } else { \
-        return [[self new] autorelease]; /*TODO - */ \
+        return [self new]; /*TODO - */ \
     } \
 } \
 - (instancetype)init \
@@ -74,8 +74,7 @@ static TYPE *s_ ## TYPE = nil; \
         return [super init]; \
     } \
     \
-    [self release]; \
-    return [[TYPE sharedInstance] retain]; \
+    return [TYPE sharedInstance]; \
 }
 
 

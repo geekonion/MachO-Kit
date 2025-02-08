@@ -85,7 +85,7 @@
     static MKHexNumberFormatter *s_HexFormatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_HexFormatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:SIZE_T_MAX] retain];
+        s_HexFormatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:SIZE_T_MAX];
     });
     
     return s_HexFormatter;
@@ -97,7 +97,7 @@
     static MKHexNumberFormatter *s_Hex8Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_Hex8Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:2] retain];
+        s_Hex8Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:2];
     });
     
     return s_Hex8Formatter;
@@ -109,7 +109,7 @@
     static MKHexNumberFormatter *s_Hex16Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_Hex16Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:4] retain];
+        s_Hex16Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:4];
     });
     
     return s_Hex16Formatter;
@@ -121,7 +121,7 @@
     static MKHexNumberFormatter *s_Hex32Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_Hex32Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:8] retain];
+        s_Hex32Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:8];
     });
     
     return s_Hex32Formatter;
@@ -133,7 +133,7 @@
     static MKHexNumberFormatter *s_Hex64Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_Hex64Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:16] retain];
+        s_Hex64Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:16];
     });
     
     return s_Hex64Formatter;
@@ -145,7 +145,7 @@
     static MKHexNumberFormatter *s_UppercaseHexFormatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_UppercaseHexFormatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:SIZE_T_MAX uppercase:YES] retain];
+        s_UppercaseHexFormatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:SIZE_T_MAX uppercase:YES];
     });
     
     return s_UppercaseHexFormatter;
@@ -157,7 +157,7 @@
     static MKHexNumberFormatter *s_UppercaseHex8Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_UppercaseHex8Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:2 uppercase:YES] retain];
+        s_UppercaseHex8Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:2 uppercase:YES];
     });
     
     return s_UppercaseHex8Formatter;
@@ -169,7 +169,7 @@
     static MKHexNumberFormatter *s_UppercaseHex16Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_UppercaseHex16Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:4 uppercase:YES] retain];
+        s_UppercaseHex16Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:4 uppercase:YES];
     });
     
     return s_UppercaseHex16Formatter;
@@ -181,7 +181,7 @@
     static MKHexNumberFormatter *s_UppercaseHex32Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_UppercaseHex32Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:8 uppercase:YES] retain];
+        s_UppercaseHex32Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:8 uppercase:YES];
     });
     
     return s_UppercaseHex32Formatter;
@@ -193,7 +193,7 @@
     static MKHexNumberFormatter *s_UppercaseHex64Formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_UppercaseHex64Formatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:16 uppercase:YES] retain];
+        s_UppercaseHex64Formatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:16 uppercase:YES];
     });
     
     return s_UppercaseHex64Formatter;
@@ -205,7 +205,7 @@
     static MKHexNumberFormatter *s_HexCompactFormatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_HexCompactFormatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:0] retain];
+        s_HexCompactFormatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:0];
     });
     
     return s_HexCompactFormatter;
@@ -217,7 +217,7 @@
     static MKHexNumberFormatter *s_UppercaseHexCompactFormatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_UppercaseHexCompactFormatter = [[MKHexNumberFormatter hexNumberFormatterWithDigits:0 uppercase:YES] retain];
+        s_UppercaseHexCompactFormatter = [MKHexNumberFormatter hexNumberFormatterWithDigits:0 uppercase:YES];
     });
     
     return s_UppercaseHexCompactFormatter;

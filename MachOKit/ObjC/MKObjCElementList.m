@@ -51,7 +51,7 @@ struct objc_entlist {
     struct objc_entlist lst;
     if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&lst length:sizeof(lst) requireFull:YES error:error] < sizeof(lst)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read entity list header."];
-        [self release]; return nil;
+        return nil;
     }
     
     _entsizeAndFlags = MKSwapLValue32(lst.entsizeAndFlags, dataModel);
@@ -60,7 +60,7 @@ struct objc_entlist {
     // Compute the node size
     if ((err = mk_vm_size_add_with_multiply(sizeof(struct objc_entlist), self.entsize, _count, &_nodeSize))) {
         MK_ERROR_OUT = MK_MAKE_VM_SIZE_ADD_WITH_MULTIPLY_ARITHMETIC_ERROR(err, _nodeSize, self.entsize, _count);
-        [self release]; return nil;
+        return nil;
     }
     
     // Check if the full length is mappable.  If it is not, shrink the size to
@@ -68,15 +68,15 @@ struct objc_entlist {
     [self.memoryMap remapBytesAtOffset:0 fromAddress:self.nodeContextAddress length:_nodeSize requireFull:NO withHandler:^(vm_address_t address, vm_size_t length, NSError *e) {
         if (address == 0x0) { memoryMapError = e; return; }
         
-        if (length < _nodeSize) {
-            MK_PUSH_WARNING(elements, MK_ESIZE, @"Expected element list size is [%" MK_VM_PRIuSIZE "] bytes but only [%" MK_VM_PRIuSIZE "] bytes could be read.  Truncating.", _nodeSize, length);
-            _nodeSize = length;
+        if (length < self->_nodeSize) {
+            MK_PUSH_WARNING(elements, MK_ESIZE, @"Expected element list size is [%" MK_VM_PRIuSIZE "] bytes but only [%" MK_VM_PRIuSIZE "] bytes could be read.  Truncating.", self->_nodeSize, length);
+            self->_nodeSize = length;
         }
     }];
     
     if (memoryMapError) {
         MK_ERROR_OUT = memoryMapError;
-        [self release]; return nil;
+        return nil;
     }
     
     // In the interest of robustness, we won't care if all/part of the node
@@ -122,27 +122,16 @@ struct objc_entlist {
             // data.
             if (offset > _nodeSize) {
                 MK_PUSH_WARNING(elements, MK_EOUT_OF_RANGE, @"Part of element at index [%" PRIu32 "] is beyond element list size.", i);
-                [element release];
                 break;
             }
             
             [elements addObject:element];
-            [element release];
         }
         
-        _elements = [elements copy];
-        [elements release];
+        _elements = elements;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_elements release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

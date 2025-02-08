@@ -56,7 +56,7 @@
     
     struct entry_point_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _entryoff = MKSwapLValue64(lc.entryoff, self.macho.dataModel);
     _stacksize = MKSwapLValue64(lc.stacksize, self.macho.dataModel);

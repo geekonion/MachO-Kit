@@ -103,9 +103,6 @@
     
     type.type = [MKNodeFieldTypeBitfield bitfieldWithType:(id)type.type bits:@[symbolTypeMask, STABTypeMask] name:nil];
     
-    [STABTypeMask release];
-    [symbolTypeMask release];
-    
     return type;
 }
 

@@ -43,10 +43,10 @@ MKMakeSingletonInitializer(MKNodeFieldBindSymbolFlagsType)
     if (s_Options != nil && s_Formatter != nil)
         return;
     
-    s_Options = [@{
+    s_Options = @{
         _$((uint8_t)BIND_SYMBOL_FLAGS_WEAK_IMPORT): @"BIND_SYMBOL_FLAGS_WEAK_IMPORT",
         _$((uint8_t)BIND_SYMBOL_FLAGS_NON_WEAK_DEFINITION): @"BIND_SYMBOL_FLAGS_NON_WEAK_DEFINITION"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_Options;

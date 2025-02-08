@@ -142,7 +142,7 @@
         else if (leftAddr < rightAddr) return NSOrderedAscending;
         else return NSOrderedDescending;
     }];
-    return [[filteredArray copy] autorelease];
+    return filteredArray;
 }
 
 + (MKResult<__kindof MKBackedNode *> *)childNodeOccupyingVMAddress:(mk_vm_address_t)address targetClass:(Class)targetClass inSortedArray:(NSArray<__kindof MKBackedNode *> *)array {

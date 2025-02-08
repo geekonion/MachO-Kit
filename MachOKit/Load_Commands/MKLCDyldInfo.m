@@ -64,7 +64,7 @@
     
     struct dyld_info_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _rebase_off = MKSwapLValue32(lc.rebase_off, self.macho.dataModel);
     _rebase_size = MKSwapLValue32(lc.rebase_size, self.macho.dataModel);

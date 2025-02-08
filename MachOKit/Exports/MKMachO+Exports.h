@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! value and a \c nil error if the image has no exports information.
 @property (nonatomic, strong, readonly) MKResult<MKExportsInfo*> *exportsInfo;
 
++ (MKNodeFieldBuilder*)_exportsInfoFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

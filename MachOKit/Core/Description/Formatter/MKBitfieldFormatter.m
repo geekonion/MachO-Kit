@@ -37,22 +37,13 @@
 @synthesize ignoreZero = _ignoreZero;
 
 //|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_formatter release];
-    [_mask release];
-    
-    [super dealloc];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithCoder:(NSCoder*)aDecoder
 {
     self = [super init];
     if (self == nil) return nil;
     
-    _mask = [[aDecoder decodeObjectOfClass:NSNumber.class forKey:@"mask"] retain];
-    _formatter = [[aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"formatter"] retain];
+    _mask = [aDecoder decodeObjectOfClass:NSNumber.class forKey:@"mask"];
+    _formatter = [aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"formatter"];
     _shift = [aDecoder decodeIntForKey:@"shift"];
     _ignoreZero = [aDecoder decodeBoolForKey:@"ignoreZero"];
     
@@ -74,14 +65,6 @@
 
 //----------------------------------------------------------------------------//
 @implementation MKBitfieldFormatter
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_bits release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  NSCoding
@@ -165,21 +148,21 @@
         #ifndef __clang_analyzer__
             case 'c':
             case 'C':
-                maskedNumber = (NSNumber*)CFNumberCreate(NULL, kCFNumberSInt8Type, (int8_t*)&maskedValue);
+                maskedNumber = (NSNumber*)CFBridgingRelease(CFNumberCreate(NULL, kCFNumberSInt8Type, (int8_t*)&maskedValue));
                 break;
             case 's':
             case 'S':
-                maskedNumber = (NSNumber*)CFNumberCreate(NULL, kCFNumberSInt16Type, (int16_t*)&maskedValue);
+                maskedNumber = (NSNumber*)CFBridgingRelease(CFNumberCreate(NULL, kCFNumberSInt16Type, (int16_t*)&maskedValue));
                 break;
             case 'i':
             case 'I':
-                maskedNumber = (NSNumber*)CFNumberCreate(NULL, kCFNumberSInt32Type, (int32_t*)&maskedValue);
+                maskedNumber = (NSNumber*)CFBridgingRelease(CFNumberCreate(NULL, kCFNumberSInt32Type, (int32_t*)&maskedValue));
                 break;
             case 'q':
             case 'Q':
         #endif
             default:
-                maskedNumber = (NSNumber*)CFNumberCreate(NULL, kCFNumberSInt64Type, (int64_t*)&maskedValue);
+                maskedNumber = (NSNumber*)CFBridgingRelease(CFNumberCreate(NULL, kCFNumberSInt64Type, (int64_t*)&maskedValue));
                 break;
         }
         
@@ -189,8 +172,6 @@
             if (retValue.length != 0) [retValue appendString:@" "];
             [retValue appendString:formattedValue];
         }
-        
-        [maskedNumber release];
     }
     
     return retValue;

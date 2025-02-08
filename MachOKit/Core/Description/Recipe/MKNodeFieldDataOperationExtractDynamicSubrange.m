@@ -66,7 +66,6 @@ MKMakeSingletonInitializer(MKNodeFieldDataOperationExtractDynamicSubrange)
 {
     NSString *getterMethod = [[NSString alloc] initWithFormat:@"%@FieldOffset", field.name];
     SEL getterSEL = NSSelectorFromString(getterMethod);
-    [getterMethod release];
     
     if ([input respondsToSelector:getterSEL]) {
         return ((mk_vm_offset_t (*)(id, SEL))objc_msgSend)(input, getterSEL);
@@ -95,7 +94,6 @@ MKMakeSingletonInitializer(MKNodeFieldDataOperationExtractDynamicSubrange)
 {
     NSString *getterMethod = [[NSString alloc] initWithFormat:@"%@FieldSize", field.name];
     SEL getterSEL = NSSelectorFromString(getterMethod);
-    [getterMethod release];
     
     if ([input respondsToSelector:getterSEL]) {
         return @( ((mk_vm_size_t (*)(id, SEL))objc_msgSend)(input, getterSEL) );

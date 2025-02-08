@@ -50,9 +50,6 @@
     
     self = [super initWithDataSource:aarch64];
     
-    [aarch64 release];
-    [lp64 release];
-    
     return self;
 }
 
@@ -100,9 +97,6 @@
     
     self = [super initWithDataSource:arm];
     
-    [arm release];
-    [ilp32 release];
-    
     return self;
 }
 
@@ -143,9 +137,6 @@
     MKAMD64DataModel *amd64 = [[MKAMD64DataModel alloc] initWithDataSource:lp64];
     
     self = [super initWithDataSource:amd64];
-    
-    [amd64 release];
-    [lp64 release];
     
     return self;
 }
@@ -192,9 +183,6 @@
     
     self = [super initWithDataSource:x86];
     
-    [x86 release];
-    [ilp32 release];
-    
     return self;
 }
 
@@ -226,8 +214,6 @@
     MKILP32DataModel *lp64 = [[MKILP32DataModel alloc] initWithDataSource:dataSource endianness:MKDataEndiannessBig];
     
     self = [super initWithDataSource:lp64];
-    
-    [lp64 release];
     
     return self;
 }

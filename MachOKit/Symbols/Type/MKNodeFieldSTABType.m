@@ -43,7 +43,7 @@ MKMakeSingletonInitializer(MKNodeFieldSTABType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)N_GSYM): @"N_GSYM",
         _$((uint8_t)N_FNAME): @"N_FNAME",
         _$((uint8_t)N_FUN): @"N_FUN",
@@ -74,7 +74,7 @@ MKMakeSingletonInitializer(MKNodeFieldSTABType)
         _$((uint8_t)N_ECOMM): @"N_ECOMM",
         _$((uint8_t)N_ECOML): @"N_ECOML",
         _$((uint8_t)N_LENG): @"N_LENG"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"STAB Type";

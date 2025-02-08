@@ -33,7 +33,7 @@
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)hexNumberFormatterWithDigits:(size_t)digits uppercase:(BOOL)uppercase
 {
-    MKHexNumberFormatter *retValue = [[[self alloc] init] autorelease];
+    MKHexNumberFormatter *retValue = [[self alloc] init];
     retValue.digits = digits;
     retValue.uppercase = uppercase;
     

@@ -34,12 +34,17 @@
 #import "MKMachHeader.h"
 #import "DyldSharedCache.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKSection
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithSectionLoadCommand:(id<MKLCSection>)sectionLoadCommand inSegment:(MKSegment*)segment
@@ -73,7 +78,7 @@
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
     }
     
-    return [[[sectionClass alloc] initWithLoadCommand:sectionLoadCommand inSegment:segment error:error] autorelease];
+    return [[sectionClass alloc] initWithLoadCommand:sectionLoadCommand inSegment:segment error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -87,8 +92,8 @@
     self = [super initWithParent:segment error:error];
     if (self == nil) return nil;
     
-    _name = [[sectionLoadCommand sectname] copy];
-    _loadCommand = [sectionLoadCommand retain];
+    _name = [sectionLoadCommand sectname];
+    _loadCommand = sectionLoadCommand;
     _alignment = [sectionLoadCommand align];
     _flags = [sectionLoadCommand flags];
     
@@ -99,7 +104,7 @@
     // Verify that this section is fully within it's segment's VM memory.
     if ((err = mk_vm_range_contains_range(mk_vm_range_make(segment.vmAddress, segment.vmSize), mk_vm_range_make(_vmAddress, _size), false))) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Section [%@] is not within segment: %@.", sectionLoadCommand, segment.compactDescription];
-        [self release]; return nil;
+        return nil;
     }
     
     // Verify that the segment is fully within it's segment's file mapping.
@@ -124,7 +129,7 @@
             if ((err = mk_vm_address_apply_offset(_nodeContextAddress, slide, &_nodeContextAddress))) {
                 arithmeticError = MK_MAKE_VM_ADDRESS_APPLY_SLIDE_ARITHMETIC_ERROR(err, _nodeContextAddress, slide);
                 MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Could not determine the context address."];
-                [self release]; return nil;
+                return nil;
             }
         }
     }
@@ -142,7 +147,7 @@
         if ((err = mk_vm_address_add(_nodeContextAddress, segment.nodeContextAddress, &_nodeContextAddress))) {
             arithmeticError = MK_MAKE_VM_ADDRESS_ADD_ARITHMETIC_ERROR(err, _nodeContextAddress, segment.nodeContextAddress);
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:arithmeticError description:@"Could not determine the context address."];
-            [self release]; return nil;
+            return nil;
         }
     }
     
@@ -150,7 +155,7 @@
     // verify again.
     if (!self.macho.isImageInSharedCache && _nodeContextSize != 0 && [segment.memoryMap hasMappingAtOffset:0 fromAddress:_nodeContextAddress length:_size] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Section data does not exist in the memory map."];
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -163,15 +168,6 @@
 #pragma unused(error)
     // TODO - We could actually provide an implementation of this method.
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-initWithParent:error: unavailable." userInfo:nil];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    [_loadCommand release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

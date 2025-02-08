@@ -43,7 +43,7 @@ MKMakeSingletonInitializer(MKNodeFieldMachOFlagsType)
     if (s_Flags != nil && s_Formatter != nil)
         return;
     
-    s_Flags = [@{
+    s_Flags = @{
         _$((uint32_t)MH_NOUNDEFS): @"MH_NOUNDEFS",
         _$((uint32_t)MH_INCRLINK): @"MH_INCRLINK",
         _$((uint32_t)MH_DYLDLINK): @"MH_DYLDLINK",
@@ -69,7 +69,7 @@ MKMakeSingletonInitializer(MKNodeFieldMachOFlagsType)
         _$((uint32_t)MH_NO_HEAP_EXECUTION): @"MH_NO_HEAP_EXECUTION",
         _$((uint32_t)MH_APP_EXTENSION_SAFE): @"MH_APP_EXTENSION_SAFE",
         _$((uint32_t)MH_DYLIB_IN_CACHE): @"MH_DYLIB_IN_CACHE"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_Flags;

@@ -72,25 +72,15 @@
             }
             
             [cfstrings addObject:cfstring];
-            [cfstring release];
             
             // SAFE - All string nodes must be within the size of this node.
             offset += cfstring.nodeSize;
         }
         
-        _strings = [cfstrings copy];
-        [cfstrings release];
+        _strings = cfstrings;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_strings release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

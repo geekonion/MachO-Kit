@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<__kindof MKSection*> *)sectionsWithName:(NSString*)sectName inSegment:(nullable MKSegment*)segment;
 - (NSArray<__kindof MKSection*> *)sectionsWithName:(NSString*)sectName inSegmentWithName:(NSString*)segName;
 
++ (MKNodeFieldBuilder*)_sectionsFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

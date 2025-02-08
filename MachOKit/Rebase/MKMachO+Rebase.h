@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! value and a \c nil error if the image has no rebasing information.
 @property (nonatomic, strong, readonly) MKResult<MKRebaseInfo*> *rebaseInfo;
 
++ (MKNodeFieldBuilder*)_rebaseInfoFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -56,6 +56,9 @@ NS_ASSUME_NONNULL_BEGIN
 //! value and a \c nil error if the image has no indirect symbol table.
 @property (nonatomic, strong, readonly) MKResult<MKIndirectSymbolTable*> *indirectSymbolTable;
 
++ (MKNodeFieldBuilder*)_stringTableFieldBuilder;
++ (MKNodeFieldBuilder*)_symbolTableFieldBuilder;
++ (MKNodeFieldBuilder*)_indirectSymbolTableFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

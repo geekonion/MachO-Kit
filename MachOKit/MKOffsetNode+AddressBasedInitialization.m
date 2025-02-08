@@ -48,7 +48,7 @@
         return nil;
     }
     
-    return [[[self alloc] initWithVMAddress:address inImage:image error:error] autorelease];
+    return [[self alloc] initWithVMAddress:address inImage:image error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -59,7 +59,7 @@
     MKBackedNode *deepestParent = [image childNodeOccupyingVMAddress:address targetClass:nil].value;
     if (deepestParent == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"No parent node for address 0x%" MK_VM_PRIxADDR " in image.", address];
-        [self release]; return nil;
+        return nil;
     }
     
     mk_error_t err;
@@ -67,7 +67,7 @@
     
     if ((err = mk_vm_address_subtract(address, deepestParent.nodeVMAddress, &offset))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_DEFFERENCE_ARITHMETIC_ERROR(err, address, deepestParent.nodeVMAddress);
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithOffset:offset fromParent:deepestParent error:error];

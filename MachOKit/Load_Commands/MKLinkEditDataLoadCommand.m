@@ -43,7 +43,7 @@
     
     struct linkedit_data_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _dataoff = MKSwapLValue32(lc.dataoff, self.macho.dataModel);
     _datasize = MKSwapLValue32(lc.datasize, self.macho.dataModel);

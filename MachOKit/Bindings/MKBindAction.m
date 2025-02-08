@@ -33,12 +33,17 @@
 #import "MKSegment.h"
 #import "MKSection.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKBindAction
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithContext:(struct MKBindContext*)bindContext
@@ -73,7 +78,7 @@
     Class actionClass = [self classForContext:bindContext];
     NSAssert(actionClass != nil, @"+[MKBindAction classForContext:] should never return nil.");
     
-    return [[[actionClass alloc] initWithContext:bindContext error:error] autorelease];
+    return [[actionClass alloc] initWithContext:bindContext error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -81,7 +86,7 @@
 {
 	NSParameterAssert(bindContext->info != nil);
 	
-	self = [super initWithParent:bindContext->info error:error];
+    self = [super initWithParent:(__bridge MKNode *)bindContext->info error:error];
     if (self == nil) return nil;
 	
 	_nodeOffset = bindContext->actionStartOffset;
@@ -90,10 +95,10 @@
     
     if (bindContext->segment == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"No segment set."];
-        [self release]; return nil;
+        return nil;
     }
     
-    _segment = [bindContext->segment retain];
+    _segment = (__bridge MKSegment *)bindContext->segment;
     _offset = bindContext->derivedOffset;
     
     // Verify that the bind location is within the segment
@@ -103,11 +108,11 @@
     mk_vm_range_t segmentRange = mk_vm_range_make(segmentAddress, _segment.vmSize);
     if ((err = mk_vm_range_contains_address(segmentRange, _offset, segmentAddress))) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"The offset [%" MK_VM_PRIuOFFSET "] is not within the %@ segement (index %u).", _offset, _segment, bindContext->segmentIndex];
-        [self release]; return nil;
+        return nil;
     }
     
     // Try to find the section
-	_section = (typeof(_section))[[_segment childNodeOccupyingVMAddress:self.address targetClass:MKSection.class] retain];
+	_section = (typeof(_section))[_segment childNodeOccupyingVMAddress:self.address targetClass:MKSection.class];
     
     return self;
 }
@@ -118,15 +123,6 @@
 #pragma unused(parent)
 #pragma unused(error)
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-initWithParent:error: unavailable." userInfo:nil];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_section release];
-    [_segment release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

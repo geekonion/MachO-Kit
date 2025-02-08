@@ -50,7 +50,7 @@ struct objc_image_info {
     
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&ii length:sizeof(ii) requireFull:YES error:&imageInfoError] < sizeof(ii)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:imageInfoError description:@"Could not read image info."];
-        [self release]; return nil;
+        return nil;
     }
     
     _version = MKSwapLValue32(ii.version, self.dataModel);

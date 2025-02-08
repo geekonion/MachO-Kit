@@ -32,12 +32,17 @@
 #import "MKExportTrieTerminalNode.h"
 #import "MKExportTrieBranch.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKExport
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithTrieNodes:(NSArray<MKExportTrieNode*> *)nodes
@@ -69,7 +74,7 @@
 	Class exportClass = [self classForTrieNodes:nodes];
 	
     NSAssert(exportClass != nil, @"No class for branch.");
-	return [[[exportClass alloc] initWithTrieNodes:nodes error:error] autorelease];
+	return [[exportClass alloc] initWithTrieNodes:nodes error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -107,8 +112,6 @@
             
             _name = [_name stringByAppendingString:prefix];
         }
-		
-		_name = [_name retain];
     }
     
 	return self;
@@ -120,14 +123,6 @@
 #pragma unused(parent)
 #pragma unused(error)
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-initWithParent:error unavailable." userInfo:nil];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

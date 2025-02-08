@@ -51,8 +51,6 @@
             _dataInCode = [[MKResult alloc] initWithError:dataInCodeError];
         else
             _dataInCode = [MKResult new];
-        
-        [dataInCode release];
     }
     
     return _dataInCode;

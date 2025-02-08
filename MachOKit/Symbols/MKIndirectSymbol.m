@@ -51,7 +51,7 @@
         _index = [self.memoryMap readDoubleWordAtOffset:offset fromAddress:parent.nodeContextAddress withDataModel:parent.dataModel error:&indexError];
         if (indexError) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:indexError description:@"Could not read index."];
-            [self release]; return nil;
+            return nil;
         }
     }
     
@@ -101,15 +101,6 @@
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_section release];
-    [_symbol release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

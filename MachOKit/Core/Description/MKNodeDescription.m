@@ -28,6 +28,53 @@
 #import "MKNodeDescription.h"
 #import "MKInternal.h"
 #import "MKBackedNode.h"
+#import "MKNodeField.h"
+
+NSString* describeValue(id value, MKNodeField *field, NSUInteger traversalDepth) {
+    // We want to format nodes a specific way, regardless of what the field says.
+    if ([value isKindOfClass:MKNode.class]) {
+        // Only recurse on the node if we have not reached the traversal depth
+        if (traversalDepth > 0 && (field.options & MKNodeFieldOptionIgnoreContainerContents) == 0) {
+            return (NSString*)[[value layout] textualDescriptionForNode:value traversalDepth:traversalDepth-1];
+        }
+        /* else, fallthrough */
+    }
+    // We want to format collections a specific way, regardless of what the field says.
+    else if ([value isKindOfClass:NSDictionary.class]) {
+        NSMutableString *collectionDescription = [NSMutableString string];
+        MKNodeField *childField = nil;
+        if (field.options & MKNodeFieldOptionFormatCollectionValues)
+            childField = field;
+        
+        [collectionDescription appendString:@"("];
+        for (id item in value) {
+            [collectionDescription appendFormat:@"\n\t%@", [describeValue([value objectForKey:item], childField, traversalDepth) stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
+        }
+        [collectionDescription appendString:@"\n)"];
+        
+        return (NSString*)collectionDescription;
+    }
+    else if ([value conformsToProtocol:@protocol(NSFastEnumeration)]) {
+        NSMutableString *collectionDescription = [NSMutableString string];
+        MKNodeField *childField = nil;
+        if (field.options & MKNodeFieldOptionFormatCollectionValues)
+            childField = field;
+        
+        [collectionDescription appendString:@"("];
+        for (id item in value) {
+            [collectionDescription appendFormat:@"\n\t%@", [describeValue(item, childField, traversalDepth) stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
+        }
+        [collectionDescription appendString:@"\n)"];
+        
+        return (NSString*)collectionDescription;
+    }
+    
+    NSFormatter *formatter = field.valueFormatter;
+    if (formatter)
+        return [formatter stringForObjectValue:value];
+    else
+        return [value description];
+}
 
 //----------------------------------------------------------------------------//
 @implementation MKNodeDescription
@@ -36,7 +83,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)nodeDescriptionWithParentDescription:(MKNodeDescription*)parent fields:(NSArray*)fields
-{ return [[[self alloc] initWithParentDescription:parent fields:fields] autorelease]; }
+{ return [[self alloc] initWithParentDescription:parent fields:fields]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParentDescription:(MKNodeDescription*)parent fields:(NSArray*)fields
@@ -44,8 +91,8 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _parent = [parent retain];
-    _fields = [fields copy];
+    _parent = parent;
+    _fields = fields;
     
     return self;
 }
@@ -53,15 +100,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { return [self initWithParentDescription:nil fields:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_parent release];
-    [_fields release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Working with Fields
@@ -121,57 +159,11 @@
     {
         [retValue appendString:@" {\n"];
         
-        __block NSString* (^describeValue)(id, MKNodeField*) = ^(id value, MKNodeField *field) {
-            // We want to format nodes a specific way, regardless of what the field says.
-            if ([value isKindOfClass:MKNode.class]) {
-                // Only recurse on the node if we have not reached the traversal depth
-                if (traversalDepth > 0 && (field.options & MKNodeFieldOptionIgnoreContainerContents) == 0) {
-                    return (NSString*)[[value layout] textualDescriptionForNode:value traversalDepth:traversalDepth-1];
-                }
-                /* else, fallthrough */
-            }
-            // We want to format collections a specific way, regardless of what the field says.
-            else if ([value isKindOfClass:NSDictionary.class]) {
-                NSMutableString *collectionDescription = [NSMutableString string];
-                MKNodeField *childField = nil;
-                if (field.options & MKNodeFieldOptionFormatCollectionValues)
-                    childField = field;
-                
-                [collectionDescription appendString:@"("];
-                for (id item in value) {
-                    [collectionDescription appendFormat:@"\n\t%@", [describeValue([value objectForKey:item], childField) stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
-                }
-                [collectionDescription appendString:@"\n)"];
-                
-                return (NSString*)collectionDescription;
-            }
-            else if ([value conformsToProtocol:@protocol(NSFastEnumeration)]) {
-                NSMutableString *collectionDescription = [NSMutableString string];
-                MKNodeField *childField = nil;
-                if (field.options & MKNodeFieldOptionFormatCollectionValues)
-                    childField = field;
-                
-                [collectionDescription appendString:@"("];
-                for (id item in value) {
-                    [collectionDescription appendFormat:@"\n\t%@", [describeValue(item, childField) stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
-                }
-                [collectionDescription appendString:@"\n)"];
-                
-                return (NSString*)collectionDescription;
-            }
-            
-            NSFormatter *formatter = field.valueFormatter;
-            if (formatter)
-                return [formatter stringForObjectValue:value];
-            else
-                return [value description];
-        };
-        
         for (MKNodeField *field in fields)
         @autoreleasepool {
             id value = [field.valueRecipe valueForField:field ofNode:node].value;
             
-            [retValue appendFormat:@"\t%@ = %@\n", field.name, [describeValue(value, field) stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
+            [retValue appendFormat:@"\t%@ = %@\n", field.name, [describeValue(value, field, traversalDepth) stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
         }
         
         if (node.warnings.count)

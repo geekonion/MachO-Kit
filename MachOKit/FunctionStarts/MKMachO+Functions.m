@@ -51,8 +51,6 @@
             _functionStarts = [[MKResult alloc] initWithError:functionStartsError];
         else
             _functionStarts = [MKResult new];
-        
-        [functionStarts release];
     }
     
     return _functionStarts;

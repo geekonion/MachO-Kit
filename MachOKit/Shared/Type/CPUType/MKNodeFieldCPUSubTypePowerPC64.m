@@ -58,10 +58,6 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypePowerPC64)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_BitfieldFormatter = formatter;
-    
-    [bits release];
-    [capabilitiesMask release];
-    [subtypeMask release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -95,11 +91,11 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypePowerPC64SubType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
+    s_Types = @{
         // PowerPC 970 is the "G5" - the only 64-bit PowerPC processor
         // supported by Darwin.
         _$(CPU_SUBTYPE_POWERPC_970): @"CPU_SUBTYPE_POWERPC_970"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_SUBTYPE_POWERPC64";
@@ -146,9 +142,9 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypePowerPC64Features)
     if (s_Capability != nil && s_CapabilityFormatter != nil)
         return;
     
-    s_Capability = [@{
+    s_Capability = @{
         _$((uint32_t)CPU_SUBTYPE_LIB64): @"CPU_SUBTYPE_LIB64",
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_Capability;

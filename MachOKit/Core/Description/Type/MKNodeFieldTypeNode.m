@@ -34,7 +34,7 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)typeWithNodeType:(Class)nodeType
-{ return [[[self alloc] initWithNodeType:nodeType] autorelease]; }
+{ return [[self alloc] initWithNodeType:nodeType]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithNodeType:(Class)nodeType

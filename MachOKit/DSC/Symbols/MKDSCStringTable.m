@@ -47,7 +47,7 @@
     if (size == 0) {
         // If we return early, 'strings' must be initialized in order to
         // fufill the non-null promise for the property.
-        _strings = [[NSDictionary dictionary] retain];
+        _strings = [NSDictionary dictionary];
         
         return self;
     }
@@ -68,7 +68,6 @@
                 MKCString *string = [[MKCString alloc] initWithOffset:offset parent:self string:str];
                 
                 [strings setObject:string forKey:@(offset)];
-                [string release];
                 if (str.length == 0) {
                     offset += 1;
                 } else {
@@ -77,8 +76,7 @@
             }
         }
         
-        _strings = [strings copy];
-        [strings release];
+        _strings = strings;
     }
     
     return self;
@@ -107,7 +105,7 @@
     // Verify that offset is in range of the strings table.
     if (offset < stringsOffset || offset > stringsOffset + stringsSize) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"Offset (%" MK_VM_PRIiOFFSET ") not in range of the string table.", offset];
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithSize:stringsSize offset:stringsOffset fromParent:symbols error:error];
@@ -124,14 +122,6 @@
     NSParameterAssert(symbolsInfo);
     
     return [self initWithOffset:symbolsInfo.stringsOffset fromParent:symbols error:error];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_strings release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

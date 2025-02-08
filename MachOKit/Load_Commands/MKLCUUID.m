@@ -55,10 +55,10 @@
     
     struct uuid_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _uuid = [[NSUUID alloc] initWithUUIDBytes:lc.uuid];
-    if (_uuid == nil) { [self release]; return nil; }
+    if (_uuid == nil) { return nil; }
     
     return self;
 }
@@ -70,17 +70,9 @@
     
     struct uuid_command *lc = (void *)lc_ptr;
     _uuid = [[NSUUID alloc] initWithUUIDBytes:lc->uuid];
-    if (_uuid == nil) { [self release]; return nil; }
+    if (_uuid == nil) { return nil; }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_uuid release];
-    
-    [super dealloc];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

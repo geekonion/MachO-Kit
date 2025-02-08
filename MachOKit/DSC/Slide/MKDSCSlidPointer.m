@@ -45,7 +45,7 @@
     self = [super initWithParent:slideInfo error:error];
     if (self == nil) return nil;
     
-    _page = [page retain];
+    _page = page;
     
     // For performance we don't actually check if the bit is set.
     NSAssert(bitOffset <= page.bitmap.nodeSize * 8, @"Bit offset %" PRIu32 " is greater than the number of bits in bitmap %" MK_VM_PRIuSIZE ".", bitOffset, page.bitmap.nodeSize * 8);
@@ -60,14 +60,6 @@
 {
     // TODO - Could do something.
     @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Use -initWithOffset:inEntryForPage:error: instead." userInfo:nil];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_page dealloc];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

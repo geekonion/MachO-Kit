@@ -43,7 +43,7 @@ MKMakeSingletonInitializer(MKNodeFieldMachOFileType)
     if (s_FileTypes != nil && s_Formatter != nil)
         return;
     
-    s_FileTypes = [@{
+    s_FileTypes = @{
         _$((uint32_t)MH_OBJECT): @"MH_OBJECT",
         _$((uint32_t)MH_EXECUTE): @"MH_EXECUTE",
         _$((uint32_t)MH_FVMLIB): @"MH_FVMLIB",
@@ -55,7 +55,7 @@ MKMakeSingletonInitializer(MKNodeFieldMachOFileType)
         _$((uint32_t)MH_DYLIB_STUB): @"MH_DYLIB_STUB",
         _$((uint32_t)MH_DSYM): @"MH_DSYM",
         _$((uint32_t)MH_KEXT_BUNDLE): @"MH_KEXT_BUNDLE"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"MH";

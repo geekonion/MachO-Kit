@@ -57,7 +57,7 @@
     
     if (readOnlyMapping == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"%@ does not have a read-only mapping.", sharedCache];
-        [self release]; return nil;
+        return nil;
     }
     
     self = [super initWithParent:sharedCache error:error];
@@ -65,7 +65,7 @@
     
     // Despite the shared cache being our real parent node, all of our data
     // should be within the readonly mapping.
-    _memoryMap = [readOnlyMapping.memoryMap retain];
+    _memoryMap = readOnlyMapping.memoryMap;
     NSParameterAssert(_memoryMap);
     
     // nodeAddress := readOnlyMappingAddress + (slideInfoOffset - readOnlyMappingFileOffset)
@@ -77,24 +77,24 @@
     
     if ((err = mk_vm_address_subtract(slideInfoOffset, readOnlyMappingFileOffset, &_contextAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_DEFFERENCE_ARITHMETIC_ERROR(err, slideInfoOffset, readOnlyMappingFileOffset);
-        [self release]; return nil;
+        return nil;
     }
     
     if ((err = mk_vm_address_add(_contextAddress, readOnlyMappingAddress, &_contextAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_ADD_ARITHMETIC_ERROR(err, _contextAddress, readOnlyMappingAddress);
-        [self release]; return nil;
+        return nil;
     }
     
     // Now subtract any slide to derive the vmAddress
     if ((err = mk_vm_address_remove_slide(_contextAddress, slide, &_vmAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_REMOVE_SLIDE_ARITHMETIC_ERROR(err, slide, _contextAddress);
-        [self release]; return nil;
+        return nil;
     }
     
     // Check that all the data is available
     if ([_memoryMap hasMappingAtOffset:0 fromAddress:_contextAddress length:slideInfoSize error:&localError] == NO) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND underlyingError:localError description:@"Complete slide info data does not exist at context-relative address %" MK_VM_PRIxADDR ".", _contextAddress];
-        [self release]; return nil;
+        return nil;
     }
     
     _size = slideInfoSize;
@@ -103,7 +103,7 @@
     _header = [[MKDSCSlideInfoHeader alloc] initWithParent:self error:&localError];
     if (_header == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:localError.code underlyingError:localError description:@"Failed to load slide info header."];
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -112,17 +112,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithSharedCache:parent.sharedCache error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_toc release];
-    [_entries release];
-    [_header dealloc];
-    [_memoryMap release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Header and Entires
@@ -159,7 +148,6 @@
             offset += entry.nodeSize;
                 
             [entries addObject:entry];
-            [entry release];
             
             if (oldOffset > offset) {
                 MK_PUSH_WARNING(entries, MK_EOVERFLOW, @"Encountered an overflow while advancing the parser to the entry following index %" PRIu32 ".", _header.entriesCount - entriesCount);
@@ -167,8 +155,7 @@
             }
         }
         
-        _entries = [entries copy];
-        [entries release];
+        _entries = entries;
     }
     
     return _entries;
@@ -203,7 +190,6 @@
             offset += page.nodeSize;
             
             [toc addObject:page];
-            [page release];
             
             if (oldOffset > offset) {
                 MK_PUSH_WARNING(toc, MK_EOVERFLOW, @"Encountered an overflow while advancing the parser to the page following index %" PRIu32 ".", _header.tocCount - tocCount);
@@ -211,8 +197,7 @@
             }
         }
         
-        _toc = [toc copy];
-        [toc release];
+        _toc = toc;
     }
     
     return _toc;
@@ -269,13 +254,11 @@
                     }
                     
                     [slidPointers addObject:slidPointer];
-                    [slidPointer release];
                 }
             }
         }
         
-        _slidPointers = [slidPointers copy];
-        [slidPointers release];
+        _slidPointers = slidPointers;
     }
     
     return _slidPointers;

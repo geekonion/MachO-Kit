@@ -103,7 +103,7 @@
         [mutableOptions appendString:@", "];
     [mutableOptions appendFormat:@"resolver=0x%.8" PRIX64 "", self.resolverAddress];
     
-    return [mutableOptions autorelease];
+    return mutableOptions;
 }
 
 @end

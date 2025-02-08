@@ -43,14 +43,14 @@ MKMakeSingletonInitializer(MKNodeFieldSymbolReferenceType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)REFERENCE_FLAG_UNDEFINED_NON_LAZY): @"REFERENCE_FLAG_UNDEFINED_NON_LAZY",
         _$((uint8_t)REFERENCE_FLAG_UNDEFINED_LAZY): @"REFERENCE_FLAG_UNDEFINED_LAZY",
         _$((uint8_t)REFERENCE_FLAG_DEFINED): @"REFERENCE_FLAG_DEFINED",
         _$((uint8_t)REFERENCE_FLAG_PRIVATE_DEFINED): @"REFERENCE_FLAG_PRIVATE_DEFINED",
         _$((uint8_t)REFERENCE_FLAG_PRIVATE_UNDEFINED_NON_LAZY): @"REFERENCE_FLAG_PRIVATE_UNDEFINED_NON_LAZY",
         _$((uint8_t)REFERENCE_FLAG_PRIVATE_UNDEFINED_LAZY): @"REFERENCE_FLAG_PRIVATE_UNDEFINED_LAZY"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"Reference Type";

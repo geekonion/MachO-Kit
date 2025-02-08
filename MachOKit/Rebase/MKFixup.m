@@ -40,7 +40,7 @@
 {
 	NSParameterAssert(rebaseContext->info != nil);
 	
-    self = [super initWithParent:rebaseContext->info error:error];
+    self = [super initWithParent:(__bridge MKNode *)rebaseContext->info error:error];
     if (self == nil) return nil;
 	
 	_nodeOffset = rebaseContext->actionStartOffset;
@@ -58,9 +58,9 @@
         } else {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"No segment at index [%u].", rebaseContext->segmentIndex];
         }
-        [self release]; return nil;
+        return nil;
     }
-    _segment = [segment.value retain];
+    _segment = segment.value;
     
     // Verify that the fixup location is within the segment
     mk_error_t err;
@@ -71,11 +71,11 @@
     if ((err = mk_vm_range_contains_address(segmentRange, _offset, segmentAddress))) {
         // TODO - Do we care?  Could this be a warning instead?
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"The offset [%" MK_VM_PRIuOFFSET "] is not within the %@ segement (index %u).", rebaseContext->offset, _segment, rebaseContext->segmentIndex];
-        [self release]; return nil;
+        return nil;
     }
     
     // Try to find the section
-    _section = (typeof(_section))[[_segment childNodeOccupyingVMAddress:self.address targetClass:MKSection.class] retain];
+    _section = (typeof(_section))[_segment childNodeOccupyingVMAddress:self.address targetClass:MKSection.class];
     
     return self;
 }
@@ -86,15 +86,6 @@
 #pragma unused(parent)
 #pragma unused(error)
 	@throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-initWithParent:error: unavailable." userInfo:nil];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_section release];
-    [_segment release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

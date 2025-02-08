@@ -34,11 +34,11 @@
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)optionSetWithUnderlyingType:(id<MKNodeFieldNumericType>)underlyingType name:(NSString*)name traits:(MKNodeFieldOptionSetTraits)traits options:(MKNodeFieldOptionSetOptions*)options
-{ return [[[self alloc] initWithUnderlyingType:underlyingType name:name traits:traits options:options] autorelease]; }
+{ return [[self alloc] initWithUnderlyingType:underlyingType name:name traits:traits options:options]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)optionSetWithUnderlyingType:(id<MKNodeFieldNumericType>)underlyingType name:(NSString*)name options:(MKNodeFieldOptionSetOptions*)options
-{ return [[[self alloc] initWithUnderlyingType:underlyingType name:name options:options] autorelease]; }
+{ return [[self alloc] initWithUnderlyingType:underlyingType name:name options:options]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithUnderlyingType:(id<MKNodeFieldNumericType>)underlyingType name:(NSString*)name traits:(MKNodeFieldOptionSetTraits)traits options:(MKNodeFieldOptionSetOptions*)options
@@ -48,10 +48,10 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _underlyingType = [underlyingType retain];
-    _options = [options copy];
+    _underlyingType = underlyingType;
+    _options = options;
     _optionSetTraits = traits;
-    _name = [name copy];
+    _name = name;
     
     return self;
 }
@@ -63,17 +63,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-init unavailable." userInfo:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_formatter release];
-    [_name release];
-    [_options release];
-    [_underlyingType release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNodeFieldOptionSetType

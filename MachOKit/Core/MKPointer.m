@@ -44,7 +44,7 @@
     self = [super init];
     
     if (MKPtrInitialize(mk_ptr_struct(self), sourceNode, address, context, error) == false) {
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -54,8 +54,6 @@
 - (void)dealloc
 {
     MKPtrDestory(mk_ptr_struct(self));
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -43,13 +43,13 @@ MKMakeSingletonInitializer(MKNodeFieldBindType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)BIND_TYPE_POINTER): @"BIND_TYPE_POINTER",
         _$((uint8_t)BIND_TYPE_TEXT_ABSOLUTE32): @"BIND_TYPE_TEXT_ABSOLUTE32",
         _$((uint8_t)BIND_TYPE_TEXT_PCREL32): @"BIND_TYPE_TEXT_PCREL32",
         _$((uint8_t)BIND_TYPE_THREADED_BIND): @"BIND_TYPE_THREADED_BIND",
         _$((uint8_t)BIND_TYPE_THREADED_REBASE): @"BIND_TYPE_THREADED_REBASE"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"BIND_TYPE";

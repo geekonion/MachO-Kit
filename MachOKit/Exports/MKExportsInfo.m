@@ -49,7 +49,7 @@
 	// An size of zero indicates that the images does not have any exports.
 	if (self.nodeSize == 0) {
 		// Not an error.
-		[self release]; return nil;
+		return nil;
 	}
 	
 	// Parse the trie
@@ -76,8 +76,7 @@
 			offset += node.nodeSize;
 		}
 		
-		_nodes = [nodes copy];
-		[nodes release];
+		_nodes = nodes;
 	}
 	
 	// Build the exports list
@@ -144,9 +143,6 @@
 				}
 			}
 			
-			[queue release];
-			[path release];
-			
 			[exports sortUsingComparator:^(MKExport *left, MKExport *right) {
 				if (left.nodeVMAddress < right.nodeVMAddress) return NSOrderedAscending;
 				else if (left.nodeVMAddress > right.nodeVMAddress) return NSOrderedDescending;
@@ -154,8 +150,7 @@
 			}];
 		}
 		
-        _exports = [exports copy];
-        [exports release];
+        _exports = exports;
 	}
 	
 	return self;
@@ -186,12 +181,10 @@
 		
 		if (commands.count == 0) {
 			MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_DYLD_INFO load command."];
-			[commands release];
-			[self release]; return nil;
+			return nil;
 		}
 		
-		dyldInfoLoadCommand = [[commands.firstObject retain] autorelease];
-		[commands release];
+		dyldInfoLoadCommand = commands.firstObject;
 	}
 	
 	return [self _initWithDyldInfo:dyldInfoLoadCommand inImage:image error:error];
@@ -200,15 +193,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_exports release];
-	[_nodes release];
-	
-	[super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKPointer

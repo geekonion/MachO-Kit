@@ -46,14 +46,14 @@
     self = [super initWithParent:nil error:error];
     if (self == nil) return nil;
     
-    _memoryMap = [memoryMap retain];
+    _memoryMap = memoryMap;
     
     struct fat_header header;
     NSError *memoryMapError = nil;
     
     if ([self.memoryMap copyBytesAtOffset:0 fromAddress:0 into:&header length:sizeof(header) requireFull:YES error:&memoryMapError] < sizeof(header)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read FAT header."];
-        [self release]; return nil;
+        return nil;
     }
     
     _magic = MKSwapLValue32(header.magic, self.dataModel);
@@ -62,7 +62,7 @@
     // Check for the proper magic value
     if (_magic != FAT_MAGIC) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVAL description:@"Bad FAT magic [0x%" PRIx32 "].", _magic];
-        [self release]; return nil;
+        return nil;
     }
     
     // Load Architectures
@@ -82,14 +82,12 @@
             }
             
             [architectures addObject:arch];
-            [arch release];
             
             // SAFE - Architecture node size is constant.
             offset += arch.nodeSize;
         }
         
-        _architectures = [architectures copy];
-        [architectures release];
+        _architectures = architectures;
     }
     
     return self;
@@ -98,15 +96,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError **)error
 { return [self initWithMemoryMap:parent.memoryMap error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_architectures release];
-    [_memoryMap release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNode

@@ -51,8 +51,6 @@
             _rebaseInfo = [[MKResult alloc] initWithError:rebaseInfoError];
         else
             _rebaseInfo = [MKResult new];
-        
-        [rebaseInfo release];
     }
     
     return _rebaseInfo;

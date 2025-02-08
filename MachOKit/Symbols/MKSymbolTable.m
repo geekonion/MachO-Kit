@@ -72,7 +72,7 @@
     // occur in valid Mach-O images?
     if (self.nodeSize == 0) {
         // Still need to assign a value to the symbols array.
-        _symbols = [@[] retain];
+        _symbols = @[];
         return self;
     }
     
@@ -99,8 +99,7 @@
             offset += symbol.nodeSize;
         }
         
-        _symbols = [symbols copy];
-        [symbols release];
+        _symbols = symbols;
     }
     
     return self;
@@ -120,10 +119,10 @@
         
         if (commands.count == 0) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_SYMTAB load command."];
-            [self release]; return nil;
+            return nil;
         }
         
-        symtabLoadCommand = [[commands.firstObject retain] autorelease];
+        symtabLoadCommand = commands.firstObject;
     }
     
     // Determine the symbol table entry size
@@ -152,14 +151,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:(id)parent error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_symbols release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKPointer

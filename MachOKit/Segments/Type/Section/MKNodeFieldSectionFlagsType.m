@@ -71,11 +71,6 @@ MKMakeSingletonInitializer(MKNodeFieldSectionFlagsType)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_Formatter = formatter;
-    
-    [bits release];
-    [systemAttributes release];
-    [userAttributes release];
-    [type release];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

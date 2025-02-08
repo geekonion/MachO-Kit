@@ -61,8 +61,7 @@
     if (components.count < 2)
         [components addObject:@(0)];
     
-    _components = [components copy];
-    [components release];
+    _components = components;
     
     return self;
 }
@@ -70,14 +69,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { return [self initWithMachVersion:0]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_components release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  NSObject
@@ -95,7 +86,7 @@
             [description appendFormat:@"%@.", component];
     }];
     
-    return [[description copy] autorelease];
+    return description;
 }
 
 //|++++++++++++++++++++++++++++++++++++|//

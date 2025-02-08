@@ -61,7 +61,7 @@
 		
 		if (!MKULEBRead(self, 1, &_offset, &_offsetULEBSize, &ULEBError)) {
 			MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:ULEBError description:@"Could not read offset."];
-			[self release]; return nil;
+			return nil;
 		}
 	}
     

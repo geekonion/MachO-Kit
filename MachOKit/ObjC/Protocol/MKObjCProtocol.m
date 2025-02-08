@@ -89,7 +89,7 @@ struct objc_protocol_32 {
         struct objc_protocol_64 var;
         if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&var length:sizeof(var) requireFull:NO error:error] < offsetof(typeof(var), extendedMethodTypes)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read objc_protocol."];
-            [self release]; return nil;
+            return nil;
         }
         
         _isa = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), isa) fromParent:self error:error];
@@ -104,9 +104,9 @@ struct objc_protocol_32 {
         _flags = MKSwapLValue32(var.flags, dataModel);
         
         if (HAS_EXTENDED_METHOD_TYPES) {
-            void *weakSelf = (void*)self;
+            __weak typeof(self) weakSelf = self;
             
-            MKDeferredContextProvider ctx = Block_copy(^{
+            MKDeferredContextProvider ctx = ^{
                 // Note that a nil value without an error is not an error, the
                 // protocol may not have any of that kind of method.
                 
@@ -132,14 +132,12 @@ struct objc_protocol_32 {
                                                 optionalInstanceMethods.value.count +
                                                 optionalClassMethods.value.count)
                 }];
-            });
+            };
             
             _extendedMethodTypes = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), extendedMethodTypes) fromParent:self context:@{
                 MKInitializationContextTargetClass: MKObjCProtocolMethodTypesList.class,
                 MKInitializationContextDeferredProvider: ctx
             } error:error];
-            
-            Block_release(ctx);
         }
         
         if (HAS_DEMANGLED_NAME) {
@@ -157,7 +155,7 @@ struct objc_protocol_32 {
         struct objc_protocol_32 var;
         if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&var length:sizeof(var) requireFull:NO error:error] < offsetof(typeof(var), extendedMethodTypes)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read objc_protocol."];
-            [self release]; return nil;
+            return nil;
         }
         
         _isa = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), isa) fromParent:self error:error];
@@ -172,9 +170,9 @@ struct objc_protocol_32 {
         _flags = MKSwapLValue32(var.flags, dataModel);
         
         if (HAS_EXTENDED_METHOD_TYPES) {
-            void *weakSelf = (void*)self;
+            __weak typeof(self) weakSelf = self;
             
-            MKDeferredContextProvider ctx = Block_copy(^{
+            MKDeferredContextProvider ctx = ^{
                 // Note that a nil value without an error is not an error, the
                 // protocol may not have any of that kind of method.
                 
@@ -200,14 +198,12 @@ struct objc_protocol_32 {
                                                 optionalInstanceMethods.value.count +
                                                 optionalClassMethods.value.count)
                     }];
-            });
+            };
             
             _extendedMethodTypes = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), extendedMethodTypes) fromParent:self context:@{
                 MKInitializationContextTargetClass: MKObjCProtocolMethodTypesList.class,
                 MKInitializationContextDeferredProvider: ctx
             } error:error];
-            
-            Block_release(ctx);
         }
         
         if (HAS_DEMANGLED_NAME) {
@@ -225,24 +221,6 @@ struct objc_protocol_32 {
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_classProperties release];
-    [_demangledName release];
-    [_extendedMethodTypes release];
-    [_instanceProperties release];
-    [_optionalClassMethods release];
-    [_optionalInstanceMethods release];
-    [_classMethods release];
-    [_instanceMethods release];
-    [_protocols release];
-    [_mangledName release];
-    [_isa release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

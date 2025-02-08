@@ -34,7 +34,7 @@
 
 //----------------------------------------------------------------------------//
 @implementation MKDSCSymbol
-
+/*
 //|++++++++++++++++++++++++++++++++++++|//
 static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNode *parent, NSError **error)
 {
@@ -67,7 +67,7 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
     
     return true;
 }
-
+*/
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithIndex:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
 {
@@ -108,7 +108,7 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
             break;
         }
         
-        _name = [string retain];
+        _name = string;
         break;
     }
     
@@ -125,7 +125,7 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
         
         for (MKDSCDylibSymbolInfo *dylib in entries.entries) {
             if (index >= dylib.nlistStartIndex && index < dylib.nlistStartIndex + dylib.nlistCount) {
-                _dylib = [dylib retain];
+                _dylib = dylib;
                 break;
             }
         }
@@ -135,15 +135,6 @@ static bool ReadNList(struct nlist_64 *result, mk_vm_offset_t offset, MKBackedNo
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    [_dylib release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

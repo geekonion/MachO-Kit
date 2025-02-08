@@ -63,19 +63,11 @@
         _symbolName = [[MKCString alloc] initWithOffset:(offset + 1) fromParent:parent error:&symbolNameError];
         if (_symbolName == nil) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:symbolNameError description:@"Could not read symbol name."];
-            [self release]; return nil;
+            return nil;
         }
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_symbolName release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -87,7 +79,7 @@
 {
 #pragma unused(binder)
 #pragma unused(error)
-    bindContext->symbolName = self.symbolName.string;
+    bindContext->symbolName = (__bridge void *)self.symbolName.string;
     bindContext->symbolFlags = self.symbolFlags;
     
     return YES;

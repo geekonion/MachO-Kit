@@ -58,14 +58,12 @@
             }
             
             [entries addObject:entry];
-            [entry release];
             
             // SAFE - All entry nodes must be within the size of this node.
             offset += entry.nodeSize;
         }
         
-        _entries = [entries copy];
-        [entries release];
+        _entries = entries;
     }
     
     return self;
@@ -85,10 +83,10 @@
         
         if (commands.count == 0) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_DATA_IN_CODE load command."];
-            [self release]; return nil;
+            return nil;
         }
         
-        dataInCodeLoadCommand = [[commands.firstObject retain] autorelease];
+        dataInCodeLoadCommand = commands.firstObject;
     }
     
     return [self initWithSize:dataInCodeLoadCommand.datasize offset:dataInCodeLoadCommand.dataoff inImage:image error:error];
@@ -97,14 +95,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_entries release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKPointer

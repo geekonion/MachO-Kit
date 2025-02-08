@@ -48,7 +48,7 @@
     if (count == 0) {
         // If we return early, 'entries' must be initialized in order to
         // fufill our non-null promise for the property.
-        _entries = [[NSArray array] retain];
+        _entries = [NSArray array];
         
         return self;
     }
@@ -70,11 +70,9 @@
             }
             
             [entries addObject:entry];
-            [entry release];
         }
         
-        _entries = [entries copy];
-        [entries release];
+        _entries = entries;
         
         _nodeSize = count * sizeof(dc_local_symbols_entry_t);
     }
@@ -97,7 +95,7 @@
     // Verify that offset is in range of the entries table.
     if (offset < entiresOffset || offset > entiresOffset + entriesCount * sizeof(struct dyld_cache_local_symbols_entry)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"Offset (%" MK_VM_PRIiOFFSET ") not in range of the entries table for %@.", offset, symbols];
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithCount:entriesCount atOffset:entiresOffset fromParent:symbols error:error];
@@ -114,14 +112,6 @@
     NSParameterAssert(symbolsInfo);
     
     return [self initWithOffset:symbolsInfo.entriesOffset fromParent:symbols error:error];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_entries release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

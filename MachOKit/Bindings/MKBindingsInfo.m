@@ -47,14 +47,14 @@
     // An offset of zero indicates that the images does not have any bindings.
     if (offset == 0) {
         // Not an error.
-        [self release]; return nil;
+        return nil;
     }
     
     // A size of 0 is strange but valid.
     if (self.nodeSize == 0) {
         // Still need to assign a value to the commands and actions array.
-        _commands = [@[] retain];
-        _actions = [@[] retain];
+        _commands = @[];
+        _actions = @[];
         return self;
     }
     
@@ -92,12 +92,10 @@
         
         if (commands.count == 0) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Image does not contain a LC_DYLD_INFO load command."];
-            [commands release];
-            [self release]; return nil;
+            return nil;
         }
         
-        dyldInfoLoadCommand = [[commands.firstObject retain] autorelease];
-        [commands release];
+        dyldInfoLoadCommand = commands.firstObject;
     }
     
     return [self _initWithDyldInfo:dyldInfoLoadCommand inImage:image error:error];
@@ -106,15 +104,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_actions release];
-    [_commands release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Parsing
@@ -153,8 +142,7 @@
             offset += command.nodeSize;
         }
         
-        _commands = [commands copy];
-        [commands release];
+        _commands = commands;
     }
 }
 
@@ -167,7 +155,7 @@
         
         __block BOOL keepGoing = YES;
         __block NSError *bindingError = nil;
-        __block struct MKBindContext context = { 0, .info = self };
+        __block struct MKBindContext context = { 0, .info = (__bridge void *)self };
         
         void (^doBind)(void) = ^{
             MKBindAction *action = [MKBindAction actionWithContext:&context error:&bindingError];
@@ -184,23 +172,20 @@
                 context.actionSize = 0;
             }
             context.actionSize += command.nodeSize;
-            context.command = command;
+            context.command = (__bridge void *)command;
             
             keepGoing &= [command bind:doBind withContext:&context error:&bindingError];
             
             if (keepGoing == NO) {
                 if (bindingError) {
-                    MK_PUSH_WARNING_WITH_ERROR(actions, MK_EINTERNAL_ERROR, bindingError, @"Binding actions list generation failed at command: %@.", context.command.compactDescription);
+                    MK_PUSH_WARNING_WITH_ERROR(actions, MK_EINTERNAL_ERROR, bindingError, @"Binding actions list generation failed at command: %@.", command.compactDescription);
                 }
                 
                 break;
             }
         }
         
-        [context.ordinalTable release];
-        
-        _actions = [actions copy];
-        [actions release];
+        _actions = actions;
     }
 }
 

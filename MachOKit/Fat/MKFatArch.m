@@ -46,7 +46,7 @@
     
     if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&slice length:sizeof(slice) requireFull:YES error:&memoryMapError] < sizeof(slice)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read fat_arch."];
-        [self release]; return nil;
+        return nil;
     }
     
     _cputype = MKSwapLValue32s(slice.cputype, self.dataModel);
@@ -145,7 +145,7 @@
 {
     char description[50];
     size_t descriptionLen = mk_architecture_copy_description(self.architecture, description, sizeof(description));
-    NSString *architecture = [[[NSString alloc] initWithBytes:(void*)description length:descriptionLen encoding:NSASCIIStringEncoding] autorelease];
+    NSString *architecture = [[NSString alloc] initWithBytes:(void*)description length:descriptionLen encoding:NSASCIIStringEncoding];
     
     return [NSString stringWithFormat:@"Fat Arch (%@)", architecture];
 }

@@ -51,15 +51,15 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _name = [name copy];
-    _description = [description copy];
-    _type = [type retain];
-    _valueRecipe = [valueRecipe retain];
-    _dataRecipe = [dataRecipe retain];
+    _name = name;
+    _description = description;
+    _type = type;
+    _valueRecipe = valueRecipe;
+    _dataRecipe = dataRecipe;
     // The formatter really should be copied but it saves memory not to.
-    _valueFormatter = [valueFormatter retain];
+    _valueFormatter = valueFormatter;
     _options = options;
-    _alternateFieldName = [alternateFieldName copy];
+    _alternateFieldName = alternateFieldName;
     
     return self;
 }
@@ -73,20 +73,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)init
 { @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"-init unavailable." userInfo:nil]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    [_description release];
-    [_type release];
-    [_valueRecipe release];
-    [_dataRecipe release];
-    [_valueFormatter release];
-    [_alternateFieldName release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Obtaining a Formatted Description

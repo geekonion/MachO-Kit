@@ -63,7 +63,7 @@ struct cf_string_32 {
         struct cf_string_64 var;
         if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&var length:sizeof(var) requireFull:YES error:&memoryMapError] < sizeof(var)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read __builtin_CFString."];
-            [self release]; return nil;
+            return nil;
         }
         
         _isa = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), isa) fromParent:self targetClass:MKObjCClass.class error:error];
@@ -78,7 +78,7 @@ struct cf_string_32 {
         struct cf_string_32 var;
         if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&var length:sizeof(var) requireFull:YES error:&memoryMapError] < sizeof(var)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read __builtin_CFString."];
-            [self release]; return nil;
+            return nil;
         }
         
         _isa = [[MKPointer alloc] initWithOffset:offsetof(typeof(var), isa) fromParent:self targetClass:MKObjCClass.class error:error];
@@ -93,15 +93,6 @@ struct cf_string_32 {
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_string release];
-    [_isa release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

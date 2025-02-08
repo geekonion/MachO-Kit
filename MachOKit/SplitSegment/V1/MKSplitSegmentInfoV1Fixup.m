@@ -38,7 +38,7 @@
 {
     NSParameterAssert(context->info != nil);
     
-    self = [super initWithParent:context->offset error:error];
+    self = [super initWithParent:(__bridge MKNode *)context->offset error:error];
     if (self == nil) return nil;
     
     _address = context->address;

@@ -91,25 +91,15 @@
             }
             
             [pointers addObject:pointer];
-            [pointer release];
             
             // SAFE - All pointer nodes must be within the size of this node.
             offset += pointer.nodeSize;
         }
         
-        _pointerList = [pointers copy];
-        [pointers release];
+        _pointerList = pointers;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_pointerList release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

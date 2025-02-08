@@ -58,10 +58,6 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARM6432)
     MKBitfieldFormatter *formatter = [MKBitfieldFormatter new];
     formatter.bits = bits;
     s_BitfieldFormatter = formatter;
-    
-    [bits release];
-    [capabilitiesMask release];
-    [subtypeMask release];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -95,10 +91,10 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeARM6432SubType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
+    s_Types = @{
         _$(CPU_SUBTYPE_ARM64_32_ALL): @"CPU_SUBTYPE_ARM64_32_ALL",
         _$(CPU_SUBTYPE_ARM64_32_V8): @"CPU_SUBTYPE_ARM64_32_V8"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_SUBTYPE_ARM64_32";

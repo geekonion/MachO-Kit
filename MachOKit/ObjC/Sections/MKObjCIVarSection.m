@@ -68,25 +68,15 @@
             }
             
             [ivarOffsets addObject:ivarOffset];
-            [ivarOffset release];
             
             // SAFE - All pointer nodes must be within the size of this node.
             offset += ivarOffset.nodeSize;
         }
         
-        _ivarOffsets = [ivarOffsets copy];
-        [ivarOffsets release];
+        _ivarOffsets = ivarOffsets;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_ivarOffsets release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

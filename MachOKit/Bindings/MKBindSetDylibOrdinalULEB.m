@@ -62,7 +62,7 @@
         
         if (!MKULEBRead(self, 1, (uint64_t*)&_ordinal, &_ordinalULEBSize, &ULEBError)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:ULEBError description:@"Could not read ordinal."];
-            [self release]; return nil;
+            return nil;
         }
     }
     

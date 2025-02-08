@@ -33,21 +33,12 @@
 //|++++++++++++++++++++++++++++++++++++|//
 + (instancetype)comboFormatterWithStyle:(MKComboFormatterStyle)style rawValueFormatter:(NSFormatter*)rawValueFormatter refinedValueFormatter:(NSFormatter*)refinedValueFormatter
 {
-    MKComboFormatter *retValue = [[[self alloc] init] autorelease];
+    MKComboFormatter *retValue = [[self alloc] init];
     retValue.rawValueFormatter = rawValueFormatter;
     retValue.refinedValueFormatter = refinedValueFormatter;
     retValue.style = style;
     
     return retValue;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_refinedValueFormatter release];
-    [_rawValueFormatter release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -60,8 +51,8 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _rawValueFormatter = [[aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"rawValueFormatter"] retain];
-    _refinedValueFormatter = [[aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"refinedValueFormatter"] retain];
+    _rawValueFormatter = [aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"rawValueFormatter"];
+    _refinedValueFormatter = [aDecoder decodeObjectOfClass:NSFormatter.class forKey:@"refinedValueFormatter"];
     _style = (NSUInteger)[aDecoder decodeIntegerForKey:@"style"];
     
     return self;

@@ -43,13 +43,13 @@ MKMakeSingletonInitializer(MKNodeFieldSymbolType)
     if (s_Elements != nil && s_Formatter != nil)
         return;
     
-    s_Elements = [@{
+    s_Elements = @{
         _$((uint8_t)N_UNDF): @"N_UNDF",
         _$((uint8_t)N_ABS): @"N_ABS",
         _$((uint8_t)N_SECT): @"N_SECT",
         _$((uint8_t)N_PBUD): @"N_PBUD",
         _$((uint8_t)N_INDR): @"N_INDR"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"Symbol Type";

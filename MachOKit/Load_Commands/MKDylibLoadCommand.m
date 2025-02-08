@@ -46,7 +46,7 @@
     
     struct dylib_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     MKSwapLValue32(lc.dylib.name.offset, self.macho.dataModel);
     _name = [[MKCString alloc] initWithOffset:lc.dylib.name.offset fromParent:self error:error];
@@ -82,17 +82,6 @@
     _compatibility_version = [[MKDylibVersion alloc] initWithMachVersion:lc->dylib.compatibility_version];
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_name release];
-    [_timestamp release];
-    [_current_version release];
-    [_compatibility_version release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

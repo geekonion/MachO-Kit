@@ -49,18 +49,18 @@
     // Can not overflow - tocOffset is uint32
     if (offset < tocOffset || offset > tocOffset + tocCount*sizeof(uint16_t)) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"Offset (%" MK_VM_PRIiOFFSET ") not in range of TOC.", offset];
-        [self release]; return nil;
+        return nil;
     }
     
     self = [super initWithOffset:offset fromParent:parent error:error];
     if (self == nil) return nil;
     
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&_entryIndex length:sizeof(uint16_t) requireFull:YES error:error] < sizeof(uint16_t))
-    { [self release]; return nil; }
+    { return nil; }
     
     // Lookup the corresponding bitmap.
     if (_entryIndex < slideInfo.entries.count)
-        _bitmap = [slideInfo.entries[_entryIndex] retain];
+        _bitmap = slideInfo.entries[_entryIndex];
     else
         MK_PUSH_WARNING(bitmap, MK_ENOT_FOUND, @"No bitmap at index %" PRIu16 " in entries table.", _entryIndex);
     
@@ -77,14 +77,6 @@
     NSParameterAssert(slideInfoHeader);
     
     return [self initWithOffset:slideInfoHeader.tocOffset fromParent:slideInfo error:error];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_bitmap release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -85,7 +85,7 @@
     // Verify that a stub size was specified in the load command.
     if (_stubSize == 0) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA description:@"No stub size specified in load command: %@", [(MKNode*)sectionLoadCommand compactDescription]];
-        [self release]; return nil;
+        return nil;
     }
     
     // Load Stubs
@@ -105,25 +105,15 @@
             }
             
             [stubs addObject:stub];
-            [stub release];
             
             // SAFE - All stub nodes must be within the size of this node.
             offset += stub.nodeSize;
         }
         
-        _stubs = [stubs copy];
-        [stubs release];
+        _stubs = stubs;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_stubs release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

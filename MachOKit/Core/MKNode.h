@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 //!
 @interface MKNode : NSObject {
 @package
-    /*__weak*/ MKNode *_parent;
+    __weak MKNode *_parent;
 }
 
 //! Initializes the receiver with the provided \a parent node.  Subclasses
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //! The delegate for the node.  If no delegate has been set for the node,
 //! the delegate of the node's parent.
-@property (nonatomic, assign, nullable) id<MKNodeDelegate> delegate;
+@property (nonatomic, weak, nullable) id<MKNodeDelegate> delegate;
 
 //! The memory map for the node.  By default this is the memory map of the
 //! node's parent.  Subclasses should override the getter for this property
@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 //! The parent node, or \c nil if the node has no parent.
-@property (nonatomic, readonly, nullable) MKNode *parent;
+@property (nonatomic, weak, readonly, nullable) MKNode *parent;
 
 //! Returns the nearest ancestor node of type \a cls.
 - (nullable __kindof MKNode*)nearestAncestorOfType:(Class)cls;

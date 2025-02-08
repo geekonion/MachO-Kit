@@ -72,7 +72,7 @@
     
     struct dysymtab_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _ilocalsym = MKSwapLValue32(lc.ilocalsym, self.macho.dataModel);
     _nlocalsym = MKSwapLValue32(lc.nlocalsym, self.macho.dataModel);

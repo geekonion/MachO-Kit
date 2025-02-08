@@ -39,7 +39,7 @@
     self = [super init];
     if (self == nil) return nil;
     
-    _keyPath = [keyPath copy];
+    _keyPath = keyPath;
     
     return self;
 }
@@ -48,14 +48,6 @@
 - (instancetype)init
 {
     return [self initWithKeyPath:nil];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_keyPath release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

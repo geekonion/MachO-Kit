@@ -69,25 +69,15 @@
             }
             
             [strings addObject:string];
-            [string release];
             
             // SAFE - All string nodes must be within the size of this node.
             offset += string.nodeSize;
         }
         
-        _strings = [strings copy];
-        [strings release];
+        _strings = strings;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_strings release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

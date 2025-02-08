@@ -46,7 +46,7 @@
     if (count == 0) {
         // If we return early, 'symbols' must be initialized in order to
         // fufill our non-null promise for the property.
-        _symbols = [[NSArray array] retain];
+        _symbols = [NSArray array];
         
         return self;
     }
@@ -69,7 +69,6 @@
             }
             
             [symbols addObject:symbol];
-            [symbol release];
             
             if ((err = mk_vm_offset_add(offset, symbol.nodeSize, &offset))) {
                 MK_PUSH_UNDERLYING_WARNING(symbols, MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, symbol.nodeSize), @"Aborted symbol parsing after index " PRIi32 ".", i);
@@ -77,8 +76,7 @@
             }
         }
         
-        _symbols = [symbols copy];
-        [symbols release];
+        _symbols = symbols;
         
         _nodeSize = offset;
     }
@@ -102,7 +100,7 @@
     // Verify that offset is in range of the symbols table.
     if (offset < symbolsOffset || offset > symbolsOffset + symbolsCount * symbolSize) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EOUT_OF_RANGE description:@"Offset (%" MK_VM_PRIiOFFSET ") not in range of the symbols table %@.", offset, symbols];
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithCount:symbolsCount atOffset:symbolsOffset fromParent:symbols error:error];
@@ -119,14 +117,6 @@
     NSParameterAssert(symbolsInfo);
     
     return [self initWithOffset:symbolsInfo.nlistOffset fromParent:symbols error:error];
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_symbols release];
-    
-    [super dealloc];
 }
 
 - (NSData *)data {

@@ -60,7 +60,7 @@
         mk_vm_range_t parentRange = mk_vm_range_make(parentAddress, parentSize);
         if ((err = mk_vm_range_contains_address(parentRange, offset, parentAddress))) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:err description:@"Provided offset [%" MK_VM_PRIuOFFSET "] is not within parent node: %@.", offset, parent.compactDescription];
-            [self release]; return nil;
+            return nil;
         }
         
         _nodeSize = parent.nodeSize - offset;
@@ -75,15 +75,15 @@
     [parent.memoryMap remapBytesAtOffset:offset fromAddress:parent.nodeContextAddress length:_nodeSize requireFull:NO withHandler:^(vm_address_t address, vm_size_t length, NSError *e) {
         if (address == 0x0) { memoryMapError = e; return; }
         
-        _nodeSize = strnlen((const char*)address, length);
-        _string = [[NSString alloc] initWithBytes:(const void*)address length:(NSUInteger)_nodeSize encoding:NSUTF8StringEncoding];
+        self->_nodeSize = strnlen((const char*)address, length);
+        self->_string = [[NSString alloc] initWithBytes:(const void*)address length:(NSUInteger)self->_nodeSize encoding:NSUTF8StringEncoding];
         
-        if (_string == nil)
+        if (self->_string == nil)
             MK_PUSH_WARNING(string, MK_EINVALID_DATA, @"Could not initialize NSString with bytes.");
         
-        if (_nodeSize < length) {
+        if (self->_nodeSize < length) {
             // Account for the NULL byte.
-            _nodeSize = _nodeSize + 1;
+            self->_nodeSize = self->_nodeSize + 1;
         } else {
             MK_PUSH_WARNING(sring, MK_EINVALID_DATA, @"String may not be properly terminated.");
         }
@@ -91,7 +91,7 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = memoryMapError;
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -102,18 +102,10 @@
         NSLog(@"not a string obj");
     }
     if (self = [super initWithOffset:offset fromParent:parent error:nil]) {
-        _string = [string retain];
+        _string = string;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_string release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

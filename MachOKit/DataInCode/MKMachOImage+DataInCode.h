@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 //! information.
 @property (nonatomic, strong, readonly) MKResult<MKDataInCode*> *dataInCode;
 
++ (MKNodeFieldBuilder*)_dataInCodeFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

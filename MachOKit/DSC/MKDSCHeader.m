@@ -68,7 +68,7 @@
     
     struct dyld_cache_header sch;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&sch length:sizeof(sch) requireFull:YES error:error] < sizeof(sch))
-    { [self release]; return nil; }
+    { return nil; }
     
     _magic = [[NSString alloc] initWithBytes:sch.magic length:strnlen(sch.magic, sizeof(sch.magic)) encoding:NSUTF8StringEncoding];
     if (_magic == nil)
@@ -113,15 +113,6 @@
         _cacheType = MKSwapLValue64(sch.cacheType, self.dataModel);
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_magic release];
-    [_uuid release];
-	
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

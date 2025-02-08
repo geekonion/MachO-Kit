@@ -43,7 +43,7 @@ MKMakeSingletonInitializer(MKNodeFieldObjCClassFlagsType)
     if (s_Flags != nil && s_Formatterr != nil)
         return;
     
-    s_Flags = [@{
+    s_Flags = @{
         _$((uint32_t)MKObjCClassMeta): @"RO_META",
         _$((uint32_t)MKObjCClassRoot): @"RO_ROOT",
         _$((uint32_t)MKObjCClassHasCXXStructors): @"RO_HAS_CXX_STRUCTORS",
@@ -52,7 +52,7 @@ MKMakeSingletonInitializer(MKNodeFieldObjCClassFlagsType)
         _$((uint32_t)MKObjCClassIsARR): @"RO_IS_ARC",
         _$((uint32_t)MKObjCClassHasCXXDestructorOnly): @"RO_HAS_CXX_DTOR_ONLY",
         _$((uint32_t)MKObjCClassHasWeakiVarWithoutARR): @"RO_HAS_WEAK_WITHOUT_ARC"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_Flags;

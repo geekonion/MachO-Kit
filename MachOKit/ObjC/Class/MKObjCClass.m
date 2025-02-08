@@ -79,7 +79,7 @@ struct objc_class_32 {
         struct objc_class_64 cls;
         if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&cls length:sizeof(cls) requireFull:YES error:&memoryMapError] < sizeof(cls)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read objc_class."];
-            [self release]; return nil;
+            return nil;
         }
         
         _metaClass = [[MKPointer alloc] initWithOffset:offsetof(struct objc_class_64, meta_class) fromParent:self targetClass:MKObjCClass.class error:error];
@@ -98,7 +98,7 @@ struct objc_class_32 {
         struct objc_class_32 cls;
         if ([self.memoryMap copyBytesAtOffset:0 fromAddress:self.nodeContextAddress into:&cls length:sizeof(cls) requireFull:YES error:&memoryMapError] < sizeof(cls)) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read objc_class."];
-            [self release]; return nil;
+            return nil;
         }
         
         _metaClass = [[MKPointer alloc] initWithOffset:offsetof(struct objc_class_32, meta_class) fromParent:self targetClass:MKObjCClass.class error:error];
@@ -117,17 +117,6 @@ struct objc_class_32 {
     }
         
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_classData release];
-    [_cache release];
-    [_superClass release];
-    [_metaClass release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

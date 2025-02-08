@@ -31,12 +31,17 @@
 #import "MKExportsInfo.h"
 #import "MKExportTrieBranch.h"
 
+static NSSet *_subclasses = NULL;
 //----------------------------------------------------------------------------//
 @implementation MKExportTrieNode
 
 //|++++++++++++++++++++++++++++++++++++|//
-+ (id*)_subclassesCache
-{ static NSSet *subclasses; return &subclasses; }
++ (NSSet *)_subclassesCache
+{ return _subclasses; }
+
++ (void)_setSubclassesCache:(NSSet *)subclasses {
+    _subclasses = subclasses;
+}
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (uint32_t)canInstantiateWithTerimalSize:(uint64_t)terminalSize contents:(uint8_t*)contents
@@ -112,7 +117,7 @@ bool ReadTerminalSize(uint64_t *result, size_t *size, mk_vm_offset_t offset, MKB
 	}
 	
 	NSAssert(nodeClass != nil, @"No class for trie node.");
-    return [[[nodeClass alloc] initWithOffset:offset fromParent:parent error:error] autorelease];
+    return [[nodeClass alloc] initWithOffset:offset fromParent:parent error:error];
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -131,7 +136,7 @@ bool ReadTerminalSize(uint64_t *result, size_t *size, mk_vm_offset_t offset, MKB
 		
 		if (ReadTerminalSize(&_terminalInformationSize, &_terminalInformationSizeULEBSize, 0, self, &terminalSizeError) == false) {
 			MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:terminalSizeError description:@"Could not read terminal size."];
-			[self release]; return nil;
+			return nil;
 		}
 		
 		offset += _terminalInformationSizeULEBSize;
@@ -139,14 +144,14 @@ bool ReadTerminalSize(uint64_t *result, size_t *size, mk_vm_offset_t offset, MKB
 	
 	// Parse terminal information.
 	if ([self _parseTerminalInformationAtOffset:offset error:error] == NO) {
-		[self release]; return nil;
+		return nil;
 	}
 	
 	// Branch information begins after the terminal information, the size of which was
 	// read from the terminal size.
     if ((err = mk_vm_offset_add(offset, _terminalInformationSize, &offset))) {
         MK_ERROR_OUT = MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, _terminalInformationSize);
-        [self release]; return nil;
+        return nil;
     }
     
     // Read the branches
@@ -155,11 +160,11 @@ bool ReadTerminalSize(uint64_t *result, size_t *size, mk_vm_offset_t offset, MKB
 		
 		if ([self.memoryMap copyBytesAtOffset:offset fromAddress:self.nodeContextAddress into:&_childCount length:sizeof(uint8_t) requireFull:YES error:&branchError] < sizeof(uint8_t)) {
 			MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:branchError description:@"Could not read child count."];
-			[self release]; return nil;
+			return nil;
 		}
 		if ((err = mk_vm_offset_add(offset, 1, &offset))) {
 			MK_ERROR_OUT = MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, 1);
-			[self release]; return nil;
+			return nil;
 		}
 		
 		NSMutableArray *branches = [[NSMutableArray alloc] initWithCapacity:_childCount];
@@ -168,21 +173,18 @@ bool ReadTerminalSize(uint64_t *result, size_t *size, mk_vm_offset_t offset, MKB
 			MKExportTrieBranch *branch = [[MKExportTrieBranch alloc] initWithOffset:offset fromParent:self error:&branchError];
 			if (branch == nil) {
 				MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINVALID_DATA underlyingError:branchError description:@"Could not parse branch at index [%" PRIi8 "].", i];
-				[branches release];
-				[self release]; return nil;
+				return nil;
 			}
 			
             // SAFE - All branch nodes must be within the size of this node.
             offset += branch.nodeSize;
 			
 			[branches addObject:branch];
-			[branch release];
 		}
 		
 		_nodeSize = offset;
 		
-		_branches = [branches copy];
-		[branches release];
+		_branches = branches;
 	}
     
     return self;

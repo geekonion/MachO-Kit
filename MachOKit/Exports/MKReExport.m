@@ -61,25 +61,16 @@
             library = libraries[(NSUInteger)(_sourceLibraryOrdinal - 1)];
         
         if (library.value)
-            _sourceLibrary = [library.value retain];
+            _sourceLibrary = library.value;
         else
             MK_PUSH_WARNING_WITH_ERROR(sourceLibrary, MK_ENOT_FOUND, library.error, @"Could not locate library for ordinal [%" PRIi64 "].", _sourceLibraryOrdinal);
     } else {
         MK_PUSH_WARNING(sourceLibrary, MK_EOUT_OF_RANGE, @"Unsupported special library ordinal [%" PRIi64 "] in an export.", _sourceLibraryOrdinal);
     }
     
-	_importedName = [terminalNode.importedName.string retain];
+	_importedName = terminalNode.importedName.string;
 	
 	return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-	[_importedName release];
-    [_sourceLibrary release];
-	
-	[super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -64,20 +64,12 @@
             library = libraries[(NSUInteger)(self.sourceLibraryOrdinal - 1)];
         
         if (library.value)
-            _sourceLibrary = [library.value retain];
+            _sourceLibrary = library.value;
         else
             MK_PUSH_WARNING_WITH_ERROR(sourceLibrary, MK_ENOT_FOUND, library.error, @"Could not locate library for ordinal [%" PRIi64 "].", self.sourceLibraryOrdinal);
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_sourceLibrary release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
@@ -129,10 +121,6 @@
     
     desc.type = [MKNodeFieldTypeBitfield bitfieldWithType:(id)desc.type bits:@[referenceTypeMask, symbolFlagsMask, sourceLibraryOrdinalMask] name:nil];
     desc.formatter = desc.type.formatter;
-    
-    [sourceLibraryOrdinalMask release];
-    [symbolFlagsMask release];
-    [referenceTypeMask release];
     
     return desc;
 }

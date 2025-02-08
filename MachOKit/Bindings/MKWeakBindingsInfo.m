@@ -56,7 +56,7 @@
         
         __block BOOL keepGoing = YES;
         __block NSError *bindingError = nil;
-        __block struct MKBindContext context = { 0, .info = self };
+        __block struct MKBindContext context = { 0, .info = (__bridge void *)self };
         
         void (^doBind)(void) = ^{
             MKBindAction *action = [[MKBindActionWeakBind alloc] initWithContext:&context error:&bindingError];
@@ -65,8 +65,6 @@
                 [actions addObject:action];
             else
                 keepGoing = NO;
-            
-            [action release];
         };
         
         for (MKBindCommand *command in _commands) {
@@ -75,21 +73,20 @@
                 context.actionSize = 0;
             }
             context.actionSize += command.nodeSize;
-            context.command = command;
+            context.command = (__bridge void *)command;
             
             keepGoing &= [command bind:doBind withContext:&context error:&bindingError];
             
             if (keepGoing == NO) {
                 if (bindingError) {
-                    MK_PUSH_WARNING_WITH_ERROR(actions, MK_EINTERNAL_ERROR, bindingError, @"Weak binding actions list generation failed at command: %@.", context.command.compactDescription);
+                    MK_PUSH_WARNING_WITH_ERROR(actions, MK_EINTERNAL_ERROR, bindingError, @"Weak binding actions list generation failed at command: %@.", command.compactDescription);
                 }
                 
                 break;
             }
         }
         
-        _actions = [actions copy];
-        [actions release];
+        _actions = actions;
     }
 }
 

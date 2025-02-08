@@ -52,7 +52,7 @@
     }
     
     MK_ERROR_OUT = splitSegmentInfoError;
-    [self release]; return nil;
+    return nil;
 }
 
 //|++++++++++++++++++++++++++++++++++++|//
@@ -70,10 +70,10 @@
         
         if (commands.count == 0) {
             // Not an error - Image has no split segment information.
-            [self release]; return nil;
+            return nil;
         }
         
-        segmentSplitInfoLoadCommand = [[commands.firstObject retain] autorelease];
+        segmentSplitInfoLoadCommand = commands.firstObject;
     }
     
     return [self initWithSize:segmentSplitInfoLoadCommand.datasize offset:segmentSplitInfoLoadCommand.dataoff inImage:image error:error];
@@ -82,14 +82,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_impl release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Values

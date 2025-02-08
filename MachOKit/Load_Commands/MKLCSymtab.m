@@ -58,7 +58,7 @@
     
     struct symtab_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _symoff = MKSwapLValue32(lc.symoff, self.macho.dataModel);
     _nsyms = MKSwapLValue32(lc.nsyms, self.macho.dataModel);

@@ -41,7 +41,7 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:memoryMapError description:@"Could not read pointer value."];
-        [self release]; return nil;
+        return nil;
     }
     
     return [self initWithAddress:address node:parent context:context error:error];

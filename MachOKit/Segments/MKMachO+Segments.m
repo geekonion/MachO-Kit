@@ -72,14 +72,12 @@ _mk_internal NSString * const MKIndexedSections = @"MKIndexedSections";
                 MKResult *segmentOpt = [[MKResult alloc] initWithValue:segment];
                 [segments addObject:segmentOpt];
                 [segmentsByLoadCommand setObject:segmentOpt forKey:lc];
-                [segmentOpt release];
             } else {
                 NSError *error = [NSError mk_errorWithDomain:MKErrorDomain code:MK_EINTERNAL_ERROR underlyingError:segmentError description:@"Could not create segment for load command: %@", lc];
                 
                 MKResult *segmentOpt = [[MKResult alloc] initWithError:error];
                 [segments addObject:segmentOpt];
                 [segmentsByLoadCommand setObject:segmentOpt forKey:lc];
-                [segmentOpt release];
                 
                 continue;
             }
@@ -110,23 +108,16 @@ _mk_internal NSString * const MKIndexedSections = @"MKIndexedSections";
             }
         }
         
-        NSArray *finalSegments = [segments copy];
+        NSArray *finalSegments = segments;
         NSArray *sortedSegments = [MKBackedNode sortNodeArray:(NSArray *)segments];
         
-        _segments = [@{
+        _segments = @{
             MKAllSegments: finalSegments,
             MKSortedSegments: sortedSegments,
             MKSegmentsByLoadCommand: segmentsByLoadCommand,
             MKAllSections: sections,
             MKIndexedSections: [NSDictionary dictionaryWithDictionary:sectionsByIndex]
-        } retain];
-        
-        [finalSegments release];
-        
-        [segments release];
-        [segmentsByLoadCommand release];
-        [sections release];
-        [sectionsByIndex release];
+        };
     }
     
     return _segments;
@@ -215,7 +206,7 @@ _mk_internal NSString * const MKIndexedSections = @"MKIndexedSections";
     ];
     sections.description = @"Sections";
     sections.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionMergeContainerContents;
-    sections.valueRecipe = [[[MKNodeFieldExtractSortedDictionaryValues alloc] initWithValueRecipe:sections.valueRecipe keyComparisonSelector:@selector(compare:)] autorelease];
+    sections.valueRecipe = [[MKNodeFieldExtractSortedDictionaryValues alloc] initWithValueRecipe:sections.valueRecipe keyComparisonSelector:@selector(compare:)];
     
     return sections;
 }

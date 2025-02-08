@@ -55,7 +55,7 @@
     
     struct encryption_info_command_64 lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _pad = MKSwapLValue32(lc.pad, self.macho.dataModel);
     

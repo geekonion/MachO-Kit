@@ -57,7 +57,7 @@
     
     struct encryption_info_command lc;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&lc length:sizeof(lc) requireFull:YES error:error] < sizeof(lc))
-    { [self release]; return nil; }
+    { return nil; }
     
     _cryptoff = MKSwapLValue32(lc.cryptoff, self.macho.dataModel);
     _cryptsize = MKSwapLValue32(lc.cryptsize, self.macho.dataModel);

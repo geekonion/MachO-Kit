@@ -43,11 +43,11 @@ MKMakeSingletonInitializer(MKNodeFieldCPUSubTypeAnySubType)
     if (s_Types != nil && s_Formatter != nil)
         return;
     
-    s_Types = [@{
+    s_Types = @{
         _$(CPU_SUBTYPE_MULTIPLE): @"CPU_SUBTYPE_MULTIPLE",
         _$(CPU_SUBTYPE_LITTLE_ENDIAN): @"CPU_SUBTYPE_LITTLE_ENDIAN",
         _$(CPU_SUBTYPE_BIG_ENDIAN): @"CPU_SUBTYPE_BIG_ENDIAN"
-    } retain];
+    };
     
     MKEnumerationFormatter *formatter = [MKEnumerationFormatter new];
     formatter.name = @"CPU_SUBTYPE";

@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) NSArray<MKPointerNode<Element>*> *elements;
 
++ (MKNodeFieldBuilder*)_elementsFieldBuilder;
 @end
 
 NS_ASSUME_NONNULL_END

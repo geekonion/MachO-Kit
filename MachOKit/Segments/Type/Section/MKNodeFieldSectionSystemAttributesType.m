@@ -43,11 +43,11 @@ MKMakeSingletonInitializer(MKNodeFieldSectionSystemAttributesType)
     if (s_SystemAttributes != nil && s_SystemFormatter != nil)
         return;
     
-    s_SystemAttributes = [@{
+    s_SystemAttributes = @{
         _$((uint32_t)S_ATTR_SOME_INSTRUCTIONS): @"S_ATTR_SOME_INSTRUCTIONS",
         _$((uint32_t)S_ATTR_EXT_RELOC): @"S_ATTR_EXT_RELOC",
         _$((uint32_t)S_ATTR_LOC_RELOC): @"S_ATTR_LOC_RELOC"
-    } retain];
+    };
     
     MKOptionSetFormatter *formatter = [MKOptionSetFormatter new];
     formatter.options = s_SystemAttributes;

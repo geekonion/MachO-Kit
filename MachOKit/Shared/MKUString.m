@@ -60,7 +60,7 @@
         mk_vm_range_t parentRange = mk_vm_range_make(parentAddress, parentSize);
         if ((err = mk_vm_range_contains_address(parentRange, offset, parentAddress))) {
             MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"Provided offset [%" MK_VM_PRIuOFFSET "] is not within parent node: %@.", offset, parent.compactDescription];
-            [self release]; return nil;
+            return nil;
         }
         
         _nodeSize = parent.nodeSize - offset;
@@ -86,15 +86,15 @@
             return count;
         };
         
-        _nodeSize = strnlen16((const uint16_t*)address, length);
-        _string = [[NSString alloc] initWithBytes:(const void*)address length:(NSUInteger)_nodeSize encoding:NSUTF16LittleEndianStringEncoding];
+        self->_nodeSize = strnlen16((const uint16_t*)address, length);
+        self->_string = [[NSString alloc] initWithBytes:(const void*)address length:(NSUInteger)self->_nodeSize encoding:NSUTF16LittleEndianStringEncoding];
         
-        if (_string == nil)
+        if (self->_string == nil)
             MK_PUSH_WARNING(string, MK_EINVALID_DATA, @"Could not initialize NSString with bytes.");
         
-        if (_nodeSize < length) {
+        if (self->_nodeSize < length) {
             // Account for the NULL terminator.
-            _nodeSize = MIN(_nodeSize + 2, length);
+            self->_nodeSize = MIN(self->_nodeSize + 2, length);
         } else {
             MK_PUSH_WARNING(sring, MK_EINVALID_DATA, @"String may not be properly terminated.");
         }
@@ -102,18 +102,10 @@
     
     if (memoryMapError) {
         MK_ERROR_OUT = memoryMapError;
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
-}
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_string release];
-    
-    [super dealloc];
 }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//

@@ -52,7 +52,7 @@
     
     // Local symbols do not reside in a region of the shared cache that is
     // mapped into process memory.
-    _memoryMap = [sharedCache.memoryMap retain];
+    _memoryMap = sharedCache.memoryMap;
     
     mk_vm_offset_t localSymbolsOffset = sharedCache.header.localSymbolsOffset;
     mk_vm_size_t localSymbolsSize = sharedCache.header.localSymbolsSize;
@@ -60,7 +60,7 @@
     
     if ((err = mk_vm_address_apply_offset(sharedCacheAddress, localSymbolsOffset, &_contextAddress))) {
         MK_ERROR_OUT = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, sharedCacheAddress, localSymbolsOffset);
-        [self release]; return nil;
+        return nil;
     }
 
     // Local symbols are not mapped.
@@ -76,7 +76,7 @@
     _header = [[MKDSCLocalSymbolsHeader alloc] initWithParent:self error:&localError];
     if (_header == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:localError.code underlyingError:localError description:@"Failed to load symbols info header."];
-        [self release]; return nil;
+        return nil;
     }
     
     return self;
@@ -100,18 +100,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithSharedCache:parent.sharedCache error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_entriesTable release];
-    [_stringTable release];
-    [_symbolTable release];
-    [_header release];
-    [_memoryMap release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark - MKNode

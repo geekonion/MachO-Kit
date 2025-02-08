@@ -43,7 +43,7 @@
     
     struct dyld_cache_mapping_info scmi;
     if ([self.memoryMap copyBytesAtOffset:offset fromAddress:parent.nodeContextAddress into:&scmi length:sizeof(scmi) requireFull:YES error:error] < sizeof(scmi))
-    { [self release]; return nil; }
+    { return nil; }
     
     _address = MKSwapLValue64(scmi.address, self.dataModel);
     _size = MKSwapLValue64(scmi.size, self.dataModel);

@@ -36,7 +36,7 @@
     @end\
     @implementation __MKUnsigned ## NAME ## Number \
     - (id)initWithUnsigned ## NAME :(unsigned TYPE)value { if (self) _v = value; return self; } \
-    - (id)copyWithZone:(__unused NSZone*)zone { return [self retain]; } \
+    - (id)copyWithZone:(__unused NSZone*)zone { return self; } \
     - (unsigned TYPE)unsigned ## NAME ## Value { return _v; } \
     - (const char*)objCType { return ENCODING; } \
     @end
@@ -61,7 +61,7 @@ MKMakeUnsignedNSNumberSubclass(LongLong, long long, "Q")
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithUnsignedByte:(uint8_t)value
-{ return [[[__MKUnsignedCharNumber alloc] initWithUnsignedChar:value] autorelease]; }
+{ return [[__MKUnsignedCharNumber alloc] initWithUnsignedChar:value]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithWord:(int16_t)value
@@ -69,7 +69,7 @@ MKMakeUnsignedNSNumberSubclass(LongLong, long long, "Q")
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithUnsignedWord:(uint16_t)value
-{ return [[[__MKUnsignedShortNumber alloc] initWithUnsignedShort:value] autorelease]; }
+{ return [[__MKUnsignedShortNumber alloc] initWithUnsignedShort:value]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithDoubleWord:(int32_t)value
@@ -77,7 +77,7 @@ MKMakeUnsignedNSNumberSubclass(LongLong, long long, "Q")
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithUnsignedDoubleWord:(uint32_t)value
-{ return [[[__MKUnsignedIntNumber alloc] initWithUnsignedInt:value] autorelease]; }
+{ return [[__MKUnsignedIntNumber alloc] initWithUnsignedInt:value]; }
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithQuadWord:(int64_t)value
@@ -85,7 +85,7 @@ MKMakeUnsignedNSNumberSubclass(LongLong, long long, "Q")
 
 //|++++++++++++++++++++++++++++++++++++|//
 + (NSNumber*)mk_numberWithUnsignedQuadWord:(uint64_t)value
-{ return [[[__MKUnsignedLongLongNumber alloc] initWithUnsignedLongLong:value] autorelease]; }
+{ return [[__MKUnsignedLongLongNumber alloc] initWithUnsignedLongLong:value]; }
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Accessing Numeric Values

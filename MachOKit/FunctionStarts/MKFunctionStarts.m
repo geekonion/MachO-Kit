@@ -61,14 +61,12 @@
             }
             
             [offsets addObject:functionOffset];
-            [functionOffset release];
             
             // SAFE - All function offset nodes must be within the size of this node.
             offset += functionOffset.nodeSize;
         }
         
-        _offsets = [offsets copy];
-        [offsets release];
+        _offsets = offsets;
     }
     
     // Determine the function addresses
@@ -78,7 +76,7 @@
         
         mk_error_t err;
         NSError *functionError = nil;
-        struct MKFunctionStartsContext context = { 0, .info = self };
+        struct MKFunctionStartsContext context = { 0, .info = (__bridge void *)self };
         
         // The initial offset is the delta from the start of __TEXT
         context.address = self.macho.nodeVMAddress;
@@ -87,7 +85,7 @@
         // <https://opensource.apple.com/source/ld64/ld64-274.2/src/ld/LinkEdit.hpp.auto.html>
         
         for (MKFunctionOffset *offset in _offsets) {
-            context.offset = offset;
+            context.offset = (__bridge void *)offset;
             
             mk_vm_offset_t nextFunctionOffset = offset.offset;
             if (nextFunctionOffset == 0)
@@ -95,23 +93,21 @@
             
             if ((err = mk_vm_address_apply_offset(context.address, nextFunctionOffset, &context.address))) {
                 functionError = MK_MAKE_VM_ADDRESS_APPLY_OFFSET_ARITHMETIC_ERROR(err, context.address, nextFunctionOffset);
-                MK_PUSH_WARNING_WITH_ERROR(functions, MK_EINTERNAL_ERROR, functionError, @"Function list generation failed at offset: %@.", context.offset.compactDescription);
+                MK_PUSH_WARNING_WITH_ERROR(functions, MK_EINTERNAL_ERROR, functionError, @"Function list generation failed at offset: %@.", offset.compactDescription);
                 break;
             }
             
             MKFunction *function = [[MKFunction alloc] initWithContext:&context error:&functionError];
             
             if (function == nil) {
-                MK_PUSH_WARNING_WITH_ERROR(functions, MK_EINTERNAL_ERROR, functionError, @"Function list generation failed at offset: %@.", context.offset.compactDescription);
+                MK_PUSH_WARNING_WITH_ERROR(functions, MK_EINTERNAL_ERROR, functionError, @"Function list generation failed at offset: %@.", offset.compactDescription);
                 break;
             }
             
             [functions addObject:function];
-            [function release];
         }
         
-        _functions = [functions copy];
-        [functions release];
+        _functions = functions;
     }
     
     return self;
@@ -132,10 +128,10 @@
         
         if (commands.count == 0) {
             // Not an error - Image has no function starts information.
-            [self release]; return nil;
+            return nil;
         }
         
-        functionStartsLoadCommand = [[commands.firstObject retain] autorelease];
+        functionStartsLoadCommand = commands.firstObject;
     }
     
     return [self initWithSize:functionStartsLoadCommand.datasize offset:functionStartsLoadCommand.dataoff inImage:image error:error];
@@ -144,15 +140,6 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithParent:(MKNode*)parent error:(NSError**)error
 { return [self initWithImage:parent.macho error:error]; }
-
-//|++++++++++++++++++++++++++++++++++++|//
-- (void)dealloc
-{
-    [_functions release];
-    [_offsets release];
-    
-    [super dealloc];
-}
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  MKNode
