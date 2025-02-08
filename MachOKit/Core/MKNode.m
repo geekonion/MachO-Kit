@@ -59,6 +59,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
     self.delegate = nil;
     _parent = nil;
     
+    objc_removeAssociatedObjects(self);
     //NSLog(@"%s %@", __PRETTY_FUNCTION__, self.className);
 }
 
