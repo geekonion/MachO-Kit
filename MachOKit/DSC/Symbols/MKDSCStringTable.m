@@ -60,7 +60,7 @@
         MKDSCLocalSymbols *symbols = (id)self.parent;
         DyldSharedCache *dsc = symbols.dsc;
         const char *str_ptr = dsc->symbolFile.strings;
-        if (str_ptr) {
+        if (false && str_ptr) {
             while (offset < _nodeSize)
             {
                 const char *ptr = str_ptr + offset;

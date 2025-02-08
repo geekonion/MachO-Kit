@@ -52,34 +52,34 @@
     }
     
     // Load Symbols
-    @autoreleasepool
-    {
-        NSMutableArray<MKDSCSymbol*> *symbols = [[NSMutableArray alloc] initWithCapacity:count];
-        mk_vm_offset_t offset = 0;
-        
-        for (uint32_t i = 0; i < count; i++)
-        {
-            mk_error_t err;
-            NSError *e = nil;
-            
-            MKDSCSymbol *symbol = [[MKDSCSymbol alloc] initWithIndex:i fromParent:self error:&e];
-            if (symbol == nil) {
-                MK_PUSH_UNDERLYING_WARNING(symbols, e, @"Could not load symbol at offset %" MK_VM_PRIiOFFSET ".", offset);
-                break;
-            }
-            
-            [symbols addObject:symbol];
-            
-            if ((err = mk_vm_offset_add(offset, symbol.nodeSize, &offset))) {
-                MK_PUSH_UNDERLYING_WARNING(symbols, MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, symbol.nodeSize), @"Aborted symbol parsing after index " PRIi32 ".", i);
-                break;
-            }
-        }
-        
-        _symbols = symbols;
-        
-        _nodeSize = offset;
-    }
+//    @autoreleasepool
+//    {
+//        NSMutableArray<MKDSCSymbol*> *symbols = [[NSMutableArray alloc] initWithCapacity:count];
+//        mk_vm_offset_t offset = 0;
+//        
+//        for (uint32_t i = 0; i < count; i++)
+//        {
+//            mk_error_t err;
+//            NSError *e = nil;
+//            
+//            MKDSCSymbol *symbol = [[MKDSCSymbol alloc] initWithIndex:i fromParent:self error:&e];
+//            if (symbol == nil) {
+//                MK_PUSH_UNDERLYING_WARNING(symbols, e, @"Could not load symbol at offset %" MK_VM_PRIiOFFSET ".", offset);
+//                break;
+//            }
+//            
+//            [symbols addObject:symbol];
+//            
+//            if ((err = mk_vm_offset_add(offset, symbol.nodeSize, &offset))) {
+//                MK_PUSH_UNDERLYING_WARNING(symbols, MK_MAKE_VM_OFFSET_ADD_ARITHMETIC_ERROR(err, offset, symbol.nodeSize), @"Aborted symbol parsing after index " PRIi32 ".", i);
+//                break;
+//            }
+//        }
+//        
+//        _symbols = symbols;
+//        
+//        _nodeSize = offset;
+//    }
     
     return self;
 }
