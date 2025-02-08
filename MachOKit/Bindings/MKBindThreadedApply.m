@@ -66,7 +66,7 @@
         return NO;
     }
     
-    MKSegment *segment = CFBridgingRelease(bindContext->segment);
+    MKSegment *segment = (__bridge MKSegment *)bindContext->segment;
     if (segment == nil) {
         MK_ERROR_OUT = [NSError mk_errorWithDomain:MKErrorDomain code:MK_ENOT_FOUND description:@"No segment set."];
         return NO;

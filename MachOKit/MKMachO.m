@@ -61,7 +61,7 @@
     if (self == nil) return nil;
     
     // TODO - Remove this eventually
-    _context.user_data = (void*)CFBridgingRetain(self);
+    _context.user_data = (__bridge void *)(self);
     _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
     
     _memMap = memMap;
@@ -223,7 +223,7 @@
     _imageSize = size;
     _dsc = dsc;
     // TODO - Remove this eventually
-    _context.user_data = (void*)CFBridgingRetain(self);
+    _context.user_data = (__bridge void *)self;
     _context.logger = (mk_logger_c)method_getImplementation(class_getInstanceMethod(self.class, @selector(_logMessageAtLevel:inFile:line:function:message:)));
     
     _flags = flags;
@@ -563,10 +563,11 @@
     id<MKNodeDelegate> delegate = self.delegate;
     if (delegate && [delegate respondsToSelector:@selector(logMessageFromNode:atLevel:inFile:line:function:message:)])
         [delegate logMessageFromNode:self atLevel:level inFile:file line:line function:function message:(NSString*)CFBridgingRelease(messageString)];
-    else
+    else {
         NSLog(@"MachOKit - [%s][%s:%d]: %@", mk_string_for_logging_level(level), file, line, messageString);
+        CFRelease(messageString);
+    }
     
-    CFRelease(messageString);
     CFRelease(str);
 }
 

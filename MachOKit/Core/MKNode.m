@@ -59,7 +59,7 @@ _mk_internal const char * const AssociatedDescription = "AssociatedDescription";
     self.delegate = nil;
     _parent = nil;
     
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, self.className);
+    //NSLog(@"%s %@", __PRETTY_FUNCTION__, self.className);
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {

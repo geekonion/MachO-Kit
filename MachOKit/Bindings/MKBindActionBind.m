@@ -70,7 +70,7 @@
         MK_PUSH_WARNING(sourceLibrary, MK_EOUT_OF_RANGE, @"Unknown special library ordinal [%" PRIi64 "].", _sourceLibraryOrdinal);
     }
     
-    _symbolName = CFBridgingRelease(bindContext->symbolName);
+    _symbolName = (__bridge NSString *)bindContext->symbolName;
     _addend = bindContext->addend;
     _symbolOptions = bindContext->symbolFlags;
     

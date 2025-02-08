@@ -79,7 +79,7 @@
 {
 #pragma unused(binder)
 #pragma unused(error)
-    bindContext->symbolName = (void *)CFBridgingRetain(self.symbolName.string);
+    bindContext->symbolName = (__bridge void *)self.symbolName.string;
     bindContext->symbolFlags = self.symbolFlags;
     
     return YES;

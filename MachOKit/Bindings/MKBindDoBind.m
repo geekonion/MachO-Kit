@@ -72,7 +72,7 @@
         threadedBindData.symbolFlags = bindContext->symbolFlags;
         threadedBindData.symbolName = bindContext->symbolName; // No retain
         NSValue *threadedBindDataValue = [[NSValue alloc] initWithBytes:&threadedBindData objCType:@encode(struct MKBindThreadedData)];
-        [CFBridgingRelease(bindContext->ordinalTable) addObject:threadedBindDataValue];
+        [(__bridge NSMutableArray *)bindContext->ordinalTable addObject:threadedBindDataValue];
     }
     
     // Reset

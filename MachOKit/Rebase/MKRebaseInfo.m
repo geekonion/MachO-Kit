@@ -97,7 +97,7 @@
         __block BOOL keepGoing = YES;
         __block NSError *rebaseError = nil;
 		// Initialize the rebase context to zero in order to match dyld's behavior.
-        __block struct MKRebaseContext context = { 0, .info = (void *)CFBridgingRetain(self) };
+        __block struct MKRebaseContext context = { 0, .info = (__bridge void *)self };
 		
         void (^doRebase)(void) = ^{
 			MKFixup *fixup = [[MKFixup alloc] initWithContext:&context error:&rebaseError];
@@ -115,7 +115,7 @@
 				context.actionSize = 0;
 			}
 			context.actionSize += command.nodeSize;
-            context.command = (void *)CFBridgingRetain(command);
+            context.command = (__bridge void *)command;
 			
 			keepGoing &= [command rebase:doRebase withContext:&context error:&rebaseError];
             

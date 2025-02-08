@@ -86,7 +86,7 @@ static NSSet *_subclasses = NULL;
 {
 	NSParameterAssert(bindContext->info != nil);
 	
-    self = [super initWithParent:CFBridgingRelease(bindContext->info) error:error];
+    self = [super initWithParent:(__bridge MKNode *)bindContext->info error:error];
     if (self == nil) return nil;
 	
 	_nodeOffset = bindContext->actionStartOffset;
@@ -98,7 +98,7 @@ static NSSet *_subclasses = NULL;
         return nil;
     }
     
-    _segment = CFBridgingRelease(bindContext->segment);
+    _segment = (__bridge MKSegment *)bindContext->segment;
     _offset = bindContext->derivedOffset;
     
     // Verify that the bind location is within the segment

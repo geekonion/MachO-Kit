@@ -76,7 +76,7 @@
         
         mk_error_t err;
         NSError *functionError = nil;
-        struct MKFunctionStartsContext context = { 0, .info = (void *)CFBridgingRetain(self) };
+        struct MKFunctionStartsContext context = { 0, .info = (__bridge void *)self };
         
         // The initial offset is the delta from the start of __TEXT
         context.address = self.macho.nodeVMAddress;
@@ -85,7 +85,7 @@
         // <https://opensource.apple.com/source/ld64/ld64-274.2/src/ld/LinkEdit.hpp.auto.html>
         
         for (MKFunctionOffset *offset in _offsets) {
-            context.offset = (void *)CFBridgingRetain(offset);
+            context.offset = (__bridge void *)offset;
             
             mk_vm_offset_t nextFunctionOffset = offset.offset;
             if (nextFunctionOffset == 0)

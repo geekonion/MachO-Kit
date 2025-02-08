@@ -40,7 +40,7 @@
 {
 	NSParameterAssert(rebaseContext->info != nil);
 	
-    self = [super initWithParent:CFBridgingRelease(rebaseContext->info) error:error];
+    self = [super initWithParent:(__bridge MKNode *)rebaseContext->info error:error];
     if (self == nil) return nil;
 	
 	_nodeOffset = rebaseContext->actionStartOffset;

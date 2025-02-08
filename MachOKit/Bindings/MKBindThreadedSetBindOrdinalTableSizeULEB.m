@@ -79,7 +79,7 @@
 #pragma unused(error)
     bindContext->count = self.count;
     
-    bindContext->ordinalTable = (void *)CFBridgingRetain([[NSMutableArray alloc] initWithCapacity:(bindContext->count + 1)]);
+    bindContext->ordinalTable = (__bridge void *)[[NSMutableArray alloc] initWithCapacity:(bindContext->count + 1)];
     
     bindContext->useThreadedRebaseBind = true;
     

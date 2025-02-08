@@ -60,7 +60,7 @@
         
         __block BOOL keepGoing = YES;
         __block NSError *bindingError = nil;
-        __block struct MKBindContext context = { 0, .type = BIND_TYPE_POINTER, .info = (void *)CFBridgingRetain(self) };
+        __block struct MKBindContext context = { 0, .type = BIND_TYPE_POINTER, .info = (__bridge void *)self };
         
         void (^doBind)(void) = ^{
             MKBindAction *action = [[MKBindActionLazyBind alloc] initWithContext:&context error:&bindingError];
@@ -79,7 +79,7 @@
                 context.actionSize = 0;
             }
             context.actionSize += command.nodeSize;
-            context.command = (void *)CFBridgingRetain(command);
+            context.command = (__bridge void *)command;
             
             keepGoing &= [command lazyBind:doBind withContext:&context error:&bindingError];
             
