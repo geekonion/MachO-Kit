@@ -29,6 +29,7 @@
 #import "NSError+MK.h"
 #import "MKMachO.h"
 #import "dyld_cache_format.h"
+#import "MKVersion.h"
 
 //----------------------------------------------------------------------------//
 @implementation MKDSCHeader
@@ -54,6 +55,9 @@
         _localSymbolsSize = symbolCacheHeader->localSymbolsSize;
         _localSymbolsOffset = symbolCacheHeader->localSymbolsOffset;
     }
+    
+    _osVersion = [[MKVersion alloc] initWithMachVersion:header->osVersion];
+    _platform = header->platform;
     
     return self;
 }
@@ -147,38 +151,61 @@
 {
     __unused struct dyld_cache_header sch;
     
-    NSArray *fields = @[
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(magic) description:@"Magic String" offset:offsetof(struct dyld_cache_header, magic) size:sizeof(sch.magic)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(mappingOffset) description:@"Mapping Offset" offset:offsetof(struct dyld_cache_header, mappingOffset) size:sizeof(sch.mappingOffset) format:MKNodeFieldFormatOffset],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(mappingCount) description:@"Number of Mappings" offset:offsetof(struct dyld_cache_header, mappingCount) size:sizeof(sch.mappingCount)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(imagesOffset) description:@"Images Offset" offset:offsetof(struct dyld_cache_header, imagesOffset) size:sizeof(sch.imagesOffset)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(imagesCount) description:@"Number of Images" offset:offsetof(struct dyld_cache_header, imagesCount) size:sizeof(sch.imagesCount)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(dyldBaseAddress) description:@"Dyld Base Address" offset:offsetof(struct dyld_cache_header, dyldBaseAddress) size:sizeof(sch.dyldBaseAddress) format:MKNodeFieldFormatAddress],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(codeSignatureOffset) description:@"Code Signature Offset" offset:offsetof(struct dyld_cache_header, codeSignatureOffset) size:sizeof(sch.codeSignatureOffset) format:MKNodeFieldFormatOffset],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(codeSignatureSize) description:@"Code Signature Size" offset:offsetof(struct dyld_cache_header, codeSignatureSize) size:sizeof(sch.codeSignatureSize) format:MKNodeFieldFormatSize]
+    NSMutableArray *fields =
+    [NSMutableArray arrayWithObjects:
+         [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(magic) description:@"Magic String" offset:offsetof(struct dyld_cache_header, magic) size:sizeof(sch.magic)],
+     [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(mappingOffset) description:@"Mapping Offset" offset:offsetof(struct dyld_cache_header, mappingOffset) size:sizeof(sch.mappingOffset) format:MKNodeFieldFormatOffset],
+     [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(mappingCount) description:@"Number of Mappings" offset:offsetof(struct dyld_cache_header, mappingCount) size:sizeof(sch.mappingCount)],
+     [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(dyldBaseAddress) description:@"Dyld Base Address" offset:offsetof(struct dyld_cache_header, dyldBaseAddress) size:sizeof(sch.dyldBaseAddress) format:MKNodeFieldFormatAddress],
+     [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(codeSignatureOffset) description:@"Code Signature Offset" offset:offsetof(struct dyld_cache_header, codeSignatureOffset) size:sizeof(sch.codeSignatureOffset) format:MKNodeFieldFormatOffset],
+     [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(codeSignatureSize) description:@"Code Signature Size" offset:offsetof(struct dyld_cache_header, codeSignatureSize) size:sizeof(sch.codeSignatureSize) format:MKNodeFieldFormatSize],
+     nil
     ];
     
     if (HAS_SLIDE_INFO) {
-        fields = [fields arrayByAddingObjectsFromArray:@[
-            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoOffset) description:@"Slide Info Offset" offset:offsetof(struct dyld_cache_header, slideInfoOffsetUnused) size:sizeof(sch.slideInfoOffsetUnused) format:MKNodeFieldFormatOffset],
-            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoSize) description:@"Slide Info Size" offset:offsetof(struct dyld_cache_header, slideInfoSizeUnused) size:sizeof(sch.slideInfoSizeUnused) format:MKNodeFieldFormatSize]
-        ]];
+        [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoOffset) description:@"Slide Info Offset" offset:offsetof(struct dyld_cache_header, slideInfoOffsetUnused) size:sizeof(sch.slideInfoOffsetUnused) format:MKNodeFieldFormatOffset]];
+         [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(slideInfoSize) description:@"Slide Info Size" offset:offsetof(struct dyld_cache_header, slideInfoSizeUnused) size:sizeof(sch.slideInfoSizeUnused) format:MKNodeFieldFormatSize]];
     }
     
     if (HAS_LOCAL_SYMBOLS) {
-        fields = [fields arrayByAddingObjectsFromArray:@[
-            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(localSymbolsOffset) description:@"Local Symbols Offset" offset:offsetof(struct dyld_cache_header, localSymbolsOffset) size:sizeof(sch.localSymbolsOffset) format:MKNodeFieldFormatOffset],
-            [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(localSymbolsSize) description:@"Local Symbols Size" offset:offsetof(struct dyld_cache_header, localSymbolsSize) size:sizeof(sch.localSymbolsSize) format:MKNodeFieldFormatSize]
-        ]];
+        [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(localSymbolsOffset) description:@"Local Symbols Offset" offset:offsetof(struct dyld_cache_header, localSymbolsOffset) size:sizeof(sch.localSymbolsOffset) format:MKNodeFieldFormatOffset]];
+        [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(localSymbolsSize) description:@"Local Symbols Size" offset:offsetof(struct dyld_cache_header, localSymbolsSize) size:sizeof(sch.localSymbolsSize) format:MKNodeFieldFormatSize]];
     }
     
     if (HAS_UUID) {
-        fields = [fields arrayByAddingObject:[MKPrimativeNodeField fieldWithName:MK_PROPERTY(uuid) keyPath:@"uuid.UUIDString" description:@"UUID" offset:offsetof(struct dyld_cache_header, uuid) size:sizeof(sch.uuid)]];
+        [fields addObject:[MKPrimativeNodeField fieldWithName:MK_PROPERTY(uuid) keyPath:@"uuid.UUIDString" description:@"UUID" offset:offsetof(struct dyld_cache_header, uuid) size:sizeof(sch.uuid)]];
     }
     
     if (HAS_CACHE_TYPE) {
-        fields = [fields arrayByAddingObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(cacheType) description:@"Cache Type" offset:offsetof(struct dyld_cache_header, cacheType) size:sizeof(sch.cacheType)]];
+        [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(cacheType) description:@"Cache Type" offset:offsetof(struct dyld_cache_header, cacheType) size:sizeof(sch.cacheType)]];
     }
+    
+    MKNodeFieldBuilder *platform =
+    [MKNodeFieldBuilder
+     builderWithProperty:MK_PROPERTY(platform)
+     type:[MKNodeFieldTypeEnumeration enumerationWithUnderlyingType:MKNodeFieldTypeUnsignedDoubleWord.sharedInstance name:@"Build Version Platform" elements:@{
+        @(PLATFORM_MACOS): @"PLATFORM_MACOS",
+        @(PLATFORM_IOS): @"PLATFORM_IOS",
+        @(PLATFORM_TVOS): @"PLATFORM_TVOS",
+        @(PLATFORM_WATCHOS): @"PLATFORM_WATCHOS",
+        @(PLATFORM_BRIDGEOS): @"PLATFORM_BRIDGEOS",
+        @(PLATFORM_MACCATALYST): @"PLATFORM_MACCATALYST",
+        @(PLATFORM_IOSSIMULATOR): @"PLATFORM_IOSSIMULATOR",
+        @(PLATFORM_TVOSSIMULATOR): @"PLATFORM_TVOSSIMULATOR",
+        @(PLATFORM_WATCHOSSIMULATOR): @"PLATFORM_WATCHOSSIMULATOR",
+        @(PLATFORM_DRIVERKIT): @"PLATFORM_DRIVERKIT",
+     }]
+     offset:offsetof(typeof(sch), platform)
+     size:sizeof(sch.platform)
+    ];
+    platform.description = @"Platform";
+    platform.options = MKNodeFieldOptionDisplayAsDetail;
+    [fields addObject:platform.build];
+    
+    [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(osVersion) description:@"OS Version" offset:offsetof(struct dyld_cache_header, osVersion) size:sizeof(sch.osVersion)]];
+    
+    [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(imagesOffset) description:@"Images Offset" offset:offsetof(struct dyld_cache_header, imagesOffset) size:sizeof(sch.imagesOffset)]];
+    [fields addObject:[MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(imagesCount) description:@"Number of Images" offset:offsetof(struct dyld_cache_header, imagesCount) size:sizeof(sch.imagesCount)]];
     
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:fields];
 }

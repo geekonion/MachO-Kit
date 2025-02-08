@@ -30,6 +30,7 @@
 #import <MachOKit/MKOffsetNode.h>
 #import <MachOKit/DyldSharedCache.h>
 
+@class MKVersion;
 NS_ASSUME_NONNULL_BEGIN
 
 //----------------------------------------------------------------------------//
@@ -76,6 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) uint64_t localSymbolsSize;
 @property (nonatomic, strong, readonly, nullable) NSUUID *uuid;
 @property (nonatomic, assign, readonly) uint64_t cacheType;
+
+@property (nonatomic, strong, readonly) MKVersion *osVersion;
+@property (nonatomic, assign, readonly) uint32_t platform;
 
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dsc:(DyldSharedCache *)dsc error:(NSError **)error;
 
