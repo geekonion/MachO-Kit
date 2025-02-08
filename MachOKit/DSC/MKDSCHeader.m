@@ -48,6 +48,8 @@
     _mappingCount = dsc->mappingCount;
     _imagesCount = dsc->containedImageCount;
     _dyldBaseAddress = dsc->baseAddress;
+    _codeSignatureOffset = header->codeSignatureOffset;
+    _codeSignatureSize = header->codeSignatureSize;
     
     DyldSharedCacheFile *symDsc = dsc->files[dsc->symbolFile.index];
     if (symDsc) {
