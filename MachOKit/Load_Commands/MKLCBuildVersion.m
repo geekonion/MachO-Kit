@@ -279,7 +279,7 @@
     { return nil; }
     
     _tool = MKSwapLValue32(btv.tool, self.macho.dataModel);
-    _version = MKSwapLValue32(btv.version, self.macho.dataModel);
+    _version = [[MKVersion alloc] initWithMachVersion:btv.version];
     
     return self;
 }
@@ -292,7 +292,7 @@
     struct build_tool_version *btv = (void *)btv_ptr;
     
     _tool = btv->tool;
-    _version = btv->version;
+    _version = [[MKVersion alloc] initWithMachVersion:btv->version];
     
     return self;
 }
@@ -309,9 +309,10 @@
     MKNodeFieldBuilder *tool = [MKNodeFieldBuilder
         builderWithProperty:MK_PROPERTY(tool)
         type:[MKNodeFieldTypeEnumeration enumerationWithUnderlyingType:MKNodeFieldTypeUnsignedDoubleWord.sharedInstance name:@"Build Tool" elements:@{
-            @((typeof(btv.tool))TOOL_CLANG): @"TOOL_CLANG",
-            @((typeof(btv.tool))TOOL_SWIFT): @"TOOL_SWIFT",
-            @((typeof(btv.tool))TOOL_LD): @"TOOL_LD",
+            @(TOOL_CLANG): [NSString stringWithFormat:@"clang (%d)", TOOL_CLANG],
+            @(TOOL_SWIFT): [NSString stringWithFormat:@"swift (%d)", TOOL_SWIFT],
+            @(TOOL_LD): [NSString stringWithFormat:@"ld (%d)", TOOL_LD],
+            @(TOOL_LLD): [NSString stringWithFormat:@"lld (%d)", TOOL_LLD],
         }]
         offset:offsetof(typeof(btv), tool)
         size:sizeof(btv.tool)
@@ -325,9 +326,8 @@
         offset:offsetof(typeof(btv), version)
         size:sizeof(btv.version)
     ];
-    version.description = @"Version";
+    version.description = @"Tool Version";
     version.options = MKNodeFieldOptionDisplayAsDetail;
-    version.formatter = [NSFormatter mk_hex32Formatter];
     
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
         tool.build,

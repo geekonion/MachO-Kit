@@ -73,13 +73,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MKLCBuildToolVersion : MKOffsetNode {
 @package
     uint32_t _tool;
-    uint32_t _version;
+    MKVersion *_version;
 }
 
 //! The build tool.
 @property (nonatomic, assign, readonly) uint32_t tool;
 //! The build tool version number.
-@property (nonatomic, assign, readonly) uint32_t version;
+@property (nonatomic, strong, readonly) MKVersion *version;
 
 - (instancetype)initWithBTV:(struct build_tool_version *)btv_ptr fromParent:(MKBackedNode*)parent;
 @end
