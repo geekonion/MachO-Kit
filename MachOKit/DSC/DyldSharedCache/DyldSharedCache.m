@@ -396,7 +396,8 @@ DyldSharedCache *dsc_init_from_path_premapped(const char *path, uint32_t premapS
         }
     }
 
-    if (symbolFileExists) {
+    // 旧版本dsc没有单独的.symbols文件，通过size来判断
+    if (symbolFileExists || mainHeader->localSymbolsSize > 0) {
         DyldSharedCacheFile *symbolCacheFile = sharedCache->files[sharedCache->symbolFile.index];
         struct dyld_cache_header *symbolCacheHeader = &symbolCacheFile->header;
         uint64_t sym_off = symbolCacheHeader->localSymbolsOffset;
