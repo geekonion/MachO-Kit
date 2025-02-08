@@ -196,16 +196,16 @@
     MKNodeFieldBuilder *platform = [MKNodeFieldBuilder
         builderWithProperty:MK_PROPERTY(platform)
         type:[MKNodeFieldTypeEnumeration enumerationWithUnderlyingType:MKNodeFieldTypeUnsignedDoubleWord.sharedInstance name:@"Build Version Platform" elements:@{
-            @((typeof(bvc.platform))PLATFORM_MACOS): @"PLATFORM_MACOS",
-            @((typeof(bvc.platform))PLATFORM_IOS): @"PLATFORM_IOS",
-            @((typeof(bvc.platform))PLATFORM_TVOS): @"PLATFORM_TVOS",
-            @((typeof(bvc.platform))PLATFORM_WATCHOS): @"PLATFORM_WATCHOS",
-            @((typeof(bvc.platform))PLATFORM_BRIDGEOS): @"PLATFORM_BRIDGEOS",
-            @((typeof(bvc.platform))PLATFORM_MACCATALYST): @"PLATFORM_MACCATALYST",
-            @((typeof(bvc.platform))PLATFORM_IOSSIMULATOR): @"PLATFORM_IOSSIMULATOR",
-            @((typeof(bvc.platform))PLATFORM_TVOSSIMULATOR): @"PLATFORM_TVOSSIMULATOR",
-            @((typeof(bvc.platform))PLATFORM_WATCHOSSIMULATOR): @"PLATFORM_WATCHOSSIMULATOR",
-            @((typeof(bvc.platform))PLATFORM_DRIVERKIT): @"PLATFORM_DRIVERKIT",
+            @(PLATFORM_MACOS): @"PLATFORM_MACOS",
+            @(PLATFORM_IOS): @"PLATFORM_IOS",
+            @(PLATFORM_TVOS): @"PLATFORM_TVOS",
+            @(PLATFORM_WATCHOS): @"PLATFORM_WATCHOS",
+            @(PLATFORM_BRIDGEOS): @"PLATFORM_BRIDGEOS",
+            @(PLATFORM_MACCATALYST): @"PLATFORM_MACCATALYST",
+            @(PLATFORM_IOSSIMULATOR): @"PLATFORM_IOSSIMULATOR",
+            @(PLATFORM_TVOSSIMULATOR): @"PLATFORM_TVOSSIMULATOR",
+            @(PLATFORM_WATCHOSSIMULATOR): @"PLATFORM_WATCHOSSIMULATOR",
+            @(PLATFORM_DRIVERKIT): @"PLATFORM_DRIVERKIT",
         }]
         offset:offsetof(struct build_version_command, platform)
         size:sizeof(bvc.platform)

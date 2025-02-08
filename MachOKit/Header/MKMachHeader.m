@@ -106,10 +106,10 @@
     MKNodeFieldBuilder *magic = [MKNodeFieldBuilder
         builderWithProperty:MK_PROPERTY(magic)
         type:[MKNodeFieldTypeEnumeration enumerationWithUnderlyingType:MKNodeFieldTypeUnsignedDoubleWord.sharedInstance name:nil elements:@{
-            @((typeof(mh.magic))MH_MAGIC): @"MH_MAGIC",
-            @((typeof(mh.magic))MH_CIGAM): @"MH_CIGAM",
-            @((typeof(mh.magic))MH_MAGIC_64): @"MH_MAGIC_64",
-            @((typeof(mh.magic))MH_CIGAM_64): @"MH_CIGAM_64",
+            @(MH_MAGIC): @"MH_MAGIC",
+            @(MH_CIGAM): @"MH_CIGAM",
+            @(MH_MAGIC_64): @"MH_MAGIC_64",
+            @(MH_CIGAM_64): @"MH_CIGAM_64",
         }]
         offset:offsetof(typeof(mh), magic)
     ];
