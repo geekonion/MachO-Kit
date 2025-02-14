@@ -51,6 +51,7 @@
 
 @interface MKSharedCache () {
     DyldSharedCache *_dsc;
+    BOOL _extracting;
 }
 
 @end
@@ -298,12 +299,12 @@
     
     MKNodeFieldBuilder *mappings = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(mappings) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCMapping.class]]
     ];
-    mappings.description = @"Mappings";
+    mappings.description = [NSString stringWithFormat:@"Mappings (%lu)", self.mappings.count];
     mappings.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
     
     MKNodeFieldBuilder *images = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(images) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCImage.class]]
     ];
-    images.description = @"Images";
+    images.description = [NSString stringWithFormat:@"Images (%lu)", self.images.count];
     images.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
     
 //    MKNodeFieldBuilder *slideInfo = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(slideInfo) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCSlideInfo.class]]
@@ -377,6 +378,35 @@
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"DSC (%s)", [self architecture_description]];
+}
+
+- (void)extractTo:(NSString *)path {
+    if (_extracting) {
+        return;
+    }
+    
+    _extracting = YES;
+    if (![[path lastPathComponent] isEqualToString:@"images"]) {
+        path = [path stringByAppendingPathComponent:@"images"];
+        NSFileManager *fileMng = [NSFileManager defaultManager];
+        if (![fileMng fileExistsAtPath:path]) {
+            NSError *error = nil;
+            [fileMng createDirectoryAtPath:path withIntermediateDirectories:NO attributes:@{} error:&error];
+            if (error) {
+                return;
+            }
+        }
+    }
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        for (MKDSCImage *image in self.images) {
+            [image extractTo:path];
+        }
+        self->_extracting = NO;
+    });
+}
+
+- (BOOL)extractable {
+    return YES;
 }
 
 @end

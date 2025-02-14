@@ -77,7 +77,7 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
     const char *base = (const char *)header;
     uint64_t offset1 = sizeof(struct mach_header_64);
     
-    NSLog(@"写入数据 header");
+    //NSLog(@"写入数据%@ header", path.lastPathComponent);
     write(fd, header, offset1);
     
     MKMachOImage *macho = (MKMachOImage *)self.parent;
@@ -205,6 +205,8 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
         
         offset1 += lc->cmdsize;
     }
+    
+    close(fd);
 }
 
 
@@ -266,7 +268,7 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
     
     // 将segment_command_64信息写入文件
     uint64_t seg_size = sizeof(tmp_seg);
-    NSLog(@"写入数据 seg %s, offset %llu", seg->segname, offset1);
+    //NSLog(@"写入数据 seg %s, offset %llu", seg->segname, offset1);
     lseek(fd, offset1, SEEK_SET);
     write(fd, &tmp_seg, seg_size);
     offset1 += seg_size;
@@ -280,7 +282,7 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
         // 将section_64信息写入文件
         struct section_64 tmp_sec = *sec;
         tmp_sec.offset = offset2;
-        NSLog(@"写入数据 sec %s.%s, offset %llu", sec->segname, sec->sectname, offset1);
+        //NSLog(@"写入数据 sec %s.%s, offset %llu", sec->segname, sec->sectname, offset1);
         lseek(fd, offset1, SEEK_SET);
         write(fd, &tmp_sec, tmp_size);
         offset1 += tmp_size;
@@ -288,7 +290,7 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
         // 将section数据写入文件
         bool needFree = false;
         void *sec_data = dsc_find_buffer(dsc, sec->addr, sec->size, &needFree);
-        NSLog(@"写入数据 data %s, offset %u", sec->sectname, offset2);
+        //NSLog(@"写入数据 data %s, offset %u", sec->sectname, offset2);
         lseek(fd, offset2, SEEK_SET);
         write(fd, sec_data, sec->size);
         
@@ -302,7 +304,7 @@ void writeSegment(struct segment_command_64 *seg, int fd, uint64_t offset1, uint
             // 将segment数据整体写入文件
             bool needFree = false;
             void *seg_data = dsc_find_buffer(dsc, seg->vmaddr, seg->filesize, &needFree);
-            NSLog(@"写入数据 data %s, offset %u", segname, offset2);
+            //NSLog(@"写入数据 data %s, offset %u", segname, offset2);
             lseek(fd, offset2, SEEK_SET);
             write(fd, seg_data, seg->filesize);
             

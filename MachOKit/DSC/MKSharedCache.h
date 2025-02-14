@@ -59,7 +59,7 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
 
 
 //----------------------------------------------------------------------------//
-@interface MKSharedCache : MKBackedNode {
+@interface MKSharedCache : MKBackedNode <MKExtractable> {
 @package
     MKMemoryMap *_memoryMap;
     MKDataModel* _dataModel;
