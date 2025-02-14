@@ -10,7 +10,7 @@ Mach-O Kit is designed to be easy to use while still exposing all the details of
 
 ## Projects Using Mach-O Kit
 
-* [Mach-O Explorer](https://github.com/DeVaukz/MachO-Explorer) - A graphical Mach-O viewer for macOS.
+* [Mach-O Explorer](https://github.com/geekonion/MachO-Explorer) - A graphical Mach-O viewer for macOS.
 
 ## Getting Started
 
