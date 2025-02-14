@@ -57,8 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) uint64_t inode;
 @property (nonatomic, assign, readonly) uint32_t pathFileOffset;
 
-//! The pathname of the library.
-@property (nonatomic, strong, readonly) MKCString *name;
+//! The name of the library.
+@property (nonatomic, strong, readonly) NSString *name;
 @property (nonatomic, strong, readonly) MKMachOImage *macho;
 
 - (nullable instancetype)initWithDSC:(DyldSharedCache *)dsc image:(DyldSharedCacheImage *)image parent:(MKBackedNode *)parent error:(NSError**)error;

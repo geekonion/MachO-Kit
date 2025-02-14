@@ -52,6 +52,7 @@
 @interface MKSharedCache () {
     DyldSharedCache *_dsc;
     BOOL _extracting;
+    NSArray <MKDSCImage *> *_sortedImages;
 }
 
 @end
@@ -407,6 +408,17 @@
 
 - (BOOL)extractable {
     return YES;
+}
+
+- (NSArray <MKDSCImage *> *)sortedImages {
+    if (_sortedImages) {
+        return _sortedImages;
+    }
+    _sortedImages = [self.images sortedArrayUsingComparator:^NSComparisonResult(MKDSCImage * _Nonnull image1, MKDSCImage *  _Nonnull image2) {
+        return [image1.name compare:image2.name options:NSCaseInsensitiveSearch];
+    }];
+    
+    return _sortedImages;
 }
 
 @end

@@ -124,6 +124,7 @@ typedef NS_OPTIONS(NSUInteger, MKSharedCacheFlags) {
 @property (nonatomic, assign, readonly) DyldSharedCache *dsc;
 
 - (MKDSCMapping *)findMapping:(uint64_t)vmaddr;
+- (NSArray <MKDSCImage *> *)sortedImages;
 @end
 
 NS_ASSUME_NONNULL_END

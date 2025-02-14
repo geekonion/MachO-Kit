@@ -46,7 +46,7 @@
     if (self == nil || *error) return nil;
     
     _address = image->address;
-    _name = [[MKCString alloc] initWithOffset:0 parent:parent string:[NSString stringWithUTF8String:image->path]];
+    _name = [NSString stringWithUTF8String:image->path].lastPathComponent;
     
 //    MKDSCMapping *mapping = [dsc findMapping:_address];
 //    if (mapping) {
@@ -106,9 +106,8 @@
 }
 
 - (NSString *)description {
-    NSString *str = _name.string;
-    if (str.length) {
-        return str.lastPathComponent;
+    if (_name.length) {
+        return _name;
     }
     return @"unknown";
 }
