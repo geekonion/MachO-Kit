@@ -36,13 +36,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //----------------------------------------------------------------------------//
-@interface MKDSCImage : MKOffsetNode <MKExtractable> {
-@package
-    uint64_t _address;
-    uint64_t _modTime;
-    uint64_t _inode;
-    uint32_t _pathFileOffset;
-}
+@interface MKDSCImage : MKOffsetNode <MKExtractable>
 
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 #pragma mark -  Shared Cache Struct Values
@@ -53,9 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
 //◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦//
 
 @property (nonatomic, assign, readonly) uint64_t address;
-@property (nonatomic, assign, readonly) uint64_t modTime;
-@property (nonatomic, assign, readonly) uint64_t inode;
-@property (nonatomic, assign, readonly) uint32_t pathFileOffset;
+@property (nonatomic, assign, readonly) uint64_t textSegmentSize;
+@property (nonatomic, strong, readonly) NSUUID *uuid;
+@property (nonatomic, strong, readonly) NSString *path;
 
 //! The name of the library.
 @property (nonatomic, strong, readonly) NSString *name;

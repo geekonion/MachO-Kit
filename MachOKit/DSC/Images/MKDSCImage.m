@@ -46,18 +46,11 @@
     if (self == nil || *error) return nil;
     
     _address = image->address;
-    _name = [NSString stringWithUTF8String:image->path].lastPathComponent;
+    _path = [NSString stringWithUTF8String:image->path];
+    _name = _path.lastPathComponent;
+    _uuid = [[NSUUID alloc] initWithUUIDBytes:image->uuid];
+    _textSegmentSize = image->size;
     
-//    MKDSCMapping *mapping = [dsc findMapping:_address];
-//    if (mapping) {
-//        intptr_t ptr = (intptr_t)mapping->ptr;
-//        
-//        
-//        return (void *)(ptr + content_offset);
-//    }
-//    _MKFileMemoryMap *map = dsc.memoryMap;
-//    NSData *data = [map data];
-//    void *bytes = data.bytes;
     bool needFree = false;
     void *buffer = dsc_find_buffer(dsc, image->address, image->size, &needFree);
     if (!buffer) {
@@ -70,15 +63,6 @@
     
     return self;
 }
-
-//----------------------------------------------------------------------------//
-#pragma mark -  Shared Cache Struct Values
-//----------------------------------------------------------------------------//
-
-@synthesize address = _address;
-@synthesize modTime = _modTime;
-@synthesize inode = _inode;
-@synthesize pathFileOffset = _pathFileOffset;
 
 //----------------------------------------------------------------------------//
 #pragma mark -  MKNode
@@ -97,10 +81,10 @@
     macho.options = MKNodeFieldOptionDisplayAsChild | MKNodeFieldOptionDisplayContainerContentsAsChild;
     
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(address) description:@"Image Start Address" offset:offsetof(struct dyld_cache_image_info, address) size:sizeof(uint64_t) format:MKNodeFieldFormatAddress],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(modTime) description:@"Modification Time" offset:offsetof(struct dyld_cache_image_info, modTime) size:sizeof(uint64_t)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(inode) description:@"iNode" offset:offsetof(struct dyld_cache_image_info, inode) size:sizeof(uint64_t)],
-        [MKPrimativeNodeField fieldWithProperty:MK_PROPERTY(pathFileOffset) description:@"Image Path Offset" offset:offsetof(struct dyld_cache_image_info, pathFileOffset) size:sizeof(uint32_t) format:MKNodeFieldFormatOffset],
+        [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(address) description:@"Image Start Address" format:MKNodeFieldFormatAddress],
+        [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(textSegmentSize) description:@"Text Segment Size" format:MKNodeFieldFormatSize],
+        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(uuid) description:@"UUID"],
+//        [MKNodeField nodeFieldWithProperty:MK_PROPERTY(path) description:@"Image Path"],
         macho.build
     ]];
 }
