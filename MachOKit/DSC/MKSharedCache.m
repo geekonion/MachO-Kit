@@ -72,9 +72,10 @@
     if (!_dsc) {
         return nil;
     }
-    DyldSharedCacheFile *main = _dsc->files[0];
+    
     // Read the Magic
     {
+        DyldSharedCacheFile *main = _dsc->files[0];
         struct dyld_cache_header *header = &main->header;
         char *magic = header->magic;
         // First 4 bytes must == 'dyld'
