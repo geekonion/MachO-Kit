@@ -83,6 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dsc:(DyldSharedCache *)dsc error:(NSError **)error;
 
+- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dscFile:(struct DyldSharedCacheFile *)dscFile error:(NSError **)error;
 @end
 
 NS_ASSUME_NONNULL_END

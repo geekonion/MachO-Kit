@@ -28,7 +28,7 @@
 #include <MachOKit/macho.h>
 #import <Foundation/Foundation.h>
 #import <MachOKit/MKBackedNode.h>
-#import <MachOKit/DyldSharedCache.h>
+#import <MachOKit/MKDSCHeader.h>
 
 @class MKSharedCache;
 @class MKDSCMappingInfo;
@@ -55,6 +55,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) vm_prot_t maximumProtection;
 @property (nonatomic, assign, readonly) vm_prot_t initialProtection;
+
+@property (nonatomic, assign, readonly) int separator;
+@property (nonatomic, strong, readonly) MKDSCHeader *header;
 
 @end
 

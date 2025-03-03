@@ -64,6 +64,29 @@
     return self;
 }
 
+- (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent dscFile:(struct DyldSharedCacheFile *)dscFile error:(NSError **)error {
+    NSParameterAssert(parent.dataModel);
+    
+    self = [super initWithOffset:offset fromParent:parent error:error];
+    if (self == nil) return nil;
+    
+    struct dyld_cache_header *header = &dscFile->header;
+    _magic = [[NSString alloc] initWithBytes:header->magic length:strnlen(header->magic, sizeof(header->magic)) encoding:NSUTF8StringEncoding];
+    if (_magic == nil)
+        MK_PUSH_WARNING(magic, MK_EINVALID_DATA, @"Could not form a string with data.");
+    
+    _mappingCount = header->mappingCount;
+    _imagesCount = header->imagesCount ?: header->imagesCountOld;
+    _dyldBaseAddress = header->dyldBaseAddress;
+    _codeSignatureOffset = header->codeSignatureOffset;
+    _codeSignatureSize = header->codeSignatureSize;
+    
+    _osVersion = [[MKVersion alloc] initWithMachVersion:header->osVersion];
+    _platform = header->platform;
+    
+    return self;
+}
+
 //|++++++++++++++++++++++++++++++++++++|//
 - (instancetype)initWithOffset:(mk_vm_offset_t)offset fromParent:(MKBackedNode*)parent error:(NSError**)error
 {

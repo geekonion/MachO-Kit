@@ -58,6 +58,9 @@
     
     _mapping = mapping;
     
+    _separator = 0;
+    _header = [[MKDSCHeader alloc] initWithOffset:0 fromParent:self dscFile:mapping->file error:nil];
+    
     return self;
 }
 
@@ -87,12 +90,19 @@
 //|++++++++++++++++++++++++++++++++++++|//
 - (MKNodeDescription*)layout
 {
+    MKNodeFieldBuilder *header = [MKNodeFieldBuilder builderWithProperty:MK_PROPERTY(header) type:[MKNodeFieldTypeCollection typeWithCollectionType:[MKNodeFieldTypeNode typeWithNodeType:MKDSCHeader.class]]
+    ];
+    header.description = @"Header";
+    header.options = MKNodeFieldOptionDisplayAsDetail | MKNodeFieldOptionMergeWithParent;
+    
     return [MKNodeDescription nodeDescriptionWithParentDescription:super.layout fields:@[
         [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(fileOffset) description:@"File offset" format:MKNodeFieldFormatOffset],
         [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(vmAddress) description:@"VM Address" format:MKNodeFieldFormatAddress],
         [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(vmSize) description:@"VM Size" format:MKNodeFieldFormatSize],
         [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(maximumProtection) description:@"Maximum VM Protection" format:MKNodeFieldFormatHexCompact],
-        [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(initialProtection) description:@"Initial VM Protection" format:MKNodeFieldFormatHexCompact]
+        [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(initialProtection) description:@"Initial VM Protection" format:MKNodeFieldFormatHexCompact],
+        [MKFormattedNodeField fieldWithProperty:MK_PROPERTY(separator) description:@"-------------------" format:MKNodeFieldFormatHexCompact],
+        header.build
     ]];
 }
 
