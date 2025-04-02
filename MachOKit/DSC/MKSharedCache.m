@@ -370,6 +370,10 @@
             description = "arm64_32";
             break;
         }
+        case CPU_TYPE_X86_64: {
+            description = "x86_64";
+            break;
+        }
         default:
             description = "Unknown";
             break;
